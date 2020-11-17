@@ -25,7 +25,10 @@ def getUSER():
 
 DEFAULTCMSSW   = getCMSSW()
 USER           = getUSER()
-DEFAULTTARBALL = "root://cmseos.fnal.gov//store/user/"+USER+"/condor/"+DEFAULTCMSSW+".tgz"
+try:
+    DEFAULTTARBALL = "root://cmseos.fnal.gov//store/user/"+USER+"/condor/"+DEFAULTCMSSW+".tgz"
+except:
+    DEFAULTTARBALL = None
 
 def enqueue_output(out, queue, logFile):
     for line in iter(out.readline, b''):

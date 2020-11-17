@@ -5,6 +5,8 @@
 #include <iostream>
 #include <TLorentzVector.h>
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
+#include "nTupleAnalysis/baseClasses/interface/truthData.h"
+#include "nTupleAnalysis/baseClasses/interface/truthParticle.h"
 
 namespace nTupleAnalysis {
   const float mW =  80.4;
@@ -38,8 +40,10 @@ namespace nTupleAnalysis {
     float xZ;
     float xH;
 
+    std::shared_ptr<particle> truthMatch = NULL;
+
     //dijet();
-    dijet(std::shared_ptr<jet>&, std::shared_ptr<jet>&, bool undo_bJES=false); 
+    dijet(std::shared_ptr<jet>&, std::shared_ptr<jet>&, bool undo_bJES=false, nTupleAnalysis::truthData* truth = NULL); 
     ~dijet(); 
 
     //void dump();
