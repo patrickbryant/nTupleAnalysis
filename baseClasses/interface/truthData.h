@@ -24,12 +24,14 @@ namespace nTupleAnalysis {
     bool debug;
 
     truthParticle* truthParticles;
-    std::vector< std::shared_ptr<particle> > bQuarksZ;//all bquarks from Z decays
-    std::vector< std::shared_ptr<particle> > bQuarksH;//all bquarks from H decays
+    std::vector< std::shared_ptr<particle> > Zbbs;//all Z bosons which decayed to bb
+    std::vector< std::shared_ptr<particle> > Hbbs;//all H bosons which decayed to bb
+    std::vector< std::shared_ptr<particle> > Bbbs;//all massive bosons which decayed to bb
     float m4b;
 
     // Constructors and member functions
     truthData(TChain*, bool); 
+    void reset();
     void update();
     void dump();
     ~truthData(); 

@@ -22,12 +22,16 @@ namespace nTupleAnalysis {
 
     Int_t genPartIdxMother;
     Int_t pdgId;
+    Int_t idx;
 
     particle();
     particle(UInt_t, truthParticle*); 
+    void getDaughters(std::vector< std::shared_ptr<particle> > particles);
+    std::vector< std::shared_ptr<particle> > daughters;
+    bool tobbbar = false;
     ~particle(); 
 
-    //void dump();
+    void dump(std::string prefix = "");
   };
 
   typedef std::shared_ptr<particle> particlePtr;
