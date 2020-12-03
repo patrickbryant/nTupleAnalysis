@@ -30,7 +30,7 @@ namespace nTupleAnalysis {
     float m4b;
 
     // Constructors and member functions
-    truthData(TChain*, bool); 
+    truthData(TChain*, bool, std::string truthName = "GenPart"); 
     void reset();
     void update();
     void dump();
