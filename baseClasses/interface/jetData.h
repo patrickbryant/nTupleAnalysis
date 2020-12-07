@@ -95,6 +95,11 @@ namespace nTupleAnalysis {
     float match_dR = -99;
     std::weak_ptr<jet>  matchedJet;
 
+    //
+    // GenJet
+    //
+    TLorentzVector genJet_p;
+
     float SF = 1.0; //btagging scale-factor
 
     Bool_t isTag = false;
@@ -171,6 +176,26 @@ namespace nTupleAnalysis {
     float DeepCSVc     [MAXJETS];
     float DeepCSVl     [MAXJETS];
     float DeepCSVbb    [MAXJETS] = {0};
+
+    //
+    bool m_loadGenJets = false; 
+    int   GenJet_hasMatch [MAXJETS];
+    float GenJet_pt       [MAXJETS];
+    float GenJet_eta      [MAXJETS];
+    float GenJet_phi      [MAXJETS];
+    float GenJet_m        [MAXJETS];
+    int   isB             [MAXJETS];
+    int   isGBB           [MAXJETS];
+    int   isBB            [MAXJETS];
+    int   isC             [MAXJETS];
+    int   isGCC           [MAXJETS];
+    int   isCC            [MAXJETS];
+    int   isTau           [MAXJETS];
+    int   isG             [MAXJETS];
+    int   isUD            [MAXJETS];
+    int   isS             [MAXJETS];
+    int   isUndefined     [MAXJETS];
+
 
     // truth Info
     int flavour        [MAXJETS];
