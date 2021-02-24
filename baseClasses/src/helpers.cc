@@ -20,3 +20,8 @@ bool nTupleAnalysis::failOverlap(const TLorentzVector& jet,const std::vector<ele
   return false;
 }
 
+
+
+bool nTupleAnalysis::findSubStr(std::string inputStr, std::string subString) { 
+  return (inputStr.find(subString) != std::string::npos); 
+};
