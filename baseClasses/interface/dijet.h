@@ -25,6 +25,7 @@ namespace nTupleAnalysis {
 
     TLorentzVector p;
     float dR;
+    float dPhi;
     float st;
     float pt;
     float eta;
