@@ -12,6 +12,7 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 
     cleanmask = dir.make<TH1F>("cleanmask", (name+"/cleanmask; "+title+" Clean Mask; Entries").c_str(), 2,-0.5,1.5);
     puId = dir.make<TH1F>("puId", (name+"/puId; "+title+" Pileup ID; Entries").c_str(), 17,-0.5,16.5);
+    jetId = dir.make<TH1F>("jetId", (name+"/jetId; "+title+" Jet ID; Entries").c_str(), 17,-0.5,16.5);
 
     deepB     = dir.make<TH1F>("deepB",     (name+"/deepB; "    +title+" Deep B; Entries").c_str(), 100,0,1);
     CSVv2     = dir.make<TH1F>("CSVv2",     (name+"/CSVv2; "    +title+" CSV v2; Entries").c_str(), 100,0,1);
@@ -94,6 +95,9 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   }else{
     puId->Fill(7, weight);
   }
+
+
+  jetId->Fill(jet->jetId, weight);
 
   deepB    ->Fill(jet->deepB, weight);
   CSVv2    ->Fill(jet->CSVv2, weight);
