@@ -15,6 +15,9 @@ void truthData::reset(){
   Zbbs.clear();
   Hbbs.clear();
   Bbbs.clear();
+  Zqqs.clear();
+  Wqqs.clear();
+  Vqqs.clear();
   m4b = -99;
 }
 
@@ -22,19 +25,30 @@ void truthData::update(){
   if(debug) std::cout<<"Reset truthData"<<std::endl;
   this->reset();
 
-  //Objects
-  std::vector< std::shared_ptr<particle> > bsFromZs = truthParticles->getParticles(5, 23); // all b quarks from Z decays
-  std::vector< std::shared_ptr<particle> > bsFromHs = truthParticles->getParticles(5, 25); // all b quarks from H decays
-  std::vector< std::shared_ptr<particle> >       Zs = truthParticles->getParticles(23); //all Z bosons
-  std::vector< std::shared_ptr<particle> >       Hs = truthParticles->getParticles(25); //all H bosons
 
+
+  //Objects
+  //std::vector< std::shared_ptr<particle> > bsFromZs = truthParticles->getParticles(5, 23); // all b quarks from Z decays
+  std::vector< std::shared_ptr<particle> > bsFromHs = truthParticles->getParticles(5, 25); // all b quarks from H decays
+  std::vector< std::shared_ptr<particle> > qsFromZs = truthParticles->getParticles(-1, 23, 6); // all quarks from Z decays
+  std::vector< std::shared_ptr<particle> > qsFromWs = truthParticles->getParticles(-1, 24, 6); // all quarks from W decays
+  std::vector< std::shared_ptr<particle> >       Zs = truthParticles->getParticles(23); //all Z bosons
+  std::vector< std::shared_ptr<particle> >       Ws = truthParticles->getParticles(24); //all W bosons
+  std::vector< std::shared_ptr<particle> >       Hs = truthParticles->getParticles(25); //all H bosons
+ 
   // Get Zs that decayed to bbbar
   for(auto &Z: Zs){
-    Z->getDaughters(bsFromZs);
+    Z->getDaughters(qsFromZs);
     if(Z->tobbbar){
       Zbbs.push_back(Z);
       Bbbs.push_back(Z);
     }
+    
+    if(Z->toqqbar){
+      Zqqs.push_back(Z);
+      Vqqs.push_back(Z);
+    }
+
   }
 
   // Get Hs that decayed to bbbar
@@ -45,6 +59,15 @@ void truthData::update(){
       Bbbs.push_back(H);
     }
   }
+
+  for(auto &W: Ws){
+    W->getDaughters(qsFromWs);
+    if(W->toqqbar){
+      Wqqs.push_back(W);
+      Vqqs.push_back(W);
+    }
+  }
+
 
   // Compute four body mass for diboson to bbbb events
   if(Bbbs.size() == 2){ //HH, ZZ or ZH
@@ -63,6 +86,13 @@ void truthData::dump(){
   for(auto &Z: Zbbs) Z->dump("  ");
   std::cout << "nHbbs: " << Hbbs.size() << std::endl; 
   for(auto &H: Hbbs) H->dump("  ");
+
+  std::cout << "nZqqs: " << Zqqs.size() << std::endl; 
+  for(auto &Z: Zqqs) Z->dump("  ");
+  std::cout << "nWqqs: " << Wqqs.size() << std::endl; 
+  for(auto &W: Wqqs) W->dump("  ");
+
+
   std::cout << "m4b = " << m4b << std::endl;
   return;
 }
