@@ -338,9 +338,11 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
       if(SFName == "deepcsv2018")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepCSV_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2018")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
+      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2017")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
+      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
       if(SFName == "deepjet2016")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/DeepJet_2016LegacySF_V1"+systTag+".csv";
       
