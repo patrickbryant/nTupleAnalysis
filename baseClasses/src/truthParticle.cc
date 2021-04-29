@@ -26,14 +26,24 @@ void particle::getDaughters(std::vector< std::shared_ptr<particle> > particles){
   
   bool found_b     = false;
   bool found_bbar  = false;
+  bool found_q     = false;
+  bool found_qbar  = false;
 
   for(auto &p: particles){
     if(p->genPartIdxMother != this->idx) continue;
     this->daughters.push_back( p );
     if     (p->pdgId ==  5 && !found_b   ) found_b     = true;
     else if(p->pdgId == -5 && !found_bbar) found_bbar  = true;
+
+    if(abs(p->pdgId) < 7){
+      if(p->pdgId > 0){ found_q = true;}
+      else{             found_qbar = true;}
+    }
+
   }
+
   this->tobbbar = found_b && found_bbar && this->daughters.size()==2;
+  this->toqqbar = found_q && found_qbar && this->daughters.size()==2;
 
   return;
 }
@@ -116,13 +126,14 @@ void truthParticle::writeTruth(std::vector< std::shared_ptr<particle> > outputTr
 }
 
 
-std::vector< std::shared_ptr<particle> > truthParticle::getParticles(Int_t absPDG, Int_t absMomPDG){
+std::vector< std::shared_ptr<particle> > truthParticle::getParticles(Int_t absPDG, Int_t absMomPDG, Int_t maxAbsPDG){
   
   std::vector< std::shared_ptr<particle> > outputParticles;
 
   for(UInt_t i = 0; i < nTruth; ++i){
     if(    absPDG != -1 && abs(pdgId[i])                   != absPDG    ) continue;
     if( absMomPDG != -1 && abs(pdgId[genPartIdxMother[i]]) != absMomPDG ) continue;
+    if( maxAbsPDG != -1 && abs(pdgId[i])                   > maxAbsPDG  ) continue;
     outputParticles.push_back(std::make_shared<particle>(particle(i, this)));
   }
 
