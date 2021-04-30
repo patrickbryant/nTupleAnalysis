@@ -259,9 +259,15 @@ void jet::bRegression(){
 void jet::undo_bRegression(){
   assert(appliedBRegression);
   scaleFourVector(1./bRegCorr);
+  
+  // Sanity Check
+  assert(fabs(pt - pt_wo_bRegCorr) < 0.001);
+  
+  // Avoid subtle floating point errors
+  pt = pt_wo_bRegCorr;
   appliedBRegression = false;
   //cout << "pt is " << pt << " pt_wo_bRegCorr " << pt_wo_bRegCorr << endl;
-  assert(fabs(pt - pt_wo_bRegCorr) < 0.001);
+
 }
 
 
@@ -333,9 +339,11 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
       if(SFName == "deepcsv2018")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepCSV_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2018")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
+      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2017")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
+      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
       if(SFName == "deepjet2016")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/DeepJet_2016LegacySF_V1"+systTag+".csv";
       
@@ -387,14 +395,30 @@ std::vector< std::shared_ptr<jet> > jetData::getJets(float ptMin, float ptMax, f
   if(tagger == "deepFlavB" || tagger == "deepjet") tag = deepFlavB;
   if(debug) std::cout << "We have " << nJets << " jets"<< std::endl;
   for(Int_t i = 0; i < int(nJets); ++i){
+
     if(i > int(MAXJETS-1)) {
       std::cout  << m_name << "::Warning too many jets! " << nJets << " jets. Skipping. "<< std::endl;
       break;
     }
+
+    if(debug) std::cout << " jet   " << pt[i] << " " << eta[i] << " " << phi[i] << std::endl;
+
       
-    if(clean && cleanmask[i] == 0) continue;
-    if(          pt[i]  <  ptMin ) continue;
-    if(          pt[i]  >= ptMax ) continue;
+    if(clean && cleanmask[i] == 0){
+      if(debug) std::cout << "... failed cleaning  " << std::endl;
+      continue;
+    }
+
+    if(          pt[i]  <  ptMin ){
+      if(debug) std::cout << "... failed ptMin  " << pt[i] << " < " << ptMin <<  std::endl;
+      continue;
+    }
+
+    if(          pt[i]  >= ptMax ){
+      if(debug) std::cout << "... failed ptMax  " << pt[i] << " >= " << ptMax <<  std::endl;
+      continue;
+    }
+
     if(    fabs(eta[i]) > etaMax ) continue;
     if(       (puId[i]  < puIdMin) && (pt[i] < 50)) continue; // Fail pilup rejection. https://twiki.cern.ch/twiki/bin/viewauth/CMS/PileupJetID
     if(antiTag^(tag[i]  < tagMin)) continue; // antiTag XOR (jet fails tagMin). This way antiTag inverts the tag criteria to select untagged jets
@@ -404,7 +428,7 @@ std::vector< std::shared_ptr<jet> > jetData::getJets(float ptMin, float ptMax, f
   return outputJets;
 }
 
-std::vector< std::shared_ptr<jet> > jetData::getJets(std::vector< std::shared_ptr<jet> > inputJets, float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin, bool debug){
+std::vector< std::shared_ptr<jet> > jetData::getJets(std::vector< std::shared_ptr<jet> > inputJets, float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin){
   if(debug) cout << "jetData::getJets " << endl;
   std::vector< std::shared_ptr<jet> > outputJets;
   
@@ -417,7 +441,7 @@ std::vector< std::shared_ptr<jet> > jetData::getJets(std::vector< std::shared_pt
     }
 
     if(         jet->pt   <  ptMin ){
-      if(debug) cout << "\t fail ptMin (" << jet->pt << " < " << ptMin << ")" << jet->pt_wo_bRegCorr << endl;
+      if(debug) cout << "\t fail ptMin (" << jet->pt << " < " << ptMin << ")" << jet->pt_wo_bRegCorr << " diff: " << jet->pt - ptMin << endl;
       if(debug) jet->dump();
       continue;
     }

@@ -18,6 +18,7 @@ namespace nTupleAnalysis {
     
     fourVectorHists* v;
     TH1F* dR;
+    TH1F* dPhi;
 
     dijetHists(std::string, fwlite::TFileService&, std::string title = "");
     void Fill(std::shared_ptr<dijet>&, float);

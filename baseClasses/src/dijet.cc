@@ -22,6 +22,7 @@ dijet::dijet(std::shared_ptr<jet> &jet1, std::shared_ptr<jet> &jet2, bool undo_b
   }
 
   dR  = p1.DeltaR(p2);
+  dPhi= p1.DeltaPhi(p2);
   st  = p1.Pt() + p2.Pt();
   p   = p1 + p2;
   pt  = p.Pt();

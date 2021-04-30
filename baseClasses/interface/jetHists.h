@@ -20,6 +20,7 @@ namespace nTupleAnalysis {
     fourVectorHists* v;
     TH1F* cleanmask;
     TH1F* puId;
+    TH1F* jetId;
     TH1F* deepB;
     TH1F* CSVv2;
     TH1F* deepFlavB;

@@ -24,9 +24,13 @@ namespace nTupleAnalysis {
     bool debug;
 
     truthParticle* truthParticles;
-    std::vector< std::shared_ptr<particle> > Zbbs;//all Z bosons which decayed to bb
-    std::vector< std::shared_ptr<particle> > Hbbs;//all H bosons which decayed to bb
-    std::vector< std::shared_ptr<particle> > Bbbs;//all massive bosons which decayed to bb
+    std::vector<particlePtr> Zbbs;//all Z bosons which decayed to bb
+    std::vector<particlePtr> Hbbs;//all H bosons which decayed to bb
+    std::vector<particlePtr> Bbbs;//all massive bosons which decayed to bb
+    std::vector<particlePtr> Zqqs;//all Z bosons which decayed to qq
+    std::vector<particlePtr> Wqqs;//all W bosons which decayed to qq
+    std::vector<particlePtr> Vqqs;//all V bosons which decayed to qq
+
     float m4b;
 
     // Constructors and member functions
