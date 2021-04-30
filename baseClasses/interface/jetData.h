@@ -178,7 +178,7 @@ namespace nTupleAnalysis {
     float DeepCSVbb    [MAXJETS] = {0};
 
     //
-    bool m_loadGenJets = false; 
+    bool m_loadGenJets =  false; 
     int   GenJet_hasMatch [MAXJETS];
     float GenJet_pt       [MAXJETS];
     float GenJet_eta      [MAXJETS];
