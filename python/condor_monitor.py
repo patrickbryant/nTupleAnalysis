@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import re
+import numpy as np
 from commandLineHelpers import *
 
 ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
@@ -13,30 +14,28 @@ class condor_job:
         self.schedd = schedd
         self.ID = ID
         self.done = False
-        self.line = ''
+        self.line = '%s %10s || '%(self.schedd, self.ID)
         self.maxLines = 1
         self.res = None
+        self.fetching = False
     
     def fetch(self):
         if self.done: return# self.line
         if self.res is not None: return
         args = ['condor_tail -maxbytes 256 -name %s %s'%(self.schedd, self.ID)]
         self.res = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash', universal_newlines=True)
+        self.fetching = True
 
     def check(self):
-        if self.done: return self.line
-        # args = ['condor_tail -maxbytes 256 -name %s %s'%(self.schedd, self.ID)]
-        # self.res = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash', universal_newlines=True)
-        # self.res.wait()
-        if self.res is None: 
+        if self.done: return
+        if self.res is None:
             self.fetch()
-        self.res.wait()
+        if self.res.poll() is not None:
+            self.fetching = False
 
         if self.res.returncode:
             self.done = True
-            #self.line = '%s %10s >> %s %d'%(self.schedd, self.ID, 'FINISHED: return code', res.returncode)
             self.line = self.line.replace('||','-|')
-            #self.line += ' | FINISHED'#: return code %d'%(res.returncode)
         else:
             tail = self.res.stdout.read()
             self.res = None
@@ -46,8 +45,8 @@ class condor_job:
             except IndexError:
                 line = ''
             self.line = '%s %10s || %s'%(self.schedd, self.ID, line)
-            #time.sleep(0.05)
 
+        # truncate output so that it never excedes one line for now
         if len(self.line)>(COLUMNS-1):
             self.line = self.line[:COLUMNS-1]
 
@@ -55,7 +54,7 @@ class condor_job:
         self.maxLines = max(nLines, self.maxLines)
         self.line += ('\n'+' '*COLUMNS)*(self.maxLines-nLines)
 
-        return self.line
+        return 
 
     def watch(self, timeout=1):
         start = time.time()
@@ -65,7 +64,6 @@ class condor_job:
                 break
             sys.stdout.write('\r'+line)
             sys.stdout.flush()
-            #print split[-1]
             
         
 def get_jobs():
@@ -82,18 +80,16 @@ def get_jobs():
         if "dagman" in line: continue
         if USER == split[1]:
             ID = split[0]
-            #print schedd, ID
             jobs.append( condor_job(schedd, ID) )
 
     print('-'*20)
     if not jobs:
         print("No Jobs")
 
-    if len(jobs)>(ROWS-1): 
-        print('WARNING: %d jobs but only %d rows on screen'%(len(jobs),ROWS-1))
-        jobs = jobs[:ROWS-1]
-    # else:
-    #     print '-'*20
+    if len(jobs)>(ROWS-2): 
+        print('WARNING: %d jobs but only %d rows on screen'%(len(jobs),ROWS-2))
+        jobs = jobs[:ROWS-2]
+
     return jobs
 
     
@@ -101,34 +97,39 @@ try:
     jobs = get_jobs()
     while jobs:
 
-        nDone=0
         nJobs=len(jobs)
+        for i, job in enumerate(jobs): print(job.line)
+
+        fetching = np.array([0 for job in jobs])            
+        i, nDone, nLines = 0, 0, 0
         while nDone < nJobs:
-            nDone = 0
-            nLines = 0
-            for i,job in enumerate(jobs):
+            job = jobs[i]
+            if not job.fetching and fetching.sum()<16:
                 job.fetch()
-                # do some pre-fetching of next job outputs to make updates faster (these run as parallel subprocesses and we wait for results in job.check())
-                if nJobs>1: jobs[(i+1)%nJobs].fetch()
-                if nJobs>2: jobs[(i+2)%nJobs].fetch()
-                if nJobs>3: jobs[(i+3)%nJobs].fetch()
-                if nJobs>4: jobs[(i+4)%nJobs].fetch()
-                if nJobs>5: jobs[(i+5)%nJobs].fetch()
-                if nJobs>6: jobs[(i+6)%nJobs].fetch()
-                if nJobs>7: jobs[(i+7)%nJobs].fetch()
-                if job.done: 
-                    nDone += 1
-                line = job.check()
-                nLines += job.maxLines
-                print("\r\033[K"+line, end='' if (i+1)==nJobs else '\n')
-                # print("\r\033[K"+line)
-                #time.sleep(1)
-            moveCursorUp(nLines-1)
-        moveCursorDown(ROWS)
+                fetching[i] = 1
+            if job.res is not None:
+                if job.res.poll() is not None:
+                    job.check()
+                    placeCursor(i+ROWS-nJobs, 0)
+                    print('\033[K', end='') # clear row
+                    print(job.line, end='' if (i+1)==nJobs else '\n')
+                    fetching[i] = 0
+            nLines += job.maxLines
+            time.sleep(0.01)
+            if job.done:
+                nDone += 1
+            i += 1
+            if i == nJobs:
+                placeCursor(ROWS-1,COLUMNS-5)
+                print('%02d/%02d'%(nDone,nJobs))
+                i, nDone, nLines = 0, 0, 0
+                
+        placeCursor(ROWS,0)
         print()
         print('-'*20)
         time.sleep(10)
         jobs = get_jobs()
+
 except KeyboardInterrupt:
     moveCursorDown(ROWS)
     print()
