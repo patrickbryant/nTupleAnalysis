@@ -82,7 +82,7 @@ def get_jobs():
             ID = split[0]
             jobs.append( condor_job(schedd, ID) )
 
-    print('-'*20)
+    print('-'*COLUMNS)
     if not jobs:
         print("No Jobs")
 
@@ -112,7 +112,7 @@ try:
                     job.check()
                     placeCursor(i+ROWS-nJobs, 0)
                     print('\033[K', end='') # clear row
-                    print(job.line, end='' if (i+1)==nJobs else '\n')
+                    print(job.line)
                     fetching[i] = 0
             nLines += job.maxLines
             time.sleep(0.01)
@@ -120,13 +120,14 @@ try:
                 nDone += 1
             i += 1
             if i == nJobs:
-                placeCursor(ROWS-1,COLUMNS-5)
-                print('%02d/%02d'%(nDone,nJobs))
+                #placeCursor(ROWS-nJobs-1,COLUMNS-5)
+                placeCursor(ROWS-nJobs-1,0)
+                print('-- %02d of %2d jobs done. Fetching output from %2d. '%(nDone,nJobs,fetching.sum()))
                 i, nDone, nLines = 0, 0, 0
                 
         placeCursor(ROWS,0)
         print()
-        print('-'*20)
+        print('-'*COLUMNS)
         time.sleep(10)
         jobs = get_jobs()
 
