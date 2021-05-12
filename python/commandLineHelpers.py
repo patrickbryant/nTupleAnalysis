@@ -260,8 +260,8 @@ class jdl:
         print('#', self.fileName, cmd)
 
         if self.humanReadableName and not logName:
-            logName = 'condor_log_%s_$(Cluster)_$(Process)'%self.humanReadableName
-        else:
+            logName = 'condor_log_%s_$(Cluster)_$(Process)'%self.humanReadableName            
+        elif not logName:
             logName = 'condor_log_$(Cluster)_$(Process)'
 
         self.CMSSW = CMSSW
