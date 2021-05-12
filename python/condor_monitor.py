@@ -86,44 +86,44 @@ def get_jobs():
     if not jobs:
         print("No Jobs")
 
-    if len(jobs)>(ROWS-2): 
-        print('WARNING: %d jobs but only %d rows on screen'%(len(jobs),ROWS-2))
-        jobs = jobs[:ROWS-2]
-
     return jobs
 
     
 try:
     jobs = get_jobs()
+
     while jobs:
+        nAllJobs = len(jobs)
+        if nAllJobs>(ROWS-2): 
+            print('WARNING: %d jobs but only %d rows on screen'%(nAllJobs,ROWS-2))
+            jobs = jobs[:ROWS-2]
 
         nJobs=len(jobs)
-        for i, job in enumerate(jobs): print(job.line)
+        for job in jobs: 
+            print(job.line)
 
         fetching = np.array([0 for job in jobs])            
         i, nDone, nLines = 0, 0, 0
         while nDone < nJobs:
-            job = jobs[i]
-            if not job.fetching and fetching.sum()<16:
-                job.fetch()
-                fetching[i] = 1
-            if job.res is not None:
-                if job.res.poll() is not None:
-                    job.check()
-                    placeCursor(i+ROWS-nJobs, 0)
-                    print('\033[K', end='') # clear row
-                    print(job.line)
-                    fetching[i] = 0
-            nLines += job.maxLines
-            time.sleep(0.01)
-            if job.done:
-                nDone += 1
-            i += 1
-            if i == nJobs:
-                #placeCursor(ROWS-nJobs-1,COLUMNS-5)
-                placeCursor(ROWS-nJobs-1,0)
-                print('-- %02d of %2d jobs done. Fetching output from %2d. '%(nDone,nJobs,fetching.sum()))
-                i, nDone, nLines = 0, 0, 0
+            nDone, nLines = 0, 0
+            for i, job in enumerate(jobs):
+                if not job.fetching and fetching.sum()<16:
+                    job.fetch()
+                    fetching[i] = 1
+                if job.res is not None:
+                    if job.res.poll() is not None:
+                        job.check()
+                        placeCursor(i+ROWS-nJobs, 0)
+                        print('\033[K', end='') # clear row
+                        print(job.line)
+                        fetching[i] = 0
+                nLines += job.maxLines
+                time.sleep(0.01)
+                if job.done:
+                    nDone += 1
+            #placeCursor(ROWS-nJobs-1,COLUMNS-5)
+            placeCursor(ROWS-nJobs-1,0)
+            print('-- %02d of %2d jobs done. Fetching output from %2d. --'%(nDone,nAllJobs,fetching.sum()))
                 
         placeCursor(ROWS,0)
         print()
