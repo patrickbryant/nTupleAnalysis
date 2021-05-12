@@ -253,10 +253,10 @@ class jdl:
             fileList = [c for c in cmd.split() if '.txt' in c]
             if fileList:
                 self.humanReadableName = fileList[0].split('/')[-1].replace('.txt','')
-                self.fileName = '%s_%s.jdl'%(self.humanReadableName, self.randName)
+                if not fileName: self.fileName = '%s_%s.jdl'%(self.humanReadableName, self.randName)
             if 'hadd' in cmd:
                 self.humanReadableName = cmd.replace('-f','').split()[1].split('/')[-2]
-                self.fileName = 'hadd_%s_%s.jdl'%(self.humanReadableName, self.randName)
+                if not fileName: self.fileName = 'hadd_%s_%s.jdl'%(self.humanReadableName, self.randName)
         print('#', self.fileName, cmd)
 
         if self.humanReadableName and not logName:
