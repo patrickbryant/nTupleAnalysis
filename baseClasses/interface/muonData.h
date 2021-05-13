@@ -62,13 +62,13 @@ namespace nTupleAnalysis {
     float eta[MAXMUONS];
     float phi[MAXMUONS];
     float m  [MAXMUONS];
-    float ip3d [MAXMUONS];
-    float sip3d [MAXMUONS];
-    float dxy [MAXMUONS];
-    float dxyErr [MAXMUONS];
+    float ip3d [MAXMUONS];     //    6 :Muon_ip3d : Float_t 3D impact parameter wrt first PV, in cm        //
+    float sip3d [MAXMUONS];      //    19 :Muon_sip3d : Float_t 3D impact parameter significance wrt first PV //
+    float dxy [MAXMUONS];          // 0 :Muon_dxy  : Float_t dxy (with sign) wrt first PV, in cm            //
+    float dxyErr [MAXMUONS];      //    1 :Muon_dxyErr : Float_t dxy uncertainty, in cm                      //
 
-    Bool_t  softId[MAXMUONS];
-    UChar_t highPtId[MAXMUONS];
+    Bool_t  softId[MAXMUONS];     //   48 :Muon_softId : Bool_t soft cut-based ID                             //
+    UChar_t highPtId[MAXMUONS];   //   32 :Muon_highPtId :  | UChar_t high-pT cut-based ID (1 = tracker high pT, 2 = global high pT, which includes tracker high pT)//                     //
 
     Bool_t mediumId[MAXMUONS];
     Bool_t tightId[MAXMUONS];

@@ -144,11 +144,29 @@ void muonData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, muonName+"_iso",            isolation_corrected, NMuonName, "F" );
   connectBranchArr(readIn, tree, muonName+"_isoTrackerOnly", isolation_trkIsoOnly,NMuonName, "F" );
 
-//  *Br   25 :nPatMuon  : nPatMuon/I                                             *
-//    *Br   34 :PatMuon_IP : PatMuon_IP[nPatMuon]/F                                *
-//    *Br   35 :PatMuon_IPsig : PatMuon_IPsig[nPatMuon]/F                          *
-//    *Br   36 :PatMuon_IP2D : PatMuon_IP2D[nPatMuon]/F                            *
-//    *Br   37 :PatMuon_IP2Dsig : PatMuon_IP2Dsig[nPatMuon]/F                      *
+  // Add
+
+  //   12 :Muon_pfRelIso03_all :                                              //
+  //         | Float_t PF relative isolation dR=0.3, total (deltaBeta corrections)//
+  //   13 :Muon_pfRelIso03_chg :                                              //
+  //         | Float_t PF relative isolation dR=0.3, charged component          //
+  //   17 :Muon_ptErr : Float_t ptError of the muon track                     //
+  //   21 :Muon_tkRelIso :                                                    //
+  //         | Float_t Tracker-based relative isolation dR=0.3 for highPt, trkIso/tunePpt//
+  //   29 :Muon_pdgId :                                                       //
+  //         | Int_t PDG code assigned by the event reconstruction (not by MC truth)//
+  //   39 :Muon_looseId : Bool_t muon is loose muon                           //
+									      
+  //   41 :Muon_mediumPromptId : Bool_t cut-based ID, medium prompt WP        //
+  //   44 :Muon_mvaId :                                                       //
+  //   46 :Muon_pfIsoId :                                                     //
+  //         | UChar_t PFIso ID from miniAOD selector (1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight)//
+  //   51 :Muon_tkIsoId : UChar_t TkIso ID (1=TkIsoLoose, 2=TkIsoTight)       //
+  //   54 :Muon_genPartFlav :                                                 //
+  //         | UChar_t Flavour of genParticle for MC matching to status==1 muons://
+  //         |  1 = prompt muon (including gamma//->mu mu), 15 = muon from prompt tau, 5 = muon from b, 4 = muon from c, 3 = muon from light or unknown, 0 = unmatched//
+
+
 }    
 
 
