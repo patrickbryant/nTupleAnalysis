@@ -11,7 +11,7 @@ elecHists::elecHists(std::string name, fwlite::TFileService& fs, std::string tit
     dr03HcalDepth1TowerSumEt   =  dir.make<TH1F>("dr03HcalDepth1TowerSumEt"     ,(name+"/dr03HcalDepth1TowerSumEt;  "+title+"    ; Entries").c_str(), 50, 0, 10);
     dr03TkSumPt                =  dir.make<TH1F>("dr03TkSumPt"                  ,(name+"/dr03TkSumPt;               "+title+"    ; Entries").c_str(), 50, 0, 10);
     eCorr                      =  dir.make<TH1F>("eCorr"                        ,(name+"/eCorr;                     "+title+"    ; Entries").c_str(), 50, 0, 10);
-    eInvMinusPInv              =  dir.make<TH1F>("eInvMinusPInv"                ,(name+"/eInvMinusPInv;             "+title+"    ; Entries").c_str(), 50, -5, 5);
+    eInvMinusPInv              =  dir.make<TH1F>("eInvMinusPInv"                ,(name+"/eInvMinusPInv;             "+title+"    ; Entries").c_str(), 50, -1, 1);
     hoe                        =  dir.make<TH1F>("hoe"                          ,(name+"/hoe;                       "+title+"    ; Entries").c_str(), 50, 0, 10);
     miniPFRelIso_all           =  dir.make<TH1F>("miniPFRelIso_all"             ,(name+"/miniPFRelIso_all;          "+title+"    ; Entries").c_str(), 50, 0, 10);
     miniPFRelIso_chg           =  dir.make<TH1F>("miniPFRelIso_chg"             ,(name+"/miniPFRelIso_chg;;         "+title+"    ; Entries").c_str(), 50, 0, 10);
@@ -23,7 +23,7 @@ elecHists::elecHists(std::string name, fwlite::TFileService& fs, std::string tit
     pfRelIso03_chg             =  dir.make<TH1F>("pfRelIso03_chg"               ,(name+"/pfRelIso03_chg;            "+title+"    ; Entries").c_str(), 50, 0, 10);
     r9                         =  dir.make<TH1F>("r9"                           ,(name+"/r9;                        "+title+"    ; Entries").c_str(), 50, 0, 5);
     scEtOverPt                 =  dir.make<TH1F>("scEtOverPt"                   ,(name+"/scEtOverPt;                "+title+"    ; Entries").c_str(), 50, -5, 5);
-    sieie                      =  dir.make<TH1F>("sieie"                        ,(name+"/sieie;                     "+title+"    ; Entries").c_str(), 50, -5, 5);
+    sieie                      =  dir.make<TH1F>("sieie"                        ,(name+"/sieie;                     "+title+"    ; Entries").c_str(), 50,  0, 0.1);
     cutBased                   =  dir.make<TH1F>("cutBased"                     ,(name+"/cutBased;                  "+title+"    ; Entries").c_str(), 10, -0.5, 9.5);
     cutBased_Fall17_V1         =  dir.make<TH1F>("cutBased_Fall17_V1"           ,(name+"/cutBased_Fall17_V1;        "+title+"    ; Entries").c_str(), 10, -0.5, 9.5);
     pdgId                      =  dir.make<TH1F>("pdgId"                        ,(name+"/pdgId;                     "+title+"    ; Entries").c_str(), 25, -12.5, 12.5);

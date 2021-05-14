@@ -104,7 +104,7 @@ namespace nTupleAnalysis {
 
 
     elecData(std::string name, TChain* tree, bool readIn = true, bool isMC = false, std::string SFName = ""); 
-    std::vector<std::shared_ptr<elec>> getElecs(float ptMin = -1e6, float etaMax = 1e6, int tag = -1, bool isolation = false);
+    std::vector<std::shared_ptr<elec>> getElecs(float ptMin = -1e6, float etaMax = 1e6, bool mvaCut = false);
 
     void writeElecs(std::vector< std::shared_ptr<elec> > outputElecs) ;
     void connectBranches(bool readIn, TTree* tree);

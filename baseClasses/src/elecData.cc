@@ -186,7 +186,7 @@ void elecData::writeElecs(std::vector< std::shared_ptr<elec> > outputElecs){
 
 
 
-std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax, int tag, bool isolation){
+std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax, bool mvaCut){
 
   std::vector<std::shared_ptr<elec>> outputElecs;
   for(Int_t i = 0; i < nElecs; ++i){
@@ -197,6 +197,8 @@ std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax
 
     if(      pt[i] < ptMin) continue;
     if(fabs(eta[i])>etaMax) continue;
+    if(mvaCut && !mvaFall17V2Iso_WP80[i]) continue;
+    //if(isolation && pfRelIso04_all[i] > 0.20) continue; 
 
     outputElecs.push_back(std::make_shared<elec>(elec(i, this)));
   }

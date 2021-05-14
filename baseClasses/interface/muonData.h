@@ -32,6 +32,18 @@ namespace nTupleAnalysis {
 
     int quality;
 
+    Float_t pfRelIso03_all ;
+    Float_t pfRelIso03_chg ;
+    Float_t ptErr          ;
+    Float_t tkRelIso       ;
+    Int_t   pdgId          ;
+    Bool_t  looseId        ;
+    Bool_t  mediumPromptId ;
+    UChar_t mvaId          ;
+    UChar_t pfIsoId        ;
+    UChar_t tkIsoId        ;
+    UChar_t genPartFlav    ;
+
     int jetIdx;
     float isolation;
     float isolation_corrected;
@@ -77,6 +89,22 @@ namespace nTupleAnalysis {
     float pfRelIso04_all[MAXMUONS];
     float isolation_corrected[MAXMUONS];
     float isolation_trkIsoOnly[MAXMUONS];
+
+
+    Float_t pfRelIso03_all [MAXMUONS]; //         | Float_t PF relative isolation dR=0.3, total (deltaBeta corrections)//
+    Float_t pfRelIso03_chg [MAXMUONS]; //         | Float_t PF relative isolation dR=0.3, charged component          //
+    Float_t ptErr          [MAXMUONS]; // Float_t ptError of the muon track                     //
+    Float_t tkRelIso       [MAXMUONS]; //         | Float_t Tracker-based relative isolation dR=0.3 for highPt, trkIso/tunePpt//
+    Int_t   pdgId          [MAXMUONS]; //         | Int_t PDG code assigned by the event reconstruction (not by MC truth)//
+    Bool_t  looseId        [MAXMUONS]; // Bool_t muon is loose muon                           //
+    Bool_t  mediumPromptId [MAXMUONS]; // Bool_t cut-based ID, medium prompt WP        //
+    UChar_t mvaId          [MAXMUONS]; //         | UChar_t Mva ID from miniAOD selector (1=MvaLoose, 2=MvaMedium, 3=MvaTight, 4=MvaVTight, 5=MvaVVTight)*
+    UChar_t pfIsoId        [MAXMUONS]; //         | UChar_t PFIso ID from miniAOD selector (1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight)//
+    UChar_t tkIsoId        [MAXMUONS]; // UChar_t TkIso ID (1=TkIsoLoose, 2=TkIsoTight)       //
+    UChar_t genPartFlav    [MAXMUONS]; //         | UChar_t Flavour of genParticle for MC matching to status==1 muons://
+                                       //         |  1 = prompt muon (including gamma//->mu mu), 15 = muon from prompt tau, 5 = muon from b, 4 = muon from c, 3 = muon from light or unknown, 0 = unmatched//
+    
+
     
     muonData(std::string, TTree*, bool readIn = true, bool isMC = false, std::string SFName=""); 
     std::vector<std::shared_ptr<muon>> getMuons(float ptMin = -1e6, float etaMax = 1e6, int tag = -1, bool isolation = false);

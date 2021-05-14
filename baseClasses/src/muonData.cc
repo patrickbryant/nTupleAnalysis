@@ -36,6 +36,19 @@ muon::muon(UInt_t i, muonData* data){
   isolation = data->pfRelIso04_all[i];
   isolation_corrected = data->isolation_corrected[i];
   isolation_trackerOnly = data->isolation_trkIsoOnly[i];
+
+  pfRelIso03_all     = data->pfRelIso03_all  [i];
+  pfRelIso03_chg     = data->pfRelIso03_chg  [i];
+  ptErr              = data->ptErr           [i];
+  tkRelIso           = data->tkRelIso        [i];
+  pdgId              = data->pdgId           [i];
+  looseId            = data->looseId         [i];
+  mediumPromptId     = data->mediumPromptId  [i];
+  mvaId              = data->mvaId           [i];
+  pfIsoId            = data->pfIsoId         [i];
+  tkIsoId            = data->tkIsoId         [i];
+  genPartFlav        = data->genPartFlav     [i];
+
  
   //
   // Load the SFs
@@ -144,27 +157,20 @@ void muonData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, muonName+"_iso",            isolation_corrected, NMuonName, "F" );
   connectBranchArr(readIn, tree, muonName+"_isoTrackerOnly", isolation_trkIsoOnly,NMuonName, "F" );
 
-  // Add
 
-  //   12 :Muon_pfRelIso03_all :                                              //
-  //         | Float_t PF relative isolation dR=0.3, total (deltaBeta corrections)//
-  //   13 :Muon_pfRelIso03_chg :                                              //
-  //         | Float_t PF relative isolation dR=0.3, charged component          //
-  //   17 :Muon_ptErr : Float_t ptError of the muon track                     //
-  //   21 :Muon_tkRelIso :                                                    //
-  //         | Float_t Tracker-based relative isolation dR=0.3 for highPt, trkIso/tunePpt//
-  //   29 :Muon_pdgId :                                                       //
-  //         | Int_t PDG code assigned by the event reconstruction (not by MC truth)//
-  //   39 :Muon_looseId : Bool_t muon is loose muon                           //
-									      
-  //   41 :Muon_mediumPromptId : Bool_t cut-based ID, medium prompt WP        //
-  //   44 :Muon_mvaId :                                                       //
-  //   46 :Muon_pfIsoId :                                                     //
-  //         | UChar_t PFIso ID from miniAOD selector (1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight)//
-  //   51 :Muon_tkIsoId : UChar_t TkIso ID (1=TkIsoLoose, 2=TkIsoTight)       //
-  //   54 :Muon_genPartFlav :                                                 //
-  //         | UChar_t Flavour of genParticle for MC matching to status==1 muons://
-  //         |  1 = prompt muon (including gamma//->mu mu), 15 = muon from prompt tau, 5 = muon from b, 4 = muon from c, 3 = muon from light or unknown, 0 = unmatched//
+  connectBranchArr(readIn, tree, muonName+"_pfRelIso03_all"  , pfRelIso03_all  , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_pfRelIso03_chg"  , pfRelIso03_chg  , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_ptErr"           , ptErr           , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_tkRelIso"        , tkRelIso        , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_pdgId"           , pdgId           , NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_looseId"         , looseId         , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_mediumPromptId"  , mediumPromptId  , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_mvaId"           , mvaId           , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_pfIsoId"         , pfIsoId         , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_tkIsoId"         , tkIsoId         , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_genPartFlav"     , genPartFlav     , NMuonName, "b");
+
+
 
 
 }    
@@ -200,6 +206,19 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
     this->pfRelIso04_all[i] =  thisMuon->isolation; 
     this->isolation_corrected[i] =    thisMuon->isolation_corrected   ;
     this->isolation_trkIsoOnly[i] =    thisMuon->isolation_trackerOnly  ;
+
+    this->pfRelIso03_all  [i] = thisMuon->pfRelIso03_all     ;
+    this->pfRelIso03_chg  [i] = thisMuon->pfRelIso03_chg     ;
+    this->ptErr           [i] = thisMuon->ptErr              ;
+    this->tkRelIso        [i] = thisMuon->tkRelIso           ;
+    this->pdgId           [i] = thisMuon->pdgId              ;
+    this->looseId         [i] = thisMuon->looseId            ;
+    this->mediumPromptId  [i] = thisMuon->mediumPromptId     ;
+    this->mvaId           [i] = thisMuon->mvaId              ;
+    this->pfIsoId         [i] = thisMuon->pfIsoId            ;
+    this->tkIsoId         [i] = thisMuon->tkIsoId            ;
+    this->genPartFlav     [i] = thisMuon->genPartFlav        ;
+
 
   }
 
