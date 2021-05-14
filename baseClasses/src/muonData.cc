@@ -36,6 +36,19 @@ muon::muon(UInt_t i, muonData* data){
   isolation = data->pfRelIso04_all[i];
   isolation_corrected = data->isolation_corrected[i];
   isolation_trackerOnly = data->isolation_trkIsoOnly[i];
+
+  pfRelIso03_all     = data->pfRelIso03_all  [i];
+  pfRelIso03_chg     = data->pfRelIso03_chg  [i];
+  ptErr              = data->ptErr           [i];
+  tkRelIso           = data->tkRelIso        [i];
+  pdgId              = data->pdgId           [i];
+  looseId            = data->looseId         [i];
+  mediumPromptId     = data->mediumPromptId  [i];
+  mvaId              = data->mvaId           [i];
+  pfIsoId            = data->pfIsoId         [i];
+  tkIsoId            = data->tkIsoId         [i];
+  genPartFlav        = data->genPartFlav     [i];
+
  
   //
   // Load the SFs
@@ -144,11 +157,22 @@ void muonData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, muonName+"_iso",            isolation_corrected, NMuonName, "F" );
   connectBranchArr(readIn, tree, muonName+"_isoTrackerOnly", isolation_trkIsoOnly,NMuonName, "F" );
 
-//  *Br   25 :nPatMuon  : nPatMuon/I                                             *
-//    *Br   34 :PatMuon_IP : PatMuon_IP[nPatMuon]/F                                *
-//    *Br   35 :PatMuon_IPsig : PatMuon_IPsig[nPatMuon]/F                          *
-//    *Br   36 :PatMuon_IP2D : PatMuon_IP2D[nPatMuon]/F                            *
-//    *Br   37 :PatMuon_IP2Dsig : PatMuon_IP2Dsig[nPatMuon]/F                      *
+
+  connectBranchArr(readIn, tree, muonName+"_pfRelIso03_all"  , pfRelIso03_all  , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_pfRelIso03_chg"  , pfRelIso03_chg  , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_ptErr"           , ptErr           , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_tkRelIso"        , tkRelIso        , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_pdgId"           , pdgId           , NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_looseId"         , looseId         , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_mediumPromptId"  , mediumPromptId  , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_mvaId"           , mvaId           , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_pfIsoId"         , pfIsoId         , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_tkIsoId"         , tkIsoId         , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_genPartFlav"     , genPartFlav     , NMuonName, "b");
+
+
+
+
 }    
 
 
@@ -182,6 +206,19 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
     this->pfRelIso04_all[i] =  thisMuon->isolation; 
     this->isolation_corrected[i] =    thisMuon->isolation_corrected   ;
     this->isolation_trkIsoOnly[i] =    thisMuon->isolation_trackerOnly  ;
+
+    this->pfRelIso03_all  [i] = thisMuon->pfRelIso03_all     ;
+    this->pfRelIso03_chg  [i] = thisMuon->pfRelIso03_chg     ;
+    this->ptErr           [i] = thisMuon->ptErr              ;
+    this->tkRelIso        [i] = thisMuon->tkRelIso           ;
+    this->pdgId           [i] = thisMuon->pdgId              ;
+    this->looseId         [i] = thisMuon->looseId            ;
+    this->mediumPromptId  [i] = thisMuon->mediumPromptId     ;
+    this->mvaId           [i] = thisMuon->mvaId              ;
+    this->pfIsoId         [i] = thisMuon->pfIsoId            ;
+    this->tkIsoId         [i] = thisMuon->tkIsoId            ;
+    this->genPartFlav     [i] = thisMuon->genPartFlav        ;
+
 
   }
 
