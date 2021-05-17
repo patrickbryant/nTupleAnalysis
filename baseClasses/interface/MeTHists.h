@@ -24,7 +24,7 @@ namespace nTupleAnalysis {
     TH1F* sumEt_l;
 
     MeTHists(std::string name, fwlite::TFileService& fs, std::string title = "");
-    void Fill(const MetData&, float);
+    void Fill(const MeTData&, float);
     ~MeTHists(); 
 
   };
