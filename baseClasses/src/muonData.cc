@@ -241,6 +241,7 @@ std::vector<std::shared_ptr<muon>> muonData::getMuons(float ptMin, float etaMax,
     if(tag == 1 && highPtId[i] == 0) continue;
     if(tag == 2 && mediumId[i] == 0) continue;
     if(tag == 3 && tightId[i]  == 0) continue;
+    if(tag == 4 && int(mvaId[i]) < 3) continue;
     if(isolation && pfRelIso04_all[i] > 0.20) continue; //working points here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideMuonIdRun2
 
     if(      pt[i] < ptMin) continue;
