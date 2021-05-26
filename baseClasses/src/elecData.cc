@@ -10,7 +10,6 @@ elec::elec(UInt_t i, elecData* data){
 
   pt  = data->pt [i];
   eta = data->eta[i];
-  superClusterEta = data->superClusterEta[i];
   phi = data->phi[i];
   m   = data->m  [i];
   if(m < 0.10) m = 0.0005;
@@ -18,33 +17,33 @@ elec::elec(UInt_t i, elecData* data){
   p = TLorentzVector();
   p.SetPtEtaPhiM(pt, eta, phi, m);
 
-  softId   = data->softId[i];
-  highPtId = data->highPtId[i];
 
-  mediumId = data->mediumId[i];
-  tightId  = data->tightId[i];
+  dr03EcalRecHitSumEt          = data->dr03EcalRecHitSumEt          [i];
+  dr03HcalDepth1TowerSumEt     = data->dr03HcalDepth1TowerSumEt     [i];
+  dr03TkSumPt                  = data->dr03TkSumPt                  [i];
+  eCorr                        = data->eCorr                        [i];
+  eInvMinusPInv                = data->eInvMinusPInv                [i];
+  hoe                          = data->hoe                          [i];
+  miniPFRelIso_all             = data->miniPFRelIso_all             [i];
+  miniPFRelIso_chg             = data->miniPFRelIso_chg             [i];
+  mvaFall17V1Iso               = data->mvaFall17V1Iso               [i];
+  mvaFall17V1noIso             = data->mvaFall17V1noIso             [i];
+  mvaFall17V2Iso               = data->mvaFall17V2Iso               [i];
+  mvaFall17V2noIso             = data->mvaFall17V2noIso             [i];
+  pfRelIso03_all               = data->pfRelIso03_all               [i];
+  pfRelIso03_chg               = data->pfRelIso03_chg               [i];
+  r9                           = data->r9                           [i];
+  scEtOverPt                   = data->scEtOverPt                   [i];
+  sieie                        = data->sieie                        [i];
+  cutBased                     = data->cutBased                     [i];
+  cutBased_Fall17_V1           = data->cutBased_Fall17_V1           [i];
+  pdgId                        = data->pdgId                        [i];
+  convVeto                     = data->convVeto                     [i];
+  mvaFall17V2Iso_WP80          = data->mvaFall17V2Iso_WP80          [i];
+  mvaFall17V2Iso_WP90          = data->mvaFall17V2Iso_WP90          [i];
+  mvaFall17V2Iso_WPL           = data->mvaFall17V2Iso_WPL           [i];
+  genPartFlav                  = data->genPartFlav                  [i];
 
-  quality  = mediumId + tightId;
-
-  jetIdx    = data->jetIdx[i];
-  isolation = data->pfRelIso04_all[i];
-
-  sumChargedHadronPt = data->sumChargedHadronPt[i]; 
-  sumNeutralHadronEt = data->sumNeutralHadronEt[i]; 
-  sumPhotonEt        = data->sumPhotonEt       [i]; 
-  sumPUPt            = data->sumPUPt           [i]; 
-
-  
-  float isoCorrection = (data->sumNeutralHadronEt[i] + data->sumPhotonEt[i] - 0.5 * data->sumPUPt[i]);
-  isolation_corrected = (isoCorrection > 0) ? (data->sumChargedHadronPt[i] + isoCorrection) / pt : data->sumChargedHadronPt[i] / pt;
-
-  //
-  // Load the SFs
-  //
-  if(data->m_isMC && data->m_SFHistTight && data->m_SFHistReco){
-    SF *= data->m_SFHistReco ->GetBinContent(data->m_SFHistReco ->FindBin(superClusterEta, pt));
-    SF *= data->m_SFHistTight->GetBinContent(data->m_SFHistTight->FindBin(superClusterEta, pt));
-  }
   
 }
 
@@ -52,55 +51,12 @@ elec::~elec(){}
 
 
 //access tree
-elecData::elecData(std::string name, TChain* tree, bool isMC, std::string SFName){
+elecData::elecData(std::string name, TChain* tree, bool readIn, bool isMC, std::string SFName){
 
   m_name = name;
   m_isMC = isMC;
 
-  inputBranch(tree, ("n"+name).c_str(), n );
-
-  inputBranch(tree, (name+"_pt"  ).c_str(), pt );  
-  inputBranch(tree, (name+"_eta" ).c_str(), eta );  
-  inputBranch(tree, (name+"_superClusterEta" ).c_str(), superClusterEta );  
-  inputBranch(tree, (name+"_phi" ).c_str(), phi );  
-  inputBranch(tree, (name+"_mass").c_str(), m );
-
-  inputBranch(tree, (name+"_softId"  ).c_str(), softId );
-  inputBranch(tree, (name+"_highPtId").c_str(), highPtId );
-
-  if(inputBranch(tree, (name+"_mediumId").c_str(), mediumId ) == -1){
-    std::cout << "\tUsing " << (name+"_isMediumElec"        ) << " for mediumId " << std::endl;
-    inputBranch(tree, (name+"_isMediumElec"        ).c_str(),         mediumId        ); 
-  }
-
-  if(inputBranch(tree, (name+"_tightId" ).c_str(), tightId ) == -1){
-    std::cout << "\tUsing " << (name+"_isTightElec"        ) << " for tightId " << std::endl;
-    inputBranch(tree, (name+"_isTightElec"        ).c_str(),         tightId        ); 
-  }
-
-  inputBranch(tree, (name+"_jetIdx").c_str(), jetIdx );
-  inputBranch(tree, (name+"_pfRelIso04_all").c_str(), pfRelIso04_all );
-
-
-  inputBranch(tree, (name+"_sumChargedHadronPt").c_str(),    sumChargedHadronPt );
-  inputBranch(tree, (name+"_sumNeutralHadronEt").c_str(),    sumNeutralHadronEt );
-  inputBranch(tree, (name+"_sumPhotonEt"       ).c_str(),    sumPhotonEt        );
-  inputBranch(tree, (name+"_sumPUPt"           ).c_str(),    sumPUPt            );
-
-
-  //inputBranch(tree, (name+"_").c_str(),  );
-
-//  *Br   72 :nPFElectron : nPFElectron/I                                        *
-//    *Br   73 :PFElectron_IdxJet : PFElectron_IdxJet[nPFElectron]/I               *
-//    *Br   77 :PFElectron_ptrel : PFElectron_ptrel[nPFElectron]/F                 *
-//    *Br   78 :PFElectron_deltaR : PFElectron_deltaR[nPFElectron]/F               *
-//    *Br   79 :PFElectron_ratio : PFElectron_ratio[nPFElectron]/F                 *
-//    *Br   80 :PFElectron_ratioRel : PFElectron_ratioRel[nPFElectron]/F           *
-//    *Br   81 :PFElectron_IP : PFElectron_IP[nPFElectron]/F                       *
-//    *Br   82 :PFElectron_IP2D : PFElectron_IP2D[nPFElectron]/F                   *
-
-//  *Br   38 :nPatElec  : nPatElec/I                                             *
-//    *Br   43 :PatElec_isLooseElec : PatElec_isLooseElec[nPatElec]/I              *
+  connectBranches(readIn, tree);
 
   //
   // Load the electron SFs
@@ -133,23 +89,116 @@ elecData::elecData(std::string name, TChain* tree, bool isMC, std::string SFName
   
 }
 
-std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax, int tag, bool isolation){
+void elecData::connectBranches(bool readIn, TTree* tree){
 
-  std::vector<std::shared_ptr<elec>> outputElecs;
-  for(Int_t i = 0; i < n; ++i){
+  std::string elecName =  m_name;
+  std::string NElecName = "n"+m_name;
+
+  connectBranch(readIn, tree, NElecName, nElecs, "i" );
+
+  connectBranchArr(readIn, tree, elecName+"_pt"     , pt     ,NElecName, "F");  
+  connectBranchArr(readIn, tree, elecName+"_eta"    , eta    ,NElecName, "F");  
+  connectBranchArr(readIn, tree, elecName+"_phi"    , phi    ,NElecName, "F");  
+  connectBranchArr(readIn, tree, elecName+"_mass"   , m      ,NElecName, "F");
+
+  connectBranchArr(readIn, tree, elecName+"_dr03EcalRecHitSumEt"        ,     dr03EcalRecHitSumEt             ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dr03HcalDepth1TowerSumEt"   ,     dr03HcalDepth1TowerSumEt        ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dr03TkSumPt"                ,     dr03TkSumPt                     ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_eCorr"                      ,     eCorr                           ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_eInvMinusPInv"              ,     eInvMinusPInv                   ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_hoe"                        ,     hoe                             ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_miniPFRelIso_all"           ,     miniPFRelIso_all                ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_miniPFRelIso_chg"           ,     miniPFRelIso_chg                ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V1Iso"             ,     mvaFall17V1Iso                  ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V1noIso"           ,     mvaFall17V1noIso                ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso"             ,     mvaFall17V2Iso                  ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2noIso"           ,     mvaFall17V2noIso                ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_pfRelIso03_all"             ,     pfRelIso03_all                  ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_pfRelIso03_chg"             ,     pfRelIso03_chg                  ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_r9"                         ,     r9                              ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_scEtOverPt"                 ,     scEtOverPt                      ,NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_sieie"                      ,     sieie                           ,NElecName, "F");
+
+  connectBranchArr(readIn, tree, elecName+"_cutBased"                   ,     cutBased                        ,NElecName, "i");
+  connectBranchArr(readIn, tree, elecName+"_cutBased_Fall17_V1"         ,     cutBased_Fall17_V1              ,NElecName, "i");
+  connectBranchArr(readIn, tree, elecName+"_pdgId"                      ,     pdgId                           ,NElecName, "i");
+
+  connectBranchArr(readIn, tree, elecName+"_convVeto"                    ,    convVeto                         ,NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WP80"         ,    mvaFall17V2Iso_WP80              ,NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WP90"         ,    mvaFall17V2Iso_WP90              ,NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WPL"          ,    mvaFall17V2Iso_WPL               ,NElecName, "O");
+
+  connectBranchArr(readIn, tree, elecName+"_genPartFlav"                 ,    genPartFlav                      ,NElecName, "b");
+
+}    
+
+
+void elecData::writeElecs(std::vector< std::shared_ptr<elec> > outputElecs){
+  
+  int nOutputElecs = outputElecs.size();
+  this->nElecs = outputElecs.size();
+ 
+  for(Int_t i = 0; i < int(this->nElecs); ++i){
     if(i > int(MAXELECS-1)) {
-      std::cout  << m_name << "::Warning too many elecs! " << n << " elecs. Skipping. "<< std::endl;
+      std::cout  << m_name << "::Warning too many elecs! " << nOutputElecs << " electrons. Skipping. "<< std::endl;
       break;
     }
 
-    //if(tag == 0 && softId[i]   == 0) continue;
-    //if(tag == 1 && highPtId[i] == 0) continue;
-    //if(tag == 2 && mediumId[i] == 0) continue;
-    //if(tag == 3 && tightId[i]  == 0) continue;
-    //if(isolation && pfRelIso04_all[i] > 0.20) continue; 
+    const elecPtr& thisElec = outputElecs.at(i);
+
+    this->pt    [i] = thisElec->pt         ;
+    this->eta   [i] = thisElec->eta        ;
+    this->phi   [i] = thisElec->phi        ;
+    this->m     [i] = thisElec->m          ;
+
+    this->dr03EcalRecHitSumEt          [i]  = thisElec->dr03EcalRecHitSumEt          ;
+    this->dr03HcalDepth1TowerSumEt     [i]  = thisElec->dr03HcalDepth1TowerSumEt     ;
+    this->dr03TkSumPt                  [i]  = thisElec->dr03TkSumPt                  ;
+    this->eCorr                        [i]  = thisElec->eCorr                        ;
+    this->eInvMinusPInv                [i]  = thisElec->eInvMinusPInv                ;
+    this->hoe                          [i]  = thisElec->hoe                          ;
+    this->miniPFRelIso_all             [i]  = thisElec->miniPFRelIso_all             ;
+    this->miniPFRelIso_chg             [i]  = thisElec->miniPFRelIso_chg             ;
+    this->mvaFall17V1Iso               [i]  = thisElec->mvaFall17V1Iso               ;
+    this->mvaFall17V1noIso             [i]  = thisElec->mvaFall17V1noIso             ;
+    this->mvaFall17V2Iso               [i]  = thisElec->mvaFall17V2Iso               ;
+    this->mvaFall17V2noIso             [i]  = thisElec->mvaFall17V2noIso             ;
+    this->pfRelIso03_all               [i]  = thisElec->pfRelIso03_all               ;
+    this->pfRelIso03_chg               [i]  = thisElec->pfRelIso03_chg               ;
+    this->r9                           [i]  = thisElec->r9                           ;
+    this->scEtOverPt                   [i]  = thisElec->scEtOverPt                   ;
+    this->sieie                        [i]  = thisElec->sieie                        ;
+    this->cutBased                     [i]  = thisElec->cutBased                     ;
+    this->cutBased_Fall17_V1           [i]  = thisElec->cutBased_Fall17_V1           ;
+    this->pdgId                        [i]  = thisElec->pdgId                        ;
+    this->convVeto                     [i]  = thisElec->convVeto                     ;
+    this->mvaFall17V2Iso_WP80          [i]  = thisElec->mvaFall17V2Iso_WP80          ;
+    this->mvaFall17V2Iso_WP90          [i]  = thisElec->mvaFall17V2Iso_WP90          ;
+    this->mvaFall17V2Iso_WPL           [i]  = thisElec->mvaFall17V2Iso_WPL           ;
+    this->genPartFlav                  [i]  = thisElec->genPartFlav                  ;
+
+
+
+  }
+
+  return ;
+}
+
+
+
+std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax, bool mvaCut){
+
+  std::vector<std::shared_ptr<elec>> outputElecs;
+  for(Int_t i = 0; i < nElecs; ++i){
+    if(i > int(MAXELECS-1)) {
+      std::cout  << m_name << "::Warning too many elecs! " << nElecs << " elecs. Skipping. "<< std::endl;
+      break;
+    }
 
     if(      pt[i] < ptMin) continue;
     if(fabs(eta[i])>etaMax) continue;
+    if(mvaCut && !mvaFall17V2Iso_WP80[i]) continue;
+    //if(isolation && pfRelIso04_all[i] > 0.20) continue; 
 
     outputElecs.push_back(std::make_shared<elec>(elec(i, this)));
   }
