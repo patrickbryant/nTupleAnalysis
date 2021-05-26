@@ -18,7 +18,9 @@
 class brilCSV
 {
   std::string fileName;
- 
+  std::map<edm::LuminosityBlockID, float> lumiData;
+  std::map<unsigned int, float> lumiData_runs;
+  
  public:
  brilCSV(std::string filename) :
   fileName(filename)

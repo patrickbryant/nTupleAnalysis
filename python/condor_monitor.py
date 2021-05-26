@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import sys
 import subprocess
 import time
 import re
@@ -66,12 +67,14 @@ class condor_job:
             sys.stdout.flush()
             
         
-def get_jobs():
+def get_jobs(grep=''):
     USER = getUSER()
     q = os.popen('condor_q').read()
     lines = q.split('\n')
     jobs = []
+    passGrep = False
     for line in lines:
+        passGrep = passGrep or (grep in line)
         print(line)
         split = line.split()
         if not split: continue
@@ -80,7 +83,9 @@ def get_jobs():
         if "dagman" in line: continue
         if USER == split[1]:
             ID = split[0]
-            jobs.append( condor_job(schedd, ID) )
+            if passGrep:
+                jobs.append( condor_job(schedd, ID) )
+            passGrep = False
 
     print('-'*COLUMNS)
     if not jobs:
@@ -88,9 +93,13 @@ def get_jobs():
 
     return jobs
 
+grep=''
+if len(sys.argv)>1:
+    grep = sys.argv[1]
+    
     
 try:
-    jobs = get_jobs()
+    jobs = get_jobs(grep)
 
     while jobs:
         nAllJobs = len(jobs)

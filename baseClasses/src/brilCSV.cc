@@ -9,8 +9,6 @@ std::map<edm::LuminosityBlockID, float> brilCSV::GetData()
   std::cout<<"brilCSV::GetData() fileName: "<<fileName<<std::endl;
   std::ifstream file(fileName);
  
-  std::map<edm::LuminosityBlockID, float> lumiData;
- 
   std::string line = "";
   float intLumi = 0;
   // Iterate through each line and split the content using delimeter
@@ -37,6 +35,7 @@ std::map<edm::LuminosityBlockID, float> brilCSV::GetData()
       lumi      = std::stof (vecLine[9]);
       intLumi+=lumi;
       lumiData[lumiID] = lumi;
+      lumiData_runs[run] += lumi;
       //std::cout << run << " " << lumiBlock << " " << lumi << " " << intLumi << std::endl;
       if(lineNumber<10){
 	int i = 0;

@@ -18,6 +18,10 @@ static inline int connectBranch(bool isInput, TTree *tree, std::string name, aut
 
 static inline int outputBranch(TTree *tree, std::string name, auto& variable, std::string typeKey){
   const char *bname = name.c_str();
+  if(tree->FindBranch(bname)){
+    std::cout << "outputBranch(TTree *tree, std::string name, auto& variable, std::string typeKey)::INFO " << bname << " already exists" << std::endl;
+    return -1;
+  }
   tree->Branch(bname, &variable, (name+"/"+typeKey).c_str());
   return 0;
 }
@@ -31,8 +35,11 @@ static inline int connectBranchArr(bool isInput, TTree *tree, std::string name, 
 
 
 static inline int outputBranchArr(TTree *tree, std::string name, auto& variable, std::string indexName, std::string typeKey){
-
   const char *bname = name.c_str();
+  if(tree->FindBranch(bname)){
+    std::cout << "outputBranchArr(TTree *tree, std::string name, auto& variable, std::string indexName, std::string typeKey)::INFO " << bname << " already exists" << std::endl;
+    return -1;
+  }
   tree->Branch(bname, variable, (name+"["+indexName+"]/"+typeKey).c_str() );
   return 0;
 }

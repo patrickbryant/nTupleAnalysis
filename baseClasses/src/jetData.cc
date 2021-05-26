@@ -13,7 +13,7 @@ using std::cout;  using std::endl;
 
 //jet object
 jet::jet(){}
-jet::jet(UInt_t i, jetData* data){
+jet::jet(UInt_t i, jetData* data, std::string tagger){
 
   tree_idx = i;
 
@@ -38,6 +38,10 @@ jet::jet(UInt_t i, jetData* data){
   if(deepFlavB == 0)
     deepFlavB = deepFlavB_alt;
 
+  bTagScore = deepFlavB;
+  if(tagger == "CSVv2") bTagScore = CSVv2;
+  if(tagger == "deepB") bTagScore = deepB;
+  //if(tagger == "deepFlavB" || tagger == "deepjet") bTagScore = deepFlavB;
 
   // Normalizize the underflow
   if(CSVv2 < 0) 
@@ -244,6 +248,7 @@ jet::jet(TLorentzVector& vec, float tag){
   deepB = tag;
   CSVv2 = tag;
   deepFlavB = tag;
+  bTagScore = tag;
 }
 
 void jet::bRegression(){
@@ -302,7 +307,7 @@ jet::~jet(){
 //
 //access tree
 //
-jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::string jetDetailLevel, std::string prefix, std::string SFName, std::string btagVariations, std::string JECSyst){
+jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::string jetDetailLevel, std::string prefix, std::string SFName, std::string btagVariations, std::string JECSyst, std::string tagger){
 
   m_name = name;
   m_prefix = prefix;
@@ -310,21 +315,28 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
   m_jetDetailLevel = jetDetailLevel;
 
   connectBranches(readIn, tree, JECSyst);
+  bTagScore = deepFlavB; // default btagger
+  if(tagger != ""){
+    if(tagger == "CSVv2") bTagScore = CSVv2;
+    if(tagger == "deepB") bTagScore = deepB;
+    //if(tagger == "deepFlavB" || tagger == "deepjet") bTagScore = deepFlavB;
+  }
+
+
+  // Split btagVariations at spaces into vector of variation names
+  std::stringstream ss(btagVariations);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  m_btagVariations = std::vector<std::string>(begin,end);
 
   //
   // Load the BTagging SFs
   //
-  if(readIn && m_isMC){
+  if(readIn && m_isMC && SFName != ""){
 
     if(SFName != "2017" && SFName != "deepcsv2018" && SFName != "deepjet2018" && SFName != "deepjet2017" && SFName != "deepjet2016"){
       std::cout << "jetData::Warning no scale factors for " << m_name << " and SFName " << SFName << std::endl;
     }else{
-
-      // Split btagVariations at spaces into vector of variation names
-      std::stringstream ss(btagVariations);
-      std::istream_iterator<std::string> begin(ss);
-      std::istream_iterator<std::string> end;
-      m_btagVariations = std::vector<std::string>(begin,end);
 
       std::string systTag = "_noSyst";
       if(m_btagVariations.size()>1){
@@ -386,12 +398,17 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
 
 
 
-std::vector< std::shared_ptr<jet> > jetData::getJets(float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin){
+std::vector< jetPtr > jetData::getJets(float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin){
   
-  std::vector< std::shared_ptr<jet> > outputJets;
-  float *tag = CSVv2;
-  if(tagger == "deepB")     tag = deepB;
-  if(tagger == "deepFlavB" || tagger == "deepjet") tag = deepFlavB;
+  std::vector< jetPtr > outputJets;
+
+  float *tag = bTagScore;
+  if(tagger != ""){
+    if(tagger == "CSVv2") tag = CSVv2;
+    if(tagger == "deepB") tag = deepB;
+    if(tagger == "deepFlavB" || tagger == "deepjet") tag = deepFlavB;
+  }
+
   if(debug) std::cout << "We have " << nJets << " jets"<< std::endl;
   for(Int_t i = 0; i < int(nJets); ++i){
 
@@ -427,9 +444,9 @@ std::vector< std::shared_ptr<jet> > jetData::getJets(float ptMin, float ptMax, f
   return outputJets;
 }
 
-std::vector< std::shared_ptr<jet> > jetData::getJets(std::vector< std::shared_ptr<jet> > inputJets, float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin){
+std::vector< jetPtr > jetData::getJets(std::vector< jetPtr > inputJets, float ptMin, float ptMax, float etaMax, bool clean, float tagMin, std::string tagger, bool antiTag, int puIdMin){
   if(debug) cout << "jetData::getJets " << endl;
-  std::vector< std::shared_ptr<jet> > outputJets;
+  std::vector< jetPtr > outputJets;
   
   for(auto &jet: inputJets){
     if(debug) cout << "new jet " << endl;
@@ -460,15 +477,15 @@ std::vector< std::shared_ptr<jet> > jetData::getJets(std::vector< std::shared_pt
       continue; // Fail pilup rejection. https://twiki.cern.ch/twiki/bin/viewauth/CMS/PileupJetID
     }
     
+    float tag = jet->bTagScore;
+    if(tagger != ""){
+      if(tagger == "CSVv2") tag = jet->CSVv2;
+      if(tagger == "deepB") tag = jet->deepB;
+      if(tagger == "deepFlavB" || tagger == "deepjet") tag = jet->deepFlavB;
+    }
 
-    if(     tagger == "deepFlavB" && antiTag^(jet->deepFlavB < tagMin)) {
-      if(debug) cout << "\t fail deepFlavB " << endl;
-      continue;
-    }else if(tagger == "deepB"     && antiTag^(jet->deepB     < tagMin)) {
-      if(debug) cout << "\t fail deepB " << endl;
-      continue;
-    } else if(tagger == "CSVv2"     && antiTag^(jet->CSVv2     < tagMin)) {
-      if(debug) cout << "\t fail CSVv2 " << endl;
+    if(antiTag^(tag < tagMin)) {
+      if(debug) cout << "\t fail " << tagger << endl;
       continue;
     }
 
@@ -509,6 +526,20 @@ void jetData::updateSFs(float jetEta,  float jetPt,  float jetTagScore, int jetH
   }
 }
 
+void jetData::updateSFs(const jetPtr& jet, bool debug){
+  for(auto &variation: m_btagVariations){
+    if(debug)
+      cout << "jetPt/jetEta/jetTagScore/jetHadronFlavour/SF" 
+	   << jet->pt << "/" << jet->eta << "/" << jet->bTagScore << "/" << jet->hadronFlavour << "/" << getSF(jet->eta, jet->pt, jet->bTagScore, jet->hadronFlavour, variation) << endl;
+      
+    m_btagSFs[variation] *= getSF(jet->eta, jet->pt, jet->bTagScore, jet->hadronFlavour, variation);
+  }
+}
+
+void jetData::updateSFs(std::vector< jetPtr > jets, bool debug){
+  for(auto &jet: jets) updateSFs(jet, debug);
+}
+
 
 void jetData::resetSFs(){
   for(auto &variation: m_btagVariations){
@@ -517,7 +548,7 @@ void jetData::resetSFs(){
 }
 
 
-void jetData::writeJets(std::vector< std::shared_ptr<jet> > outputJets){
+void jetData::writeJets(std::vector< jetPtr > outputJets){
   
   int nOutputJets = outputJets.size();
   this->nJets = outputJets.size();
