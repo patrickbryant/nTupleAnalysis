@@ -51,7 +51,7 @@ def execute(command, doExecute=True, condor_dag=None): # use to run command like
         print(command)
         if doExecute: os.system(command)
     if type(command) is list and condor_dag is None:
-        babySit(commands, doExecute)
+        babySit(command, doExecute)
     if condor_dag is not None:
         if command is str:
             command = [command]

@@ -116,6 +116,9 @@ try:
         while nDone < nJobs:
             nDone, nLines = 0, 0
             for i, job in enumerate(jobs):
+                if job.done:
+                    nDone += 1
+                    continue
                 if not job.fetching and fetching.sum()<16:
                     job.fetch()
                     fetching[i] = 1
@@ -128,8 +131,8 @@ try:
                         fetching[i] = 0
                 nLines += job.maxLines
                 time.sleep(0.01)
-                if job.done:
-                    nDone += 1
+                # if job.done:
+                #     nDone += 1
             #placeCursor(ROWS-nJobs-1,COLUMNS-5)
             placeCursor(ROWS-nJobs-1,0)
             print('-- %02d of %2d jobs done. Fetching output from %2d. --'%(nDone,nAllJobs,fetching.sum()))
