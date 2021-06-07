@@ -72,20 +72,23 @@ def get_jobs(grep=''):
     q = os.popen('condor_q').read()
     lines = q.split('\n')
     jobs = []
-    passGrep = False
+
     for line in lines:
-        passGrep = passGrep or (grep in line)
         print(line)
         split = line.split()
         if not split: continue
         if "-- Schedd:" in line:
             schedd = split[2]
+            print(schedd)
         if "dagman" in line: continue
-        if USER == split[1]:
+
+        ID = ''
+        if USER == split[1]: # LPC
             ID = split[0]
-            if passGrep:
-                jobs.append( condor_job(schedd, ID) )
-            passGrep = False
+        if USER == split[0]: # lxplus
+            ID = split[-1]
+        if ID and grep in line:
+            jobs.append( condor_job(schedd, ID) )
 
     print('-'*COLUMNS)
     if not jobs:
