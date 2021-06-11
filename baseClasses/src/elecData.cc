@@ -51,7 +51,7 @@ elec::~elec(){}
 
 
 //access tree
-elecData::elecData(std::string name, TChain* tree, bool readIn, bool isMC, std::string SFName){
+elecData::elecData(std::string name, TTree* tree, bool readIn, bool isMC, std::string SFName){
 
   m_name = name;
   m_isMC = isMC;
