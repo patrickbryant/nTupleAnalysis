@@ -103,7 +103,7 @@ namespace nTupleAnalysis {
     //         |  1 = prompt electron (including gamma//->mu mu), 15 = electron from prompt tau, 22 = prompt photon (likely conversion), 5 = electron from b, 4 = electron from c, 3 = electron from light or unknown, 0 = unmatched//
 
 
-    elecData(std::string name, TChain* tree, bool readIn = true, bool isMC = false, std::string SFName = ""); 
+    elecData(std::string name, TTree* tree, bool readIn = true, bool isMC = false, std::string SFName = ""); 
     std::vector<std::shared_ptr<elec>> getElecs(float ptMin = -1e6, float etaMax = 1e6, bool mvaCut = false);
 
     void writeElecs(std::vector< std::shared_ptr<elec> > outputElecs) ;
