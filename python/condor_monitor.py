@@ -36,16 +36,19 @@ class condor_job:
 
         if self.res.returncode:
             self.done = True
-            self.line = self.line.replace('||','-|')
-        else:
-            tail = self.res.stdout.read()
-            self.res = None
-            split = [line for line in tail.split('\n') if line]
-            try:
-                line = split[-1]
-            except IndexError:
-                line = ''
+        #     self.line = self.line.replace('||','-|')
+        # else:
+        tail = self.res.stdout.read()
+        self.res = None
+        split = [line for line in tail.split('\n') if line]
+        try:
+            line = split[-1]
+        except IndexError:
+            line = ''
+        if line: # only update self.line if the string is non-empty
             self.line = '%s %10s || %s'%(self.schedd, self.ID, line)
+
+        if self.done: self.line = self.line.replace('||','-|') 
 
         # truncate output so that it never excedes one line for now
         if len(self.line)>(COLUMNS-1):
