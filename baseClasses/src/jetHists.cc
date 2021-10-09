@@ -29,6 +29,7 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 
     pt_wo_bRegCorr = dir.make<TH1F>("pt_wo_bRegCorr", (name+"/pt_wo_bRegCorr; "+title+" p_T (No bRegCorr) [GeV]; Entries").c_str(),  100,0, 500);
     bRegCorr       = dir.make<TH1F>("bRegCorr", (name+"/bRegCorr; "+title+" bRegCorr; Entries").c_str(),  100,0,2 );
+    hadronFlavour     = dir.make<TH1F>("hadronFlavour",     (name+"/hadronFlavour;    " +title+" Hadron Flavour; Entries").c_str(),  31,-5.5,25.5);
 
     
     if(jetDetailLevel.find("matched") != std::string::npos){
@@ -59,7 +60,6 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
       flavour          = dir.make<TH1F>("flavour",     (name+"/flavour;    " +title+" Flavour; Entries").c_str(),  31,-5.5,25.5);
       flavourCleaned     = dir.make<TH1F>("flavourCleaned",     (name+"/flavourCleaned;    " +title+" Flavour (cleaned); Entries").c_str(),  31,-5.5,25.5);
       partonFlavour     = dir.make<TH1F>("partonFlavour",     (name+"/partonFlavour;    " +title+" Parton Flavour; Entries").c_str(),  31,-5.5,25.5);
-      hadronFlavour     = dir.make<TH1F>("hadronFlavour",     (name+"/hadronFlavour;    " +title+" Hadron Flavour; Entries").c_str(),  31,-5.5,25.5);
       nbHadrons     = dir.make<TH1F>("nbHadrons",     (name+"/nbHadrons;    " +title+" Number of B Hadrons; Entries").c_str(),  5,-0.5,4.5);
       ncHadrons     = dir.make<TH1F>("ncHadrons",     (name+"/ncHadrons;    " +title+" Number of C Hadrons; Entries").c_str(),  5,-0.5,4.5);
 
@@ -118,6 +118,9 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   pt_wo_bRegCorr ->Fill(jet->pt_wo_bRegCorr, weight);
   bRegCorr ->Fill(jet->bRegCorr, weight);
 
+  hadronFlavour    ->Fill(jet->hadronFlavour,   weight);
+
+
   unsigned int nTrks_noV0 = 0;
 
 
@@ -151,7 +154,6 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     flavour    ->Fill(jet->flavour,   weight);
     flavourCleaned    ->Fill(jet->flavourCleaned,   weight);
     partonFlavour    ->Fill(jet->partonFlavour,   weight);
-    hadronFlavour    ->Fill(jet->hadronFlavour,   weight);
     nbHadrons        ->Fill(jet->nbHadrons,   weight);
     ncHadrons        ->Fill(jet->ncHadrons,   weight);
 

@@ -15,6 +15,12 @@ try:
 except ImportError:
     from Queue import Queue, Empty  # python 2.x
 
+try:
+    ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
+    ROWS, COLUMNS = int(ROWS), int(COLUMNS)
+except ValueError: # condor jobs don't have screen dimensions
+    ROWS, COLUMNS = 100, 100
+
 ON_POSIX = 'posix' in sys.builtin_module_names
 
 def getCMSSW():
@@ -40,9 +46,19 @@ def enqueue_output(out, queue, logFile):
     out.close()
 
 
-def execute(command, doExecute=True): # use to run command like a normal line of bash
-    print(command)
-    if doExecute: os.system(command)
+def execute(command, doExecute=True, condor_dag=None): # use to run command like a normal line of bash
+    if type(command) is str and condor_dag is None:
+        print(command)
+        if doExecute: os.system(command)
+    if type(command) is list and condor_dag is None:
+        babySit(command, doExecute)
+    if condor_dag is not None:
+        if command is str:
+            command = [command]
+        for cmd in command:
+            thisJDL = jdl(cmd=cmd)
+            condor_dag.addJob(thisJDL)
+        
 
 
 def watch(command, doExecute=True, stdout=None, doPrint=True, logFile=None): # use to run a command and keep track of the thread, ie to run something when it is done
@@ -68,12 +84,15 @@ def watch(command, doExecute=True, stdout=None, doPrint=True, logFile=None): # u
 def placeCursor(L,C):
     print('\033['+str(L)+';'+str(C)+'H', end='')
 def moveCursorUp(N=''):
+    if N<1: 
+        print('\r', end='')
+        return
     print('\r\033['+str(N)+'A', end='')
 def moveCursorDown(N=''):
     print('\r\033['+str(N)+'B', end='')
 
 
-def babySit(commands, doExecute, maxAttempts=1, maxJobs=3, logFiles=None):
+def babySit(commands, doExecute, maxAttempts=1, maxJobs=4, logFiles=None):
     attempts={}
     nCommands = len(commands)
     jobs=[]
@@ -226,11 +245,27 @@ def rmdir(directory, doExecute=True):
 
 
 class jdl:
-    def __init__(self, cmd=None, CMSSW=DEFAULTCMSSW, EOSOUTDIR="None", TARBALL=DEFAULTTARBALL, fileName=None, logPath = "./", logName = "condor_$(Cluster)_$(Process)"):
-        self.fileName = fileName if fileName else str(np.random.uniform())[2:]+".jdl"
+    def __init__(self, cmd=None, CMSSW=DEFAULTCMSSW, EOSOUTDIR="None", TARBALL=DEFAULTTARBALL, fileName=None, logPath = './', logName = ''):
+        self.randName = str(np.random.uniform())[2:]
+        self.humanReadableName = ''
+        self.fileName = fileName if fileName else self.randName+".jdl"
+        if cmd:
+            fileList = [c for c in cmd.split() if '.txt' in c]
+            if fileList:
+                self.humanReadableName = fileList[0].split('/')[-1].replace('.txt','')
+                if not fileName: self.fileName = '%s_%s.jdl'%(self.humanReadableName, self.randName)
+            if 'hadd' in cmd:
+                self.humanReadableName = cmd.replace('-f','').split()[1].split('/')[-2]
+                if not fileName: self.fileName = 'hadd_%s_%s.jdl'%(self.humanReadableName, self.randName)
+        print('#', self.fileName, cmd)
+
+        if self.humanReadableName and not logName:
+            logName = 'condor_log_%s_$(Cluster)_$(Process)'%self.humanReadableName            
+        elif not logName:
+            logName = 'condor_log_$(Cluster)_$(Process)'
 
         self.CMSSW = CMSSW
-        self.EOSOUTDIR = EOSOUTDIR
+        self.EOSOUTDIR = EOSOUTDIR # specify this to have condor.sh manually xrdcp command output to an EOS location
         self.TARBALL = TARBALL
 
         self.universe = "vanilla"
@@ -244,7 +279,7 @@ class jdl:
         self.Log = logPath+logName+".log"
         self.Arguments = CMSSW+" "+EOSOUTDIR+" "+TARBALL+" "+cmd
         self.Queue = "1" # no equals sign in .jdl file
-
+        
         self.made = False
 
     def make(self):
@@ -277,7 +312,7 @@ class dag:
         self.iG = 0
         self.iGMax = 0
         self.jobs = [[]]
-        self.generations = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        self.generations = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         
         self.jobLines=[]
         self.genLines=[]

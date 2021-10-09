@@ -1,7 +1,10 @@
+from __future__ import print_function
 import os
+import sys
 import subprocess
 import time
 import re
+import numpy as np
 from commandLineHelpers import *
 
 ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
@@ -12,34 +15,50 @@ class condor_job:
         self.schedd = schedd
         self.ID = ID
         self.done = False
-        self.line = ''
+        self.line = '%s %10s || '%(self.schedd, self.ID)
         self.maxLines = 1
+        self.res = None
+        self.fetching = False
     
-    def check(self):
-        if self.done: return self.line
-        args = ['condor_tail -maxbytes 1024 -name %s %s'%(self.schedd, self.ID)]
-        res = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash', universal_newlines=True)
-        res.wait()
+    def fetch(self):
+        if self.done: return# self.line
+        if self.res is not None: return
+        args = ['condor_tail -maxbytes 256 -name %s %s'%(self.schedd, self.ID)]
+        self.res = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash', universal_newlines=True)
+        self.fetching = True
 
-        if res.returncode:
+    def check(self):
+        if self.done: return
+        if self.res is None:
+            self.fetch()
+        if self.res.poll() is not None:
+            self.fetching = False
+
+        if self.res.returncode:
             self.done = True
-            #self.line = '%s %10s >> %s %d'%(self.schedd, self.ID, 'FINISHED: return code', res.returncode)
-            self.line += ' | FINISHED'#: return code %d'%(res.returncode)
-        else:
-            tail = res.stdout.read()
-            split = [line for line in tail.split('\n') if line]
-            try:
-                line = split[-1]
-            except IndexError:
-                line = ''
-            self.line = '%s %10s >> %s'%(self.schedd, self.ID, line)
-            time.sleep(0.1)
+        #     self.line = self.line.replace('||','-|')
+        # else:
+        tail = self.res.stdout.read()
+        self.res = None
+        split = [line for line in tail.split('\n') if line]
+        try:
+            line = split[-1]
+        except IndexError:
+            line = ''
+        if line: # only update self.line if the string is non-empty
+            self.line = '%s %10s || %s'%(self.schedd, self.ID, line)
+
+        if self.done: self.line = self.line.replace('||','-|') 
+
+        # truncate output so that it never excedes one line for now
+        if len(self.line)>(COLUMNS-1):
+            self.line = self.line[:COLUMNS-1]
 
         nLines = 1 + int(len(self.line)/COLUMNS)
         self.maxLines = max(nLines, self.maxLines)
         self.line += ('\n'+' '*COLUMNS)*(self.maxLines-nLines)
 
-        return self.line
+        return 
 
     def watch(self, timeout=1):
         start = time.time()
@@ -49,53 +68,88 @@ class condor_job:
                 break
             sys.stdout.write('\r'+line)
             sys.stdout.flush()
-            #print split[-1]
             
         
-def get_jobs():
+def get_jobs(grep=''):
     USER = getUSER()
     q = os.popen('condor_q').read()
     lines = q.split('\n')
     jobs = []
+
     for line in lines:
-        print line
+        print(line)
         split = line.split()
         if not split: continue
         if "-- Schedd:" in line:
             schedd = split[2]
+            print(schedd)
         if "dagman" in line: continue
-        if USER == split[1]:
+
+        ID = ''
+        if USER == split[1]: # LPC
             ID = split[0]
-            #print schedd, ID
+        if USER == split[0]: # lxplus
+            ID = split[-1]
+        if ID and grep in line:
             jobs.append( condor_job(schedd, ID) )
 
-    print '-'*20
+    print('-'*COLUMNS)
     if not jobs:
-        print "No Jobs"
-    # else:
-    #     print '-'*20
+        print("No Jobs")
+
     return jobs
 
+grep=''
+if len(sys.argv)>1:
+    grep = sys.argv[1]
     
+    
+try:
+    jobs = get_jobs(grep)
 
-jobs = get_jobs()
-while jobs:
+    while jobs:
+        nAllJobs = len(jobs)
+        if nAllJobs>(ROWS-2): 
+            print('WARNING: %d jobs but only %d rows on screen'%(nAllJobs,ROWS-2))
+            jobs = jobs[:ROWS-2]
 
-    nDone=0
-    nJobs=len(jobs)
-    while nDone < nJobs:
-        nDone = 0
-        nLines = 0
-        for job in jobs:
-            if job.done: 
-                nDone += 1
-            line = job.check()
-            nLines += job.maxLines
-            print "\033[K"+line
-        moveCursorUp(nLines)
+        nJobs=len(jobs)
+        for job in jobs: 
+            print(job.line)
+
+        fetching = np.array([0 for job in jobs])            
+        i, nDone, nLines = 0, 0, 0
+        while nDone < nJobs:
+            nDone, nLines = 0, 0
+            for i, job in enumerate(jobs):
+                if job.done:
+                    nDone += 1
+                    continue
+                if not job.fetching and fetching.sum()<16:
+                    job.fetch()
+                    fetching[i] = 1
+                if job.res is not None:
+                    if job.res.poll() is not None:
+                        job.check()
+                        placeCursor(i+ROWS-nJobs, 0)
+                        print('\033[K', end='') # clear row
+                        print(job.line)
+                        fetching[i] = 0
+                nLines += job.maxLines
+                time.sleep(0.01)
+                # if job.done:
+                #     nDone += 1
+            #placeCursor(ROWS-nJobs-1,COLUMNS-5)
+            placeCursor(ROWS-nJobs-1,0)
+            print('-- %02d of %2d jobs done. Fetching output from %2d. --'%(nDone,nAllJobs,fetching.sum()))
+                
+        placeCursor(ROWS,0)
+        print()
+        print('-'*COLUMNS)
+        time.sleep(10)
+        jobs = get_jobs()
+
+except KeyboardInterrupt:
     moveCursorDown(ROWS)
-
-    print '-'*20
-    time.sleep(10)
-    jobs = get_jobs()
-
+    print()
+    pass

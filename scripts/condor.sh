@@ -35,11 +35,11 @@ if [[ $CMDEXIT -ne 0 ]]; then
     exit $CMDEXIT
 fi
 
-if [ $EOSOUTDIR == "None" ]
+# if [ $EOSOUTDIR == "None" ]
+# then
+#     echo "Done"
+if [ $EOSOUTDIR != "None" ]
 then
-    echo "Done"
-else
-    ### Now that the cmsRun is over, there is one or more root or h5 files created
     pwd
     echo "List all root files:"
     ls *.root
@@ -94,5 +94,5 @@ else
 	    rm ${FILE}
 	done
     fi
-fi #EOSOUTDIR?=None
-echo "Leaving condor.sh"
+fi
+

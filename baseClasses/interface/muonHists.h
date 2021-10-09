@@ -23,6 +23,24 @@ namespace nTupleAnalysis {
     TH1F* nMuons;
     TH1F* SF;
 
+    TH1F* ip3d            ;
+    TH1F* ip3d_l            ;
+    TH1F* sip3d  	      ;
+    TH1F* sip3d_l  	      ;
+    TH1F* pfRelIso03_all  ;
+    TH1F* pfRelIso03_chg  ;
+    TH1F* ptErr           ;
+    TH1F* tkRelIso        ;
+    TH1F* pdgId           ;
+    TH1F* looseId         ;
+    TH1F* mediumPromptId  ;
+    TH1F* mvaId           ;
+    TH1F* pfIsoId         ;
+    TH1F* tkIsoId         ;
+    TH1F* genPartFlav     ;
+
+
+
     muonHists(std::string, fwlite::TFileService&, std::string title = "");
     void Fill(const muonPtr&, float);
     ~muonHists(); 
