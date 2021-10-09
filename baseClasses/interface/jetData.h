@@ -36,8 +36,8 @@ namespace nTupleAnalysis {
     float bRegCorr;
     float pt_wo_bRegCorr;
 
-    float deepB;
-    float CSVv2;
+    float deepB = 0;
+    float CSVv2 = 0;
     float deepFlavB = 0;
     Int_t puId;
     Int_t jetId;
@@ -50,12 +50,12 @@ namespace nTupleAnalysis {
     int nSE            ;
     int looseID        ;
     int tightID        ;
-    float DeepCSV      ;
+    float DeepCSV      = 0;
     float DeepCSV_reCalc = -2;
-    float DeepCSVb     ;
-    float DeepCSVc     ;
-    float DeepCSVl     ;
-    float DeepCSVbb    ;
+    float DeepCSVb     = 0;
+    float DeepCSVc     = 0;
+    float DeepCSVl     = 0;
+    float DeepCSVbb    = 0;
 
     // truth Info
     int flavour        ;
@@ -172,9 +172,9 @@ namespace nTupleAnalysis {
     int nSE            [MAXJETS];
     int looseID        [MAXJETS];
     int tightID        [MAXJETS];
-    float DeepCSVb     [MAXJETS];
-    float DeepCSVc     [MAXJETS];
-    float DeepCSVl     [MAXJETS];
+    float DeepCSVb     [MAXJETS] = {0};;
+    float DeepCSVc     [MAXJETS] = {0};;
+    float DeepCSVl     [MAXJETS] = {0};;
     float DeepCSVbb    [MAXJETS] = {0};
 
     //

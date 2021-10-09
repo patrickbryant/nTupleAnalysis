@@ -69,7 +69,10 @@ jet::jet(UInt_t i, jetData* data){
   DeepCSVl       = data->DeepCSVl       [i];
   DeepCSVbb      = data->DeepCSVbb      [i];
 
-  DeepCSV = DeepCSVb+DeepCSVbb;
+  DeepCSV = DeepCSVb;
+  if(DeepCSVbb > 0)
+    DeepCSV += DeepCSVbb;
+
   if(DeepCSV < 0)
     DeepCSV = -0.1;
 

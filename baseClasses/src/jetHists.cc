@@ -1,4 +1,3 @@
-
 #include "nTupleAnalysis/baseClasses/interface/jetHists.h"
 
 using namespace nTupleAnalysis;
@@ -14,9 +13,9 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     puId = dir.make<TH1F>("puId", (name+"/puId; "+title+" Pileup ID; Entries").c_str(), 17,-0.5,16.5);
     jetId = dir.make<TH1F>("jetId", (name+"/jetId; "+title+" Jet ID; Entries").c_str(), 17,-0.5,16.5);
 
-    deepB     = dir.make<TH1F>("deepB",     (name+"/deepB; "    +title+" Deep B; Entries").c_str(), 100,0,1);
-    CSVv2     = dir.make<TH1F>("CSVv2",     (name+"/CSVv2; "    +title+" CSV v2; Entries").c_str(), 100,0,1);
-    deepFlavB = dir.make<TH1F>("deepFlavB", (name+"/deepFlavB; "+title+" Deep (Jet) Flavour B; Entries").c_str(), 100,0,1);
+    deepB     = dir.make<TH1F>("deepB",     (name+"/deepB; "    +title+" Deep B; Entries").c_str(), 120,-0.2,1.2);
+    CSVv2     = dir.make<TH1F>("CSVv2",     (name+"/CSVv2; "    +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
+    deepFlavB = dir.make<TH1F>("deepFlavB", (name+"/deepFlavB; "+title+" Deep (Jet) Flavour B; Entries").c_str(), 120,-0.2,1.2);
     nJets     = dir.make<TH1F>("nJets",     (name+"/nJets;    " +title+" Number of Jets; Entries").c_str(),  10,-0.5,9.5);
 
     CSVv2_l     = dir.make<TH1F>("CSVv2_l",     (name+"/CSVv2_l; "   +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
@@ -52,7 +51,8 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
       nseltracks  = dir.make<TH1F>("nSelTracks",  (name+"/nSelTracks;    " +title+" Number of Selected Tracks; Entries").c_str(),  20,-0.5,19.5);
 
       tracks      = new trackHists(name+"/tracks",      fs, title);
-      tracks_noV0 = new trackHists(name+"/tracks_noV0", fs, title);
+      
+      if(jetDetailLevel.find("noV0") != std::string::npos) tracks_noV0 = new trackHists(name+"/tracks_noV0", fs, title);
     }
 
     if(jetDetailLevel.find("btagInputs") != std::string::npos){
@@ -66,13 +66,13 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
       SF      = dir.make<TH1F>("SF",     (name+"/SF;SF;Entries").c_str(),50,-0.1,2);
 
       btags      = new btaggingHists(name+"/btags",      fs, title);
-      btags_noV0 = new btaggingHists(name+"/btags_noV0", fs, title);
+      if(jetDetailLevel.find("noV0") != std::string::npos) btags_noV0 = new btaggingHists(name+"/btags_noV0", fs, title);
 
       if(jetDetailLevel.find("Tracks") != std::string::npos){
 	Delta_nTracks_tracks_btag                    = dir.make<TH1F>("Del_nTracks",     ("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  21,-10.5,10.5);
-	Delta_nTracks_tracks_btag_noV0               = dir.make<TH1F>("Del_nTracks_noV0",("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  21,-10.5,10.5);
+	if(jetDetailLevel.find("noV0") != std::string::npos) Delta_nTracks_tracks_btag_noV0               = dir.make<TH1F>("Del_nTracks_noV0",("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  21,-10.5,10.5);
 	Delta_nTracks_tracks_btag_l                  = dir.make<TH1F>("Del_nTracks_l",     ("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  101,-50.5,50.5);
-	Delta_nTracks_tracks_btag_noV0_l             = dir.make<TH1F>("Del_nTracks_noV0_l",("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  101,-50.5,50.5);
+	if(jetDetailLevel.find("noV0") != std::string::npos) Delta_nTracks_tracks_btag_noV0_l             = dir.make<TH1F>("Del_nTracks_noV0_l",("#Delta NTracks (trks-btag);    " +title+" Number of Tracks; Entries").c_str(),  101,-50.5,50.5);
       }
 
     }
@@ -138,10 +138,10 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     for(const trackPtr& track: jet->tracks) {
       if(!track->isfromV0){
 	++nTrks_noV0;
-	tracks_noV0->Fill(track, weight);
+	if(tracks_noV0) tracks_noV0->Fill(track, weight);
       }
     }
-    tracks_noV0->nTracks->Fill(nTrks_noV0, weight);  
+    if(tracks_noV0) tracks_noV0->nTracks->Fill(nTrks_noV0, weight);  
   }
 
   //
@@ -180,18 +180,18 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     unsigned int nTrkTags_noV0 = 0;
     for(const trkTagVarPtr& trkTag: jet->trkTagVars) {
       if(!trkTag->matchIsFromV0){
-	btags_noV0->FillTrkTagVarHists(trkTag, weight);
+	if(btags_noV0) btags_noV0->FillTrkTagVarHists(trkTag, weight);
 	++nTrkTags_noV0;
       }
     }
-    btags_noV0->trkTag_nTracks->Fill(nTrkTags_noV0, weight);
+    if(btags_noV0) btags_noV0->trkTag_nTracks->Fill(nTrkTags_noV0, weight);
 
     if(tracks){
       Delta_nTracks_tracks_btag         ->Fill( jet->tracks.size() - jet->trkTagVars.size()  ,weight);
-      Delta_nTracks_tracks_btag_noV0    ->Fill( nTrks_noV0 - nTrkTags_noV0  ,weight);
+      if(Delta_nTracks_tracks_btag_noV0) Delta_nTracks_tracks_btag_noV0    ->Fill( nTrks_noV0 - nTrkTags_noV0  ,weight);
 
       Delta_nTracks_tracks_btag_l       ->Fill( jet->tracks.size() - jet->trkTagVars.size()  ,weight);
-      Delta_nTracks_tracks_btag_noV0_l  ->Fill( nTrks_noV0 - nTrkTags_noV0  ,weight);
+      if(Delta_nTracks_tracks_btag_noV0_l) Delta_nTracks_tracks_btag_noV0_l  ->Fill( nTrks_noV0 - nTrkTags_noV0  ,weight);
     }
 
   }
