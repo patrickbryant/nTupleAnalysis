@@ -233,6 +233,28 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
     SF = 1.0;
   }
 
+
+  Ip2N       = data->Ip2N         [i];
+  Ip2P       = data->Ip2P         [i];
+  Ip3N       = data->Ip3N         [i];
+  Ip3P       = data->Ip3P         [i];
+  ProbaN     = data->ProbaN       [i];
+  Proba      = data->Proba        [i];
+  BprobN     = data->BprobN       [i];
+  Bprob      = data->Bprob        [i];
+  Svx        = data->Svx          [i];
+  SvxHP      = data->SvxHP        [i];
+  CombIVF    = data->CombIVF      [i];
+  CombIVF_N  = data->CombIVF_N    [i];
+  SoftMuN    = data->SoftMuN      [i];
+  SoftMu     = data->SoftMu       [i];
+  SoftElN    = data->SoftElN      [i];
+  SoftEl     = data->SoftEl       [i];
+  cMVAv2     = data->cMVAv2       [i];
+  cMVAv2N    = data->cMVAv2N      [i];
+
+
+
 }
 
 
@@ -672,6 +694,29 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 
   connectBranchArr(readIn, tree, jetName+"_isTag", isTag,   NjetName,  "O");  
   connectBranchArr(readIn, tree, jetName+"_isSel", isSel,   NjetName,  "O");  
+
+  connectBranchArr(readIn, tree, jetName+"_Ip2N"         ,Ip2N     ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Ip2P"         ,Ip2P     ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Ip3N"         ,Ip3N     ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Ip3P"         ,Ip3P     ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_ProbaN"       ,ProbaN   ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Proba"        ,Proba    ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_BprobN"       ,BprobN   ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Bprob"        ,Bprob    ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_Svx"          ,Svx      ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_SvxHP"        ,SvxHP    ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_CombIVF"      ,CombIVF  ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_CombIVF_N"    ,CombIVF_N,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_SoftMuN"      ,SoftMuN  ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_SoftMu"       ,SoftMu   ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_SoftElN"      ,SoftElN  ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_SoftEl"       ,SoftEl   ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_cMVAv2"       ,cMVAv2   ,  NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_cMVAv2N"      ,cMVAv2N  ,  NjetName, "F");
+
+
+
+
 
   //
   //  Following only supported for reading In

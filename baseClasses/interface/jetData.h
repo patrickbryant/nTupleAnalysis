@@ -43,6 +43,24 @@ namespace nTupleAnalysis {
     Int_t puId;
     Int_t jetId;
 
+    float Ip2N     = -99;
+    float Ip2P     = -99;
+    float Ip3N     = -99;
+    float Ip3P     = -99;
+    float ProbaN   = -99;
+    float Proba    = -99;
+    float BprobN   = -99;
+    float Bprob    = -99;
+    float Svx      = -99;
+    float SvxHP    = -99;
+    float CombIVF  = -99;
+    float CombIVF_N= -99;
+    float SoftMuN  = -99;
+    float SoftElN  = -99;
+    float cMVAv2   = -99;
+    float cMVAv2N  = -99;
+
+
     int ntracks        ;
     int nseltracks     ;
     float SoftMu       ;
@@ -165,6 +183,26 @@ namespace nTupleAnalysis {
     float *bTagScore;
     Int_t puId[MAXJETS];
     Int_t jetId[MAXJETS];
+
+
+    float Ip2N     [MAXJETS];
+    float Ip2P     [MAXJETS];
+    float Ip3N     [MAXJETS];
+    float Ip3P     [MAXJETS];
+    float ProbaN   [MAXJETS];
+    float Proba    [MAXJETS];
+    float BprobN   [MAXJETS];
+    float Bprob    [MAXJETS];
+    float Svx      [MAXJETS];
+    float SvxHP    [MAXJETS];
+    float CombIVF  [MAXJETS];
+    float CombIVF_N[MAXJETS];
+    float SoftMuN  [MAXJETS];
+    float SoftElN  [MAXJETS];
+    float cMVAv2   [MAXJETS];
+    float cMVAv2N  [MAXJETS];
+
+
 
     int ntracks        [MAXJETS];
     int nseltracks     [MAXJETS];
