@@ -17,27 +17,27 @@ btaggingDeltaHists::btaggingDeltaHists(std::string name, TFileDirectory& dir, st
 void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::string title) {
 
   dsv_NTracks                    = dir.make<TH1F>("dsv_NTracks"                ,"vertexNTracks;#Delta nVertex Tracks;Entries"                 ,11, -5.5, 5.5);
-  dsv_Mass                       = dir.make<TH1F>("dsv_Mass"                   ,"vertexMass;#Delta Vertex Mass [GeV]"                    ,100, -1, 1);
+  dsv_Mass                       = dir.make<TH1F>("dsv_Mass"                   ,"vertexMass;#Delta Vertex Mass [GeV]"                    ,100, -5, 5);
   dsv_JetDeltaR                  = dir.make<TH1F>("dsv_JetDeltaR"              ,"vertexJetDeltaR;#Delta Vertex-Jet #Delta R"               ,100, -0.04, 0.04);
   //FitProb                    = dir.make<TH1F>("dsv_FitProb"                ,"vertexFitProb;Vertex Fit Prob"                 ,100, -50, 50);
   dsv_EnergyRatio                = dir.make<TH1F>("dsv_EnergyRatio"            ,"vertexEnergyRatio;#Delta Vertex Energy Fraction "             ,100, -0.3, 0.3);
-  dsv_R              = dir.make<TH1F>("dsv_R          "            ,"R          ;#Delta Vertex R           "             ,100, -0.02, 0.02);
-  dsv_Z              = dir.make<TH1F>("dsv_Z          "            ,"Z          ;#Delta Vertex Z           "             ,100, -0.02, 0.02);
-  dsv_Chi2           = dir.make<TH1F>("dsv_Chi2       "            ,"Chi2       ;#Delta Vertex Chi2        "             ,100, -0.1, 0.1);
-  dsv_Chi2_l         = dir.make<TH1F>("dsv_Chi2_l     "            ,"Chi2       ;#Delta Vertex Chi2        "           ,100, -5, 5);
-  dsv_NDF            = dir.make<TH1F>("dsv_NDF        "            ,"NDF        ;#Delta Vertex NDF         "             ,19, -9.5, 9.5);
-  dsv_Flight         = dir.make<TH1F>("dsv_Flight     "            ,"Flight     ;#Delta Vertex Flight      "             ,100, -0.02, 0.02);
-  dsv_FlightSig      = dir.make<TH1F>("dsv_FlightSig  "            ,"FlightSig  ;#Delta Vertex FlightSig   "             ,100, -5, 5);
-  dsv_Flight2D       = dir.make<TH1F>("dsv_Flight2D   "            ,"Flight2D   ;#Delta Vertex Flight2D    "             ,100, -0.02, 0.02);
-  dsv_FlightSig2D    = dir.make<TH1F>("dsv_FlightSig2D"            ,"FlightSig2D;#Delta Vertex FlightSig2D "             ,100, -5, 5);
-  dsv_Pt             = dir.make<TH1F>("dsv_Pt         "            ,"Pt         ;#Delta Vertex Pt          "             ,100, -20, 20);
-  dsv_Eta            = dir.make<TH1F>("dsv_Eta        "            ,"Eta        ;#Delta Vertex Eta         "             ,100, -0.1, 0.1);
-  dsv_Phi            = dir.make<TH1F>("dsv_Phi        "            ,"Phi        ;#Delta Vertex Phi         "             ,100, -0.1, 0.1);
-  dsv_DistJetAxis    = dir.make<TH1F>("dsv_DistJetAxis"            ,"DistJetAxis;#Delta Vertex DistJetAxis "             ,100, -5e-5, 5e-5);
-  dsv_nSVs           = dir.make<TH1F>("dsv_nSVs",     ("nSVs;  #Delta " +title+" Number of Sec. Verticies; Entries").c_str(),  21,-10.5,10.5);
+  dsv_R              = dir.make<TH1F>("dsv_R"            ,"R          ;#Delta Vertex R           "             ,100, -0.02, 0.02);
+  dsv_Z              = dir.make<TH1F>("dsv_Z"            ,"Z          ;#Delta Vertex Z           "             ,100, -0.02, 0.02);
+  dsv_Chi2           = dir.make<TH1F>("dsv_Chi2"         ,"Chi2       ;#Delta Vertex Chi2        "             ,100, -0.1, 0.1);
+  dsv_Chi2_l         = dir.make<TH1F>("dsv_Chi2_l"       ,"Chi2       ;#Delta Vertex Chi2        "           ,100, -5, 5);
+  dsv_NDF            = dir.make<TH1F>("dsv_NDF"          ,"NDF        ;#Delta Vertex NDF         "             ,19, -9.5, 9.5);
+  dsv_Flight         = dir.make<TH1F>("dsv_Flight"       ,"Flight     ;#Delta Vertex Flight      "             ,100, -0.02, 0.02);
+  dsv_FlightSig      = dir.make<TH1F>("dsv_FlightSig"    ,"FlightSig  ;#Delta Vertex FlightSig   "             ,100, -5, 5);
+  dsv_Flight2D       = dir.make<TH1F>("dsv_Flight2D"     ,"Flight2D   ;#Delta Vertex Flight2D    "             ,100, -0.02, 0.02);
+  dsv_FlightSig2D    = dir.make<TH1F>("dsv_FlightSig2D"  ,"FlightSig2D;#Delta Vertex FlightSig2D "             ,100, -5, 5);
+  dsv_Pt             = dir.make<TH1F>("dsv_Pt"           ,"Pt         ;#Delta Vertex Pt          "             ,100, -20, 20);
+  dsv_Eta            = dir.make<TH1F>("dsv_Eta"          ,"Eta        ;#Delta Vertex Eta         "             ,100, -0.1, 0.1);
+  dsv_Phi            = dir.make<TH1F>("dsv_Phi"          ,"Phi        ;#Delta Vertex Phi         "             ,100, -0.1, 0.1);
+  dsv_DistJetAxis    = dir.make<TH1F>("dsv_DistJetAxis"  ,"DistJetAxis;#Delta Vertex DistJetAxis "             ,100, -5e-5, 5e-5);
+  dsv_nSVs           = dir.make<TH1F>("dsv_nSVs"         ,     ("nSVs;  #Delta " +title+" Number of Sec. Verticies; Entries").c_str(),  21,-10.5,10.5);
   dsv_boostOverSqrtJetPt         = dir.make<TH1F>("dsv_BoostOverSqrtJetPt"     ,"vertexBoostOverSqrtJetPt;#Delta Vertex Boost/#sqrt{jet P_{T}}"      ,100, -0.05, 0.05);
   dsv_massVertexEnergyFraction   = dir.make<TH1F>("dsv_massVertexEnergyFraction"     ,"massVertexEnergyFraction;#Delta massVertexEnergyFraction"      ,100, -0.2,0.2);
-  dsv_totCharge   = dir.make<TH1F>("dsv_totCharge"     ,"totCharge;totCharge"      ,11, -5.5,5.5);
+  dsv_totCharge   = dir.make<TH1F>("dsv_totCharge"     ,"totCharge;#Delta totCharge"      ,11, -5.5,5.5);
 
 
   dtrkTag_ip3d_l = dir.make<TH1F>("dip3d_l","ip3d;#Delta IP3D [cm]",100,-0.05,0.05);
@@ -80,17 +80,17 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
 
 
   dtag_jetNTracks                       = dir.make<TH1F>("djetNTracks"                   ,"jetNTracks;#Delta Number Tracks"                    ,19, -9.5, 9.5);
-  dtag_jetNSecondaryVertices               = dir.make<TH1F>("djetNSecondaryVertices"           ,"jetNSelectedTracks;#Delta Number Secondary Verticies"            ,11, -4.5, 4.5);
+  dtag_jetNSecondaryVertices            = dir.make<TH1F>("djetNSecondaryVertices"        ,"jetNSelectedTracks;#Delta Number Secondary Verticies"            ,11, -4.5, 4.5);
 
   dtag_chargedMultiplicity               = dir.make<TH1F>("dchargedMultiplicity"           ,"chargedMultiplicity;#Delta charged multiplicity"            ,41, -20.5, 20.5);
-  dtag_chargedHadronEnergyFraction       = dir.make<TH1F>("dchargedHadronEnergyFraction"         ,"chargedHadronEnergyFraction;#Delta charged Hadron energy fraction"          ,100, -1,1.);
-  dtag_chargedHadronMultiplicity         = dir.make<TH1F>("dchargedHadronMultiplicity"           ,"chargedHadronMultiplicity;#Delta charged hadron multiplicity"            ,41, -20.5, 20.5);
-  dtag_chargedEmEnergyFraction           = dir.make<TH1F>("dchargedEmEnergyFraction"         ,"chargedEmEnergyFraction;#Delta charged Em energy fraction"          ,100, -1,1.);
+  dtag_chargedHadronEnergyFraction       = dir.make<TH1F>("dchargedHadronEnergyFraction"   ,"chargedHadronEnergyFraction;#Delta charged Hadron energy fraction"          ,100, -1,1.);
+  dtag_chargedHadronMultiplicity         = dir.make<TH1F>("dchargedHadronMultiplicity"     ,"chargedHadronMultiplicity;#Delta charged hadron multiplicity"            ,41, -20.5, 20.5);
+  dtag_chargedEmEnergyFraction           = dir.make<TH1F>("dchargedEmEnergyFraction"       ,"chargedEmEnergyFraction;#Delta charged Em energy fraction"          ,100, -1,1.);
 
   dtag_neutralMultiplicity               = dir.make<TH1F>("dneutralMultiplicity"           ,"neutralMultiplicity;#Delta neutral multiplicity"            ,41, -20.5, 20.5);
-  dtag_neutralHadronEnergyFraction       = dir.make<TH1F>("dneutralHadronEnergyFraction"         ,"neutralHadronEnergyFraction;#Delta neutral Hadron energy fraction"          ,100, -1,1.);
-  dtag_neutralHadronMultiplicity         = dir.make<TH1F>("dneutralHadronMultiplicity"           ,"neutralHadronMultiplicity;#Delta neutral hadron multiplicity"           ,41, -20.5, 20.5);
-  dtag_neutralEmEnergyFraction           = dir.make<TH1F>("dneutralEmEnergyFraction"         ,"neutralEmEnergyFraction;#Delta neutral Em energy fraction"          ,100, -1,1);
+  dtag_neutralHadronEnergyFraction       = dir.make<TH1F>("dneutralHadronEnergyFraction"   ,"neutralHadronEnergyFraction;#Delta neutral Hadron energy fraction"          ,100, -1,1.);
+  dtag_neutralHadronMultiplicity         = dir.make<TH1F>("dneutralHadronMultiplicity"     ,"neutralHadronMultiplicity;#Delta neutral hadron multiplicity"           ,41, -20.5, 20.5);
+  dtag_neutralEmEnergyFraction           = dir.make<TH1F>("dneutralEmEnergyFraction"       ,"neutralEmEnergyFraction;#Delta neutral Em energy fraction"          ,100, -1,1);
 
   dtag_photonMultiplicity               = dir.make<TH1F>("dphotonMultiplicity"           ,"photonMultiplicity;#Delta photon multiplicity"             ,41, -20.5, 20.5);
   dtag_photonEnergyFraction             = dir.make<TH1F>("dphotonEnergyFraction"         ,"photonEnergyFraction;#Delta photon energy fraction"          ,100, -1,1.);
