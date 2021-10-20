@@ -80,7 +80,7 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
 
 
   dtag_jetNTracks                       = dir.make<TH1F>("djetNTracks"                   ,"jetNTracks;#Delta Number Tracks"                    ,19, -9.5, 9.5);
-  dtag_jetNSecondaryVertices            = dir.make<TH1F>("djetNSecondaryVertices"        ,"jetNSelectedTracks;#Delta Number Secondary Verticies"            ,11, -4.5, 4.5);
+  dtag_jetNSecondaryVertices            = dir.make<TH1F>("djetNSecondaryVertices"        ,"jetNSelectedTracks;#Delta Number Secondary Verticies"            ,9, -4.5, 4.5);
 
   dtag_chargedMultiplicity               = dir.make<TH1F>("dchargedMultiplicity"           ,"chargedMultiplicity;#Delta charged multiplicity"            ,41, -20.5, 20.5);
   dtag_chargedHadronEnergyFraction       = dir.make<TH1F>("dchargedHadronEnergyFraction"   ,"chargedHadronEnergyFraction;#Delta charged Hadron energy fraction"          ,100, -1,1.);
