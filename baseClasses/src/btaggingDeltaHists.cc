@@ -34,7 +34,7 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
   dsv_Eta            = dir.make<TH1F>("dsv_Eta        "            ,"Eta        ;#Delta Vertex Eta         "             ,100, -0.1, 0.1);
   dsv_Phi            = dir.make<TH1F>("dsv_Phi        "            ,"Phi        ;#Delta Vertex Phi         "             ,100, -0.1, 0.1);
   dsv_DistJetAxis    = dir.make<TH1F>("dsv_DistJetAxis"            ,"DistJetAxis;#Delta Vertex DistJetAxis "             ,100, -5e-5, 5e-5);
-  dsv_nSVs           = dir.make<TH1F>("dsv_nSVs",     ("nSVs;  #Delta " +title+" Number of Sec. Verticies; Entries").c_str(),  10,-0.5,9.5);
+  dsv_nSVs           = dir.make<TH1F>("dsv_nSVs",     ("nSVs;  #Delta " +title+" Number of Sec. Verticies; Entries").c_str(),  21,-10.5,10.5);
   dsv_boostOverSqrtJetPt         = dir.make<TH1F>("dsv_BoostOverSqrtJetPt"     ,"vertexBoostOverSqrtJetPt;#Delta Vertex Boost/#sqrt{jet P_{T}}"      ,100, -0.05, 0.05);
   dsv_massVertexEnergyFraction   = dir.make<TH1F>("dsv_massVertexEnergyFraction"     ,"massVertexEnergyFraction;#Delta massVertexEnergyFraction"      ,100, -0.2,0.2);
   dsv_totCharge   = dir.make<TH1F>("dsv_totCharge"     ,"totCharge;totCharge"      ,11, -5.5,5.5);
@@ -72,8 +72,8 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
   dtrkTag_trackPParRatio             = dir.make<TH1F>("dtrackPParRatio"      ,    "trackPParRatio;#Delta track P Par Ratio;Entries", 100, -0.02, 0.02);  
 
   dtrkTag_trackChi2                  = dir.make<TH1F>("dtrackChi2"            ,    "trackChi2;#Delta track Chi2;Entries", 100, -1, 1);            
-  dtrkTag_trackNTotalHits            = dir.make<TH1F>("dtrackNTotalHits"      ,    "trackNTotalHits;#Delta trackNTotalHits;Entries", 10, -4.5, 4.5);
-  dtrkTag_trackNPixelHits            = dir.make<TH1F>("dtrackNPixelHits"      ,    "trackNPixelHits;#Delta trackNPixelHits;Entries", 10, -4.5, 4.5);  
+  dtrkTag_trackNTotalHits            = dir.make<TH1F>("dtrackNTotalHits"      ,    "trackNTotalHits;#Delta trackNTotalHits;Entries", 21, -10.5, 10.5);
+  dtrkTag_trackNPixelHits            = dir.make<TH1F>("dtrackNPixelHits"      ,    "trackNPixelHits;#Delta trackNPixelHits;Entries", 9, -4.5, 4.5);  
   //dtrkTag_nTracks                    = dir.make<TH1F>("d_nTracks",     ("nTrkTags;    " +title+" Number of Tracks; Entries").c_str(),  20,-0.5,19.5);
   dtrkTag_isFromV0                    = dir.make<TH1F>("dtrackIsFromV0"  ,  "IsFromV0;#Delta Is from V0;Entries", 3, -1.5,  1.5);  
 

@@ -7,6 +7,7 @@
 #include <TLorentzVector.h>
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
+#include "nTupleAnalysis/baseClasses/interface/btaggingDeltaHists.h"
 
 namespace nTupleAnalysis {
 
@@ -45,6 +46,8 @@ namespace nTupleAnalysis {
     TH1F* dSoftEl   = NULL;
     TH1F* dcMVAv2   = NULL;
     TH1F* dcMVAv2N  = NULL;
+
+    btaggingDeltaHists* dbtagging;
 
     jetDeltaHists(std::string,       TFileDirectory&, std::string title = "");
     jetDeltaHists(std::string, fwlite::TFileService&, std::string title = "");

@@ -42,40 +42,62 @@ void jetDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::string
     dcMVAv2         = dir.make<TH1F>("dcMVAv2"       ,  (name+"/dcMVAv2;   "      +title+"#Delta cMVAv2   ;Entries").c_str(), 100, -1.2, 1.2);
     dcMVAv2N        = dir.make<TH1F>("dcMVAv2N"      ,  (name+"/dcMVAv2N;  "      +title+"#Delta cMVAv2N  ;Entries").c_str(), 100, -1.2, 1.2);
 
+    dbtagging = new btaggingDeltaHists("btags", dir, title);
+
+
     return;
 } 
 
 void jetDeltaHists::Fill(const std::shared_ptr<nTupleAnalysis::jet> &jet1, const std::shared_ptr<nTupleAnalysis::jet> &jet2, float weight){
-    dPt      ->Fill(jet1->pt  - jet2->pt ,weight);
-    dEta     ->Fill(jet1->eta - jet2->eta,weight);
-    dPhi     ->Fill(jet1->p.DeltaPhi(jet2->p),weight);
-    dR       ->Fill(jet1->p.DeltaR(jet2->p),weight);
-    dcsv     ->Fill(jet1->CSVv2 - jet2->CSVv2,weight);
-    dDeepcsv ->Fill(jet1->DeepCSV - jet2->DeepCSV,weight);
+  dPt      ->Fill(jet1->pt  - jet2->pt ,weight);
+  dEta     ->Fill(jet1->eta - jet2->eta,weight);
+  dPhi     ->Fill(jet1->p.DeltaPhi(jet2->p),weight);
+  dR       ->Fill(jet1->p.DeltaR(jet2->p),weight);
+  dcsv     ->Fill(jet1->CSVv2 - jet2->CSVv2,weight);
+  dDeepcsv ->Fill(jet1->DeepCSV - jet2->DeepCSV,weight);
 
 
-    ddeepFlavB    ->Fill(jet1->deepFlavB  - jet2->deepFlavB  , weight);
-    dntracks      ->Fill(jet1->ntracks    - jet2->ntracks    ,weight);
-    dnseltracks   ->Fill(jet1->nseltracks - jet2->nseltracks ,weight);
-    dIp2N         ->Fill(jet1-> Ip2N      - jet2-> Ip2N      , weight);
-    dIp2P         ->Fill(jet1-> Ip2P      - jet2-> Ip2P      , weight);
-    dIp3N         ->Fill(jet1-> Ip3N      - jet2-> Ip3N      , weight);
-    dIp3P         ->Fill(jet1-> Ip3P      - jet2-> Ip3P      , weight);
-    dProbaN       ->Fill(jet1-> ProbaN    - jet2-> ProbaN    , weight);
-    dProba        ->Fill(jet1-> Proba     - jet2-> Proba     , weight);
-    dBprobN       ->Fill(jet1-> BprobN    - jet2-> BprobN    , weight);
-    dBprob        ->Fill(jet1-> Bprob     - jet2-> Bprob     , weight);
-    dSvx          ->Fill(jet1-> Svx       - jet2-> Svx       , weight);
-    dSvxHP        ->Fill(jet1-> SvxHP     - jet2-> SvxHP     , weight);
-    dCombIVF      ->Fill(jet1-> CombIVF   - jet2-> CombIVF   , weight);
-    dCombIVF_N    ->Fill(jet1-> CombIVF_N - jet2-> CombIVF_N , weight);
-    dSoftMuN      ->Fill(jet1-> SoftMuN   - jet2-> SoftMuN   , weight);
-    dSoftMu       ->Fill(jet1-> SoftMu    - jet2-> SoftMu    , weight);
-    dSoftElN      ->Fill(jet1-> SoftElN   - jet2-> SoftElN   , weight);
-    dSoftEl       ->Fill(jet1-> SoftEl    - jet2-> SoftEl    , weight);
-    dcMVAv2       ->Fill(jet1-> cMVAv2    - jet2-> cMVAv2    , weight);
-    dcMVAv2N      ->Fill(jet1-> cMVAv2N   - jet2-> cMVAv2N   , weight);
+  ddeepFlavB    ->Fill(jet1->deepFlavB  - jet2->deepFlavB  , weight);
+  dntracks      ->Fill(jet1->ntracks    - jet2->ntracks    ,weight);
+  dnseltracks   ->Fill(jet1->nseltracks - jet2->nseltracks ,weight);
+  dIp2N         ->Fill(jet1-> Ip2N      - jet2-> Ip2N      , weight);
+  dIp2P         ->Fill(jet1-> Ip2P      - jet2-> Ip2P      , weight);
+  dIp3N         ->Fill(jet1-> Ip3N      - jet2-> Ip3N      , weight);
+  dIp3P         ->Fill(jet1-> Ip3P      - jet2-> Ip3P      , weight);
+  dProbaN       ->Fill(jet1-> ProbaN    - jet2-> ProbaN    , weight);
+  dProba        ->Fill(jet1-> Proba     - jet2-> Proba     , weight);
+  dBprobN       ->Fill(jet1-> BprobN    - jet2-> BprobN    , weight);
+  dBprob        ->Fill(jet1-> Bprob     - jet2-> Bprob     , weight);
+  dSvx          ->Fill(jet1-> Svx       - jet2-> Svx       , weight);
+  dSvxHP        ->Fill(jet1-> SvxHP     - jet2-> SvxHP     , weight);
+  dCombIVF      ->Fill(jet1-> CombIVF   - jet2-> CombIVF   , weight);
+  dCombIVF_N    ->Fill(jet1-> CombIVF_N - jet2-> CombIVF_N , weight);
+  dSoftMuN      ->Fill(jet1-> SoftMuN   - jet2-> SoftMuN   , weight);
+  dSoftMu       ->Fill(jet1-> SoftMu    - jet2-> SoftMu    , weight);
+  dSoftElN      ->Fill(jet1-> SoftElN   - jet2-> SoftElN   , weight);
+  dSoftEl       ->Fill(jet1-> SoftEl    - jet2-> SoftEl    , weight);
+  dcMVAv2       ->Fill(jet1-> cMVAv2    - jet2-> cMVAv2    , weight);
+  dcMVAv2N      ->Fill(jet1-> cMVAv2N   - jet2-> cMVAv2N   , weight);
 
+  //
+  //  Fill delta SVs
+  //
+  dbtagging->dsv_nSVs->Fill(jet1->svs.size() - jet2->svs.size(), weight);  
+  for(const svPtr& sv: jet1->svs) {
+    // assuming this is the right matching object !!
+    std::shared_ptr<nTupleAnalysis::secondaryVertex> matchedSV = sv->matchedSV.lock();
+    if(matchedSV) dbtagging->FillSVHists(sv, jet1, matchedSV, jet2, weight);
+  }
+
+  for(const trkTagVarPtr& trkTag: jet1->trkTagVars) {
+    // assuming this is the right matching object !!
+    const nTupleAnalysis::trkTagVarPtr trkTagMatch = trkTag->matchedTrkTagVar.lock();
+    if(trkTagMatch) dbtagging->FillTrkTagVarHists(trkTag, trkTagMatch, weight);
+  }
+
+  if(jet1->tagVars && jet2->tagVars){
+    dbtagging->FillTagVarHists(jet1->tagVars, jet2->tagVars, weight);
+  }
 
 
   return;

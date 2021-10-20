@@ -8,7 +8,7 @@
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "nTupleAnalysis/baseClasses/interface/btaggingData.h"
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
-#include "nTupleAnalysis/baseClasses/interface/btaggingDeltaHists.h"
+
 
 namespace nTupleAnalysis {
 
@@ -115,8 +115,6 @@ namespace nTupleAnalysis {
     TH1F* tag_flightDistance3dSig      ;
     TH1F* tag_flightDistance3dVal      ;
     TH1F* tag_trackEtaRel              ;
-
-    btaggingDeltaHists* deltaHists;
 
 
     btaggingHists(std::string,       TFileDirectory&, std::string title = "");
