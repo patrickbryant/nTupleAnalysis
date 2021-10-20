@@ -7,6 +7,7 @@
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
 #include "nTupleAnalysis/baseClasses/interface/fourVectorHists.h"
+#include "nTupleAnalysis/baseClasses/interface/jetDeltaHists.h"
 #include "nTupleAnalysis/baseClasses/interface/trackHists.h"
 #include "nTupleAnalysis/baseClasses/interface/btaggingHists.h"
 
@@ -48,12 +49,7 @@ namespace nTupleAnalysis {
     TH1F* ncHadrons     ;
     TH1F* SF     ;
 
-    TH1F* matched_dPt      = NULL;
-    TH1F* matched_dEta     ;
-    TH1F* matched_dPhi     ;
-    TH1F* matched_dR       ;
-    TH1F* matched_dcsv     ;
-    TH1F* matched_dDeepcsv ;
+    jetDeltaHists* hMatchedJet = NULL;
 
     TH1F* Ip2N     = NULL;
     TH1F* Ip2P     = NULL;
