@@ -66,7 +66,7 @@ namespace nTupleAnalysis {
     static const unsigned int MAXELECS = 10000;
     bool m_isMC;
 
-    Int_t nElecs;
+    Int_t nElecs = 0;
 
     float pt [MAXELECS];
     float eta[MAXELECS];
