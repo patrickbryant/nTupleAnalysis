@@ -189,7 +189,7 @@ void elecData::writeElecs(std::vector< std::shared_ptr<elec> > outputElecs){
 std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax, bool mvaCut){
 
   std::vector<std::shared_ptr<elec>> outputElecs;
-  for(Int_t i = 0; i < nElecs; ++i){
+  for(Int_t i = 0; i < int(nElecs); ++i){
     if(i > int(MAXELECS-1)) {
       std::cout  << m_name << "::Warning too many elecs! " << nElecs << " elecs. Skipping. "<< std::endl;
       break;

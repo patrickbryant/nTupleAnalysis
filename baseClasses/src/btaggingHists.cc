@@ -126,7 +126,6 @@ void btaggingHists::makeHists(std::string name, TFileDirectory& dir, std::string
   tag_flightDistance3dVal              = dir.make<TH1F>("flightDistance3dVal"          ,"flightDistance3dVal;flightDistance3dVal"           ,100, -0.1, 5);
   tag_trackEtaRel                      = dir.make<TH1F>("etaRel"                       ,"etaRel;etaRel"                                     ,100,  0, 7);
   
-  deltaHists = new btaggingDeltaHists("deltaHists", dir, title);
 } 
 
 void btaggingHists::FillSVHists(const svPtr &sv, const jetPtr& jet, float weight){
@@ -158,14 +157,6 @@ void btaggingHists::FillSVHists(const svPtr &sv, const jetPtr& jet, float weight
 
   sv_boostOverSqrtJetPt ->Fill(sv->p.BoostVector().Mag()/ sqrt(jet->p.Pt()), weight);
   sv_massVertexEnergyFraction -> Fill(sv->p.M() / sv->p.E(), weight);
-
-
-  std::shared_ptr<nTupleAnalysis::secondaryVertex> matchedSV = sv->matchedSV.lock();
-  std::shared_ptr<nTupleAnalysis::jet> matchedJet = jet->matchedJet.lock();
-  if(matchedSV && matchedJet){
-    deltaHists->FillSVHists(sv, jet, matchedSV, matchedJet, weight);
-  }
-
 
   return;
 }
@@ -219,9 +210,6 @@ void btaggingHists::FillTrkTagVarHists(const trkTagVarPtr &trkTag, float weight)
 
   trkTag_isFromV0->Fill(trkTag->matchIsFromV0, weight);
 
-  const nTupleAnalysis::trkTagVarPtr trkTagMatch = trkTag->matchedTrkTagVar.lock();
-  if(trkTagMatch)
-    deltaHists->FillTrkTagVarHists(trkTag, trkTagMatch, weight);
 
 
   return;
@@ -250,10 +238,6 @@ void btaggingHists::FillTagVarHists(const tagVarPtr &tag, const jetPtr& jet, flo
   tag_elecMultiplicity            ->Fill(tag-> electronMultiplicity        ,weight);
   tag_totalMultiplicity           ->Fill(tag-> numberOfDaughters           ,weight);
 
-  std::shared_ptr<nTupleAnalysis::jet> matchedJet = jet->matchedJet.lock();
-  if(matchedJet && matchedJet->tagVars){
-    deltaHists->FillTagVarHists(tag, matchedJet->tagVars, weight);
-  }
 
   //
   //  DeepCSV NN inputs

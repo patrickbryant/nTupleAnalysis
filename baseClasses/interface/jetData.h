@@ -36,12 +36,30 @@ namespace nTupleAnalysis {
     float bRegCorr;
     float pt_wo_bRegCorr;
 
-    float deepB;
-    float CSVv2;
+    float deepB = 0;
+    float CSVv2 = 0;
     float deepFlavB = 0;
     float bTagScore = -1;
     Int_t puId;
     Int_t jetId;
+
+    float Ip2N     = -99;
+    float Ip2P     = -99;
+    float Ip3N     = -99;
+    float Ip3P     = -99;
+    float ProbaN   = -99;
+    float Proba    = -99;
+    float BprobN   = -99;
+    float Bprob    = -99;
+    float Svx      = -99;
+    float SvxHP    = -99;
+    float CombIVF  = -99;
+    float CombIVF_N= -99;
+    float SoftMuN  = -99;
+    float SoftElN  = -99;
+    float cMVAv2   = -99;
+    float cMVAv2N  = -99;
+
 
     int ntracks        ;
     int nseltracks     ;
@@ -51,12 +69,12 @@ namespace nTupleAnalysis {
     int nSE            ;
     int looseID        ;
     int tightID        ;
-    float DeepCSV      ;
+    float DeepCSV      = 0;
     float DeepCSV_reCalc = -2;
-    float DeepCSVb     ;
-    float DeepCSVc     ;
-    float DeepCSVl     ;
-    float DeepCSVbb    ;
+    float DeepCSVb     = 0;
+    float DeepCSVc     = 0;
+    float DeepCSVl     = 0;
+    float DeepCSVbb    = 0;
 
     // truth Info
     int flavour        ;
@@ -166,6 +184,26 @@ namespace nTupleAnalysis {
     Int_t puId[MAXJETS];
     Int_t jetId[MAXJETS];
 
+
+    float Ip2N     [MAXJETS];
+    float Ip2P     [MAXJETS];
+    float Ip3N     [MAXJETS];
+    float Ip3P     [MAXJETS];
+    float ProbaN   [MAXJETS];
+    float Proba    [MAXJETS];
+    float BprobN   [MAXJETS];
+    float Bprob    [MAXJETS];
+    float Svx      [MAXJETS];
+    float SvxHP    [MAXJETS];
+    float CombIVF  [MAXJETS];
+    float CombIVF_N[MAXJETS];
+    float SoftMuN  [MAXJETS];
+    float SoftElN  [MAXJETS];
+    float cMVAv2   [MAXJETS];
+    float cMVAv2N  [MAXJETS];
+
+
+
     int ntracks        [MAXJETS];
     int nseltracks     [MAXJETS];
     float SoftMu       [MAXJETS];
@@ -174,13 +212,13 @@ namespace nTupleAnalysis {
     int nSE            [MAXJETS];
     int looseID        [MAXJETS];
     int tightID        [MAXJETS];
-    float DeepCSVb     [MAXJETS];
-    float DeepCSVc     [MAXJETS];
-    float DeepCSVl     [MAXJETS];
+    float DeepCSVb     [MAXJETS] = {0};;
+    float DeepCSVc     [MAXJETS] = {0};;
+    float DeepCSVl     [MAXJETS] = {0};;
     float DeepCSVbb    [MAXJETS] = {0};
 
     //
-    bool m_loadGenJets = false; 
+    bool m_loadGenJets =  false; 
     int   GenJet_hasMatch [MAXJETS];
     float GenJet_pt       [MAXJETS];
     float GenJet_eta      [MAXJETS];

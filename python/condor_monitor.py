@@ -36,16 +36,19 @@ class condor_job:
 
         if self.res.returncode:
             self.done = True
-            self.line = self.line.replace('||','-|')
-        else:
-            tail = self.res.stdout.read()
-            self.res = None
-            split = [line for line in tail.split('\n') if line]
-            try:
-                line = split[-1]
-            except IndexError:
-                line = ''
+        #     self.line = self.line.replace('||','-|')
+        # else:
+        tail = self.res.stdout.read()
+        self.res = None
+        split = [line for line in tail.split('\n') if line]
+        try:
+            line = split[-1]
+        except IndexError:
+            line = ''
+        if line: # only update self.line if the string is non-empty
             self.line = '%s %10s || %s'%(self.schedd, self.ID, line)
+
+        if self.done: self.line = self.line.replace('||','-|') 
 
         # truncate output so that it never excedes one line for now
         if len(self.line)>(COLUMNS-1):
@@ -72,20 +75,23 @@ def get_jobs(grep=''):
     q = os.popen('condor_q').read()
     lines = q.split('\n')
     jobs = []
-    passGrep = False
+
     for line in lines:
-        passGrep = passGrep or (grep in line)
         print(line)
         split = line.split()
         if not split: continue
         if "-- Schedd:" in line:
             schedd = split[2]
+            print(schedd)
         if "dagman" in line: continue
-        if USER == split[1]:
+
+        ID = ''
+        if USER == split[1]: # LPC
             ID = split[0]
-            if passGrep:
-                jobs.append( condor_job(schedd, ID) )
-            passGrep = False
+        if USER == split[0]: # lxplus
+            ID = split[-1]
+        if ID and grep in line:
+            jobs.append( condor_job(schedd, ID) )
 
     print('-'*COLUMNS)
     if not jobs:
@@ -116,6 +122,9 @@ try:
         while nDone < nJobs:
             nDone, nLines = 0, 0
             for i, job in enumerate(jobs):
+                if job.done:
+                    nDone += 1
+                    continue
                 if not job.fetching and fetching.sum()<16:
                     job.fetch()
                     fetching[i] = 1
@@ -128,8 +137,8 @@ try:
                         fetching[i] = 0
                 nLines += job.maxLines
                 time.sleep(0.01)
-                if job.done:
-                    nDone += 1
+                # if job.done:
+                #     nDone += 1
             #placeCursor(ROWS-nJobs-1,COLUMNS-5)
             placeCursor(ROWS-nJobs-1,0)
             print('-- %02d of %2d jobs done. Fetching output from %2d. --'%(nDone,nAllJobs,fetching.sum()))
