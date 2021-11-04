@@ -34,7 +34,6 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
   dsv_Eta            = dir.make<TH1F>("dsv_Eta"          ,"Eta        ;#Delta Vertex Eta         "             ,100, -0.1, 0.1);
   dsv_Phi            = dir.make<TH1F>("dsv_Phi"          ,"Phi        ;#Delta Vertex Phi         "             ,100, -0.1, 0.1);
   dsv_DistJetAxis    = dir.make<TH1F>("dsv_DistJetAxis"  ,"DistJetAxis;#Delta Vertex DistJetAxis "             ,100, -5e-5, 5e-5);
-  dsv_nSVs           = dir.make<TH1F>("dsv_nSVs"         ,     ("nSVs;  #Delta " +title+" Number of Sec. Verticies; Entries").c_str(),  21,-10.5,10.5);
   dsv_boostOverSqrtJetPt         = dir.make<TH1F>("dsv_BoostOverSqrtJetPt"     ,"vertexBoostOverSqrtJetPt;#Delta Vertex Boost/#sqrt{jet P_{T}}"      ,100, -0.05, 0.05);
   dsv_massVertexEnergyFraction   = dir.make<TH1F>("dsv_massVertexEnergyFraction"     ,"massVertexEnergyFraction;#Delta massVertexEnergyFraction"      ,100, -0.2,0.2);
   dsv_totCharge   = dir.make<TH1F>("dsv_totCharge"     ,"totCharge;#Delta totCharge"      ,11, -5.5,5.5);
