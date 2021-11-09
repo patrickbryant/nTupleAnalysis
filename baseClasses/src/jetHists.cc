@@ -114,6 +114,7 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 	std::string ptStr = ss.str();
 
 	deepFlavB_ptHists.push_back( dir.make<TH1F>(("deepFlavB_pt"+ptStr).c_str(), (name+"/deepFlavB_pt"+ptStr+"; "+title+" Deep (Jet) Flavour B ptBin "+ptStr+"; Entries").c_str(), 120,-0.2,1.2));
+	Proba_ptHists    .push_back( dir.make<TH1F>(("Proba_pt"+ptStr)    .c_str(), (name+"/Proba_pt"+ptStr+";     "+title+ " Proba ptBin "+ptStr+"    ;Entries").c_str(), 100, -0.2, 4.2));
       }
 
 
@@ -123,7 +124,8 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 	ss << etaBin;
 	std::string etaStr = ss.str();
 
-	deepFlavB_etaHists.push_back( dir.make<TH1F>(("deepFlavB_eta"+etaStr).c_str(), (name+"/deepFlavB_eta"+etaStr+"; "+title+" Deep (Jet) Flavour B etaBin "+etaStr+"; Entries").c_str(), 120,-0.2,1.2));
+	deepFlavB_etaHists.push_back( dir.make<TH1F>(("deepFlavB_eta"+etaStr).c_str(), (name+"/deepFlavB_eta"+etaStr+"; "+title+" Deep (Jet) Flavour B etaBin "+etaStr+"; Entries").c_str(), 120,-0.2,1.2));	
+	Proba_etaHists    .push_back( dir.make<TH1F>(("Proba_eta"+etaStr)    .c_str(), (name+"/Proba_eta"+etaStr+";     "+title+ " Proba etaBin "+etaStr+"    ;Entries").c_str(), 100, -0.2, 4.2));
       }
 
 
@@ -307,6 +309,7 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     
       if(jet->pt < deepFlavB_ptBins.at(iPt)){
 	deepFlavB_ptHists.at(iPt)->Fill(jet->deepFlavB,weight);	 
+	Proba_ptHists    .at(iPt)->Fill(jet->Proba,    weight);	 
 	break;
       }
     }
@@ -319,6 +322,7 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     
       if(fabs(jet->eta) < deepFlavB_etaBins.at(iEta)){
 	deepFlavB_etaHists.at(iEta)->Fill(jet->deepFlavB,weight);	 
+	Proba_etaHists    .at(iEta)->Fill(jet->Proba,    weight);	 
 	break;
       }
     }

@@ -96,9 +96,11 @@ namespace nTupleAnalysis {
 
     std::vector<float> deepFlavB_ptBins = {50,100,300,10000};
     std::vector<TH1F*> deepFlavB_ptHists;
+    std::vector<TH1F*> Proba_ptHists;
 
     std::vector<float> deepFlavB_etaBins = {0.5,1,1.5,2,2.5};
     std::vector<TH1F*> deepFlavB_etaHists;
+    std::vector<TH1F*> Proba_etaHists;
 
     std::string name;
     std::string title;
