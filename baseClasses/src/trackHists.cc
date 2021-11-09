@@ -68,6 +68,12 @@ void trackHists::makeHists(std::string name, TFileDirectory& dir, std::string ti
   trackNStripHits            = dir.make<TH1F>("NStripHits"      ,    "trackNStripHits;trackNStripHits;Entries", 30, -0.5, 39.5);  
   trackHasInnerPixHit        = dir.make<TH1F>("HasInnerPixHit"  ,    "trackHasInnerPixHit;trackHasInnerPixHit;Entries", 2, -0.5,  1.5);  
 
+  trackHasInnerPixHit_vs_eta        = dir.make<TProfile>("HasInnerPixHit_vs_eta"  ,    "trackHasInnerPixHit_vs_eta;Eta;HasInnerPixHit", 50, -2.6, 2.6, 0.0,  1.0);  
+  trackHasInnerPixHit_vs_pt         = dir.make<TProfile>("HasInnerPixHit_vs_pt"  ,    "trackHasInnerPixHit_vs_pt;pT;HasInnerPixHit", 50, 0, 20., 0.0,  1.0);  
+  trackHasInnerPixHit_vs_phi         = dir.make<TProfile>("HasInnerPixHit_vs_phi"  ,    "trackHasInnerPixHit_vs_phi;Phi;HasInnerPixHit", 100, -3.2, 3.2, 0.0,  1.0);  
+  trackHasInnerPixHit_vs_phi_f         = dir.make<TProfile>("HasInnerPixHit_vs_phi_f"  ,    "trackHasInnerPixHit_vs_phi_f;Phi;HasInnerPixHit", 300, -3.2, 3.2, 0.0,  1.0);  
+  trackHasInnerPixHit_vs_dR         = dir.make<TProfile>("HasInnerPixHit_vs_dR"  ,    "trackHasInnerPixHit_vs_dR;dR;HasInnerPixHit", 50, 0, 0.5, 0.0,  1.0);  
+
   for(unsigned int iAlgo = 0; iAlgo < nAlgos; ++iAlgo){
     std::string sAlgo = std::to_string(iAlgo);
     trackEta_forAlgo.push_back(dir.make<TH1F>(("Eta_forAlgo"+sAlgo).c_str(),    ("Eta;track #eta (algo = "+sAlgo+");Entries").c_str(), 100, -2.6, 2.6));              
@@ -118,6 +124,7 @@ void trackHists::makeHists(std::string name, TFileDirectory& dir, std::string ti
   stripHitMap     = dir.make<TH2F>("stripHitMap"   , (name+"/stripHitMap; "+title+" Eta; Phi; Strips").c_str(),  50,-3, 3, 50, -3.3, 3.3);
   totHitMap       = dir.make<TH2F>("totHitMap"     , (name+"/totHitMap; "+title+" Eta; Phi; TotalHitMap").c_str(),  50,-3, 3, 50, -3.3, 3.3);
   innerPixHitMap  = dir.make<TH2F>("innerPixHitMap", (name+"/innerPixHitMap; "+title+" Eta; Phi; hasInnerPix").c_str(),  50,-3, 3, 50, -3.3, 3.3);
+  noInnerPixHitMap  = dir.make<TH2F>("noInnerPixHitMap", (name+"/noInnerPixHitMap; "+title+" Eta; Phi; hasInnerPix").c_str(),  100,-3, 3, 100, -3.3, 3.3);
 
 
 } 
@@ -175,6 +182,11 @@ void trackHists::Fill(const std::shared_ptr<track> &track, float weight){
   trackNPixelHits            ->Fill(track->nHitPixel,weight);
   trackNStripHits            ->Fill(track->nHitStrip,weight);
   trackHasInnerPixHit        ->Fill(track->isHitL1,weight);
+  trackHasInnerPixHit_vs_eta ->Fill(eta, track->isHitL1,weight);
+  trackHasInnerPixHit_vs_phi ->Fill(phi, track->isHitL1,weight);
+  trackHasInnerPixHit_vs_phi_f ->Fill(phi, track->isHitL1,weight);
+  trackHasInnerPixHit_vs_pt  ->Fill(pt,  track->isHitL1,weight);
+  trackHasInnerPixHit_vs_dR  ->Fill(track->dR, track->isHitL1,weight);
 
   trackCharge          ->Fill(track->charge        ,weight);
   trackIsFromSV        ->Fill(track->isfromSV,weight);
@@ -196,6 +208,7 @@ void trackHists::Fill(const std::shared_ptr<track> &track, float weight){
   stripHitMap     ->Fill(eta, phi,  track->nHitStrip);
   totHitMap       ->Fill(eta, phi,  track->nHitAll);
   innerPixHitMap  ->Fill(eta, phi,  track->isHitL1);
+  noInnerPixHitMap->Fill(eta, phi,  !track->isHitL1);
 
 
 
