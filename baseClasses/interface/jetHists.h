@@ -83,6 +83,8 @@ namespace nTupleAnalysis {
 
     trackHists* tracks = NULL;
     trackHists* tracks_noV0 = NULL;
+    trackHists* tracks_innerPixHit = NULL;
+    trackHists* tracks_noInnerPixHit = NULL;
 
     btaggingHists* btags = NULL;
     btaggingHists* btags_noV0 = NULL;
@@ -91,6 +93,12 @@ namespace nTupleAnalysis {
     TH1F* Delta_nTracks_tracks_btag_noV0 = NULL;
     TH1F* Delta_nTracks_tracks_btag_l = NULL;
     TH1F* Delta_nTracks_tracks_btag_noV0_l = NULL;
+
+    std::vector<float> deepFlavB_ptBins = {50,100,300,10000};
+    std::vector<TH1F*> deepFlavB_ptHists;
+
+    std::vector<float> deepFlavB_etaBins = {0.5,1,1.5,2,2.5};
+    std::vector<TH1F*> deepFlavB_etaHists;
 
     std::string name;
     std::string title;
