@@ -5,6 +5,7 @@
 #include <iostream>
 #include <TH1F.h>
 #include <TH2F.h>
+#include <TProfile.h>
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "nTupleAnalysis/baseClasses/interface/trackData.h"
 #include "nTupleAnalysis/baseClasses/interface/fourVectorHists.h"
@@ -65,6 +66,11 @@ namespace nTupleAnalysis {
     TH1F* trackNStripHits    ;       
     TH1F* trackHasInnerPixHit;       
 
+    TProfile* trackHasInnerPixHit_vs_eta;
+    TProfile* trackHasInnerPixHit_vs_phi;
+    TProfile* trackHasInnerPixHit_vs_phi_f;
+    TProfile* trackHasInnerPixHit_vs_pt;
+    TProfile* trackHasInnerPixHit_vs_dR;
 
     TH1F* nMatches;
 
@@ -110,6 +116,7 @@ namespace nTupleAnalysis {
     TH2F* stripHitMap;
     TH2F* totHitMap;
     TH2F* innerPixHitMap;
+    TH2F* noInnerPixHitMap;
 
 
     //

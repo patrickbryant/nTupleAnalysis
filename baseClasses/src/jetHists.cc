@@ -1,4 +1,5 @@
 #include "nTupleAnalysis/baseClasses/interface/jetHists.h"
+#include <sstream>      // std::stringstream
 
 using namespace nTupleAnalysis;
 
@@ -47,7 +48,9 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 
       tracks      = new trackHists(name+"/tracks",      fs, title);
       
-      if(jetDetailLevel.find("noV0") != std::string::npos) tracks_noV0 = new trackHists(name+"/tracks_noV0", fs, title);
+      if(jetDetailLevel.find("noV0")          != std::string::npos) tracks_noV0          = new trackHists(name+"/tracks_noV0", fs, title);
+      if(jetDetailLevel.find("innerPixHit")   != std::string::npos) tracks_innerPixHit   = new trackHists(name+"/tracks_innerPixHit", fs, title);
+      if(jetDetailLevel.find("noInnerPixHit") != std::string::npos) tracks_noInnerPixHit = new trackHists(name+"/tracks_noInnerPixHit", fs, title);
     }
 
     if(jetDetailLevel.find("btagInputs") != std::string::npos){
@@ -102,6 +105,32 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
       cMVAv2    = dir.make<TH1F>("cMVAv2"       ,  (name+"/cMVAv2;   "+title+ " cMVAv2   ;Entries").c_str(), 100, -1.2, 1.2);
       cMVAv2N   = dir.make<TH1F>("cMVAv2N"      ,  (name+"/cMVAv2N;  "+title+ " cMVAv2N  ;Entries").c_str(), 100, -1.2, 1.2);
     } 
+
+    if(jetDetailLevel.find("DeepJetBins") != std::string::npos){
+      for(float ptBin : deepFlavB_ptBins){
+	
+	std::stringstream ss; 
+	ss << ptBin;
+	std::string ptStr = ss.str();
+
+	deepFlavB_ptHists.push_back( dir.make<TH1F>(("deepFlavB_pt"+ptStr).c_str(), (name+"/deepFlavB_pt"+ptStr+"; "+title+" Deep (Jet) Flavour B ptBin "+ptStr+"; Entries").c_str(), 120,-0.2,1.2));
+	Proba_ptHists    .push_back( dir.make<TH1F>(("Proba_pt"+ptStr)    .c_str(), (name+"/Proba_pt"+ptStr+";     "+title+ " Proba ptBin "+ptStr+"    ;Entries").c_str(), 100, -0.2, 4.2));
+      }
+
+
+      for(float etaBin : deepFlavB_etaBins){
+	
+	std::stringstream ss; 
+	ss << etaBin;
+	std::string etaStr = ss.str();
+
+	deepFlavB_etaHists.push_back( dir.make<TH1F>(("deepFlavB_eta"+etaStr).c_str(), (name+"/deepFlavB_eta"+etaStr+"; "+title+" Deep (Jet) Flavour B etaBin "+etaStr+"; Entries").c_str(), 120,-0.2,1.2));	
+	Proba_etaHists    .push_back( dir.make<TH1F>(("Proba_eta"+etaStr)    .c_str(), (name+"/Proba_eta"+etaStr+";     "+title+ " Proba etaBin "+etaStr+"    ;Entries").c_str(), 100, -0.2, 4.2));
+      }
+
+
+    }
+
 }
 
 
@@ -149,8 +178,16 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     nseltracks ->Fill(jet->nseltracks ,weight);
     nTrksExpected->Fill(jet->nLastTrack-jet->nFirstTrack,weight);
     tracks->nTracks->Fill(jet->tracks.size(), weight);
-    for(const trackPtr& track: jet->tracks) 
+    for(const trackPtr& track: jet->tracks){ 
+      if(tracks_innerPixHit || tracks_noInnerPixHit){
+	if(track->isHitL1){
+	  if(tracks_innerPixHit) tracks_innerPixHit->Fill(track, weight);
+	}else{
+	  if(tracks_noInnerPixHit) tracks_noInnerPixHit->Fill(track, weight);
+	}
+      }
       tracks->Fill(track, weight);
+    }
 
     //
     // No V0s
@@ -265,6 +302,33 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
     cMVAv2    ->Fill(jet-> cMVAv2    , weight);
     cMVAv2N   ->Fill(jet-> cMVAv2N   , weight);
   }
+
+  if(deepFlavB_ptHists.size()){
+
+    for(unsigned int iPt = 0; iPt < deepFlavB_ptBins.size(); ++iPt){
+    
+      if(jet->pt < deepFlavB_ptBins.at(iPt)){
+	deepFlavB_ptHists.at(iPt)->Fill(jet->deepFlavB,weight);	 
+	Proba_ptHists    .at(iPt)->Fill(jet->Proba,    weight);	 
+	break;
+      }
+    }
+  }
+
+
+  if(deepFlavB_etaHists.size()){
+
+    for(unsigned int iEta = 0; iEta < deepFlavB_etaBins.size(); ++iEta){
+    
+      if(fabs(jet->eta) < deepFlavB_etaBins.at(iEta)){
+	deepFlavB_etaHists.at(iEta)->Fill(jet->deepFlavB,weight);	 
+	Proba_etaHists    .at(iEta)->Fill(jet->Proba,    weight);	 
+	break;
+      }
+    }
+  }
+
+
 
   if(debug) std::cout << "jetHists::Fill " << name << " " << title << " done" << std::endl;
   return;
