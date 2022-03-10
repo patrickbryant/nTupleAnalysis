@@ -84,6 +84,7 @@ def get_jobs(grep=''):
             schedd = split[2]
             print(schedd)
         if "dagman" in line: continue
+        if " X " in line: continue
 
         ID = ''
         if USER == split[1]: # LPC
