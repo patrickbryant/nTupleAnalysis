@@ -67,7 +67,7 @@ namespace nTupleAnalysis {
     bool m_isMC;
 
 
-    Int_t nElecs = 0;
+    UInt_t nElecs = 0;
 
     float pt [MAXELECS];
     float eta[MAXELECS];
