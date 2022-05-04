@@ -360,7 +360,7 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
   //
   if(readIn && m_isMC && SFName != ""){
 
-    if(SFName != "2017" && SFName != "deepcsv2018" && SFName != "deepjet2018" && SFName != "deepjet2017" && SFName != "deepjet2016"){
+    if(SFName != "2017" && SFName != "deepcsv2018" && SFName != "deepjet2018" && SFName != "deepjet2017" && SFName != "deepjet2016" && SFName != "deepjet2016_preVFP" && SFName != "deepjet2016_postVFP"){
       std::cout << "jetData::Warning no scale factors for " << m_name << " and SFName " << SFName << std::endl;
     }else{
 
@@ -376,13 +376,19 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
       if(SFName == "deepcsv2018")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepCSV_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2018")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
-      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/reshaping_deepJet_106XUL18_v2"+systTag+".csv";
+	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
+        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
       if(SFName == "deepjet2017")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
-      //sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/reshaping_deepJet_106XUL17_v3"+systTag+".csv";
+	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
+        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
       if(SFName == "deepjet2016")
 	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/DeepJet_2016LegacySF_V1"+systTag+".csv";
+      if(SFName == "deepjet2016_preVFP")
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16preVFP_v2"+systTag+".csv";
+      if(SFName == "deepjet2016_postVFP")
+	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16postVFP_v3"+systTag+".csv";
       
       std::cout << "jetData::Loading SF from " << sfFileName << " For jets " << m_name << std::endl;
       BTagCalibration calib = BTagCalibration("", sfFileName);//tagger name only needed for creating csv files
