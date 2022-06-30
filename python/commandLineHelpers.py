@@ -229,7 +229,7 @@ def mkpath(path, doExecute=True):
     if "root://" in path:
         url, path = parseXRD(path)
     dirs = [x for x in path.split("/") if x]
-    thisDir = url+'/'
+    thisDir = url+'/' if url else ''
     for d in dirs:
         thisDir = thisDir+d+"/"
         mkdir(thisDir, doExecute)
