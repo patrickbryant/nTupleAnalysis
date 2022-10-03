@@ -24,7 +24,9 @@ except ValueError: # condor jobs don't have screen dimensions
 ON_POSIX = 'posix' in sys.builtin_module_names
 
 def getCMSSW():
-    return os.getenv('CMSSW_VERSION')
+    CMSSW = os.getenv('CMSSW_VERSION')
+    if CMSSW is None: CMSSW = ''
+    return CMSSW
 
 def getUSER():
     return os.getenv('USER')
@@ -205,8 +207,8 @@ def exists(path):
         return os.path.exists(path)
     
 
-def mkdir(directory, doExecute=True, xrd=False, url="root://cmseos.fnal.gov/"):
-    if exists(directory): 
+def mkdir(directory, doExecute=True, xrd=False, url="root://cmseos.fnal.gov/", debug=False):
+    if exists(directory) and debug: 
         print("#",directory,"already exists")
         return
         
@@ -220,8 +222,8 @@ def mkdir(directory, doExecute=True, xrd=False, url="root://cmseos.fnal.gov/"):
             if doExecute: os.mkdir(directory)
 
 
-def mkpath(path, doExecute=True):
-    if exists(path):
+def mkpath(path, doExecute=True, debug=False):
+    if exists(path) and debug:
         print("#",path,"already exists")
         return
         
@@ -230,6 +232,8 @@ def mkpath(path, doExecute=True):
         url, path = parseXRD(path)
     dirs = [x for x in path.split("/") if x]
     thisDir = url+'/' if url else ''
+    if not url and path[0]=='/':
+        thisDir = '/'+thisDir
     for d in dirs:
         thisDir = thisDir+d+"/"
         mkdir(thisDir, doExecute)
@@ -245,7 +249,7 @@ def rmdir(directory, doExecute=True):
 
 
 class jdl:
-    def __init__(self, cmd=None, CMSSW=DEFAULTCMSSW, EOSOUTDIR="None", TARBALL=DEFAULTTARBALL, fileName=None, logPath = './', logName = ''):
+    def __init__(self, cmd=None, CMSSW=DEFAULTCMSSW, EOSOUTDIR="None", TARBALL=DEFAULTTARBALL, fileName=None, logPath = './', logName = '', executable = 'nTupleAnalysis/scripts/condor.sh'):
         self.randName = str(np.random.uniform())[2:]
         self.humanReadableName = ''
         self.fileName = fileName if fileName else self.randName+".jdl"
@@ -270,7 +274,7 @@ class jdl:
 
         self.universe = "vanilla"
         self.use_x509userproxy = "true"
-        self.Executable = "nTupleAnalysis/scripts/condor.sh"
+        self.Executable = executable
         #self.x509userproxy = "x509up_forCondor"
         self.should_transfer_files = "YES"
         self.when_to_transfer_output = "ON_EXIT"
