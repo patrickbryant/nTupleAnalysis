@@ -155,7 +155,12 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
     }
     
     if(data->btagData->haveTrkTagVars){
-      trkTagVars = data->btagData->getTrkTagVars(data->nFirstTrkTagVar[i],data->nLastTrkTagVar[i]);
+      DeepJet_nCpfcand = data->DeepJet_nCpfcand[i];
+      if(data->doPFNano){
+	trkTagVars = data->btagData->getTrkTagVarsPFNano(i,DeepJet_nCpfcand);
+      }else{
+	trkTagVars = data->btagData->getTrkTagVars(data->nFirstTrkTagVar[i],data->nLastTrkTagVar[i]);
+      }
     }
     
     if(data->btagData->haveTagVars){
@@ -358,71 +363,71 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
   //
   // Load the BTagging SFs
   //
-  if(readIn && m_isMC && SFName != ""){
-
-    if(SFName != "2017" && SFName != "deepcsv2018" && SFName != "deepjet2018" && SFName != "deepjet2017" && SFName != "deepjet2016" && SFName != "deepjet2016_preVFP" && SFName != "deepjet2016_postVFP"){
-      std::cout << "jetData::Warning no scale factors for " << m_name << " and SFName " << SFName << std::endl;
-    }else{
-
-      std::string systTag = "_noSyst";
-      if(m_btagVariations.size()>1){
-	systTag = "";
-	std::cout << "Loading b-tag systematic variations. Will take several miniutes and use a few hundred MB of RAM." << std::endl;	
-      }else{
-	std::cout << "Not loading b-tag systematic variations" << std::endl;
-      }
-      
-      std::string sfFileName =  "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepCSV_94XSF_V4_B_F"+systTag+".csv";
-      if(SFName == "deepcsv2018")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepCSV_102XSF_V1"+systTag+".csv";
-      if(SFName == "deepjet2018")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/reshaping_deepJet_106XUL18_v2"+systTag+".csv";
-	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
-        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
-      if(SFName == "deepjet2017")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/reshaping_deepJet_106XUL17_v3"+systTag+".csv";
-	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
-        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
-      if(SFName == "deepjet2016")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/DeepJet_2016LegacySF_V1"+systTag+".csv";
-      if(SFName == "deepjet2016_preVFP")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16preVFP_v2"+systTag+".csv";
-      if(SFName == "deepjet2016_postVFP")
-	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16postVFP_v3"+systTag+".csv";
-      
-      std::cout << "jetData::Loading SF from " << sfFileName << " For jets " << m_name << std::endl;
-      BTagCalibration calib = BTagCalibration("", sfFileName);//tagger name only needed for creating csv files
-
-
-      for(auto &variation: m_btagVariations){
-	std::cout<<"Load btag systematic variation: "<<variation<<std::endl;
-
-	m_btagCalibrationTools[variation] = new BTagCalibrationReader(BTagEntry::OP_RESHAPING, // 0 is for loose op, 1: medium, 2: tight, 3: discr. reshaping
-								      variation // systematic type
-								      );
-
-	std::cout << "jetData::Load BTagEntry::FLAV_B" << std::endl;
-	m_btagCalibrationTools[variation]->load(calib, 
-						BTagEntry::FLAV_B,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
-						"iterativefit"      // measurement type
-						);
-	
-	std::cout << "jetData::Load BTagEntry::FLAV_C" << std::endl;
-	m_btagCalibrationTools[variation]->load(calib, 
-					       BTagEntry::FLAV_C,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
-					       "iterativefit"      // measurement type
-					       );
-
-	std::cout << "jetData::Load BTagEntry::FLAV_UDSG" << std::endl;
-	m_btagCalibrationTools[variation]->load(calib, 
-						BTagEntry::FLAV_UDSG,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
-						"iterativefit"      // measurement type
-						);
-      }
-
-    }
-
-  }
+//  if(readIn && m_isMC && SFName != ""){
+//
+//    if(SFName != "2017" && SFName != "deepcsv2018" && SFName != "deepjet2018" && SFName != "deepjet2017" && SFName != "deepjet2016" && SFName != "deepjet2016_preVFP" && SFName != "deepjet2016_postVFP"){
+//      std::cout << "jetData::Warning no scale factors for " << m_name << " and SFName " << SFName << std::endl;
+//    }else{
+//
+//      std::string systTag = "_noSyst";
+//      if(m_btagVariations.size()>1){
+//	systTag = "";
+//	std::cout << "Loading b-tag systematic variations. Will take several miniutes and use a few hundred MB of RAM." << std::endl;	
+//      }else{
+//	std::cout << "Not loading b-tag systematic variations" << std::endl;
+//      }
+//      
+//      std::string sfFileName =  "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepCSV_94XSF_V4_B_F"+systTag+".csv";
+//      if(SFName == "deepcsv2018")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepCSV_102XSF_V1"+systTag+".csv";
+//      if(SFName == "deepjet2018")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/reshaping_deepJet_106XUL18_v2"+systTag+".csv";
+//	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_106XUL18SF"+systTag+".csv";
+//        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2018/DeepJet_102XSF_V1"+systTag+".csv";
+//      if(SFName == "deepjet2017")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/reshaping_deepJet_106XUL17_v3"+systTag+".csv";
+//	// sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepJet_106XUL17SF_V2"+systTag+".csv";
+//        // sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2017/DeepFlavour_94XSF_V3_B_F"+systTag+".csv";
+//      if(SFName == "deepjet2016")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/DeepJet_2016LegacySF_V1"+systTag+".csv";
+//      if(SFName == "deepjet2016_preVFP")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16preVFP_v2"+systTag+".csv";
+//      if(SFName == "deepjet2016_postVFP")
+//	sfFileName = "nTupleAnalysis/baseClasses/data/BTagSF2016/reshaping_deepJet_106XUL16postVFP_v3"+systTag+".csv";
+//      
+//      std::cout << "jetData::Loading SF from " << sfFileName << " For jets " << m_name << std::endl;
+//      BTagCalibration calib = BTagCalibration("", sfFileName);//tagger name only needed for creating csv files
+//
+//
+//      for(auto &variation: m_btagVariations){
+//	std::cout<<"Load btag systematic variation: "<<variation<<std::endl;
+//
+//	m_btagCalibrationTools[variation] = new BTagCalibrationReader(BTagEntry::OP_RESHAPING, // 0 is for loose op, 1: medium, 2: tight, 3: discr. reshaping
+//								      variation // systematic type
+//								      );
+//
+//	std::cout << "jetData::Load BTagEntry::FLAV_B" << std::endl;
+//	m_btagCalibrationTools[variation]->load(calib, 
+//						BTagEntry::FLAV_B,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
+//						"iterativefit"      // measurement type
+//						);
+//	
+//	std::cout << "jetData::Load BTagEntry::FLAV_C" << std::endl;
+//	m_btagCalibrationTools[variation]->load(calib, 
+//					       BTagEntry::FLAV_C,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
+//					       "iterativefit"      // measurement type
+//					       );
+//
+//	std::cout << "jetData::Load BTagEntry::FLAV_UDSG" << std::endl;
+//	m_btagCalibrationTools[variation]->load(calib, 
+//						BTagEntry::FLAV_UDSG,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
+//						"iterativefit"      // measurement type
+//						);
+//      }
+//
+//    }
+//
+//  }
 
 }
 
@@ -693,35 +698,38 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
   connectBranchArr(readIn, tree, jetName+"_looseID", looseID,   NjetName,  "I");  
   connectBranchArr(readIn, tree, jetName+"_tightID", tightID,   NjetName,  "I");  
 
-  connectBranchArr(readIn, tree, jetName+"_DeepCSVb", DeepCSVb,   NjetName,  "F");  
-  connectBranchArr(readIn, tree, jetName+"_DeepCSVc", DeepCSVc,   NjetName,  "F");  
-  connectBranchArr(readIn, tree, jetName+"_DeepCSVl", DeepCSVl,   NjetName,  "F");  
-  connectBranchArr(readIn, tree, jetName+"_DeepCSVbb", DeepCSVbb,   NjetName,  "F");  
+  if(doBTA){
+    connectBranchArr(readIn, tree, jetName+"_DeepCSVb", DeepCSVb,   NjetName,  "F");  
+    connectBranchArr(readIn, tree, jetName+"_DeepCSVc", DeepCSVc,   NjetName,  "F");  
+    connectBranchArr(readIn, tree, jetName+"_DeepCSVl", DeepCSVl,   NjetName,  "F");  
+    connectBranchArr(readIn, tree, jetName+"_DeepCSVbb", DeepCSVbb,   NjetName,  "F");  
+  }
 
   connectBranchArr(readIn, tree, jetName+"_isTag", isTag,   NjetName,  "O");  
   connectBranchArr(readIn, tree, jetName+"_isSel", isSel,   NjetName,  "O");  
 
-  connectBranchArr(readIn, tree, jetName+"_Ip2N"         ,Ip2N     ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_Ip2P"         ,Ip2P     ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_Ip3N"         ,Ip3N     ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_Ip3P"         ,Ip3P     ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_ProbaN"       ,ProbaN   ,  NjetName, "F");
   connectBranchArr(readIn, tree, jetName+"_Proba"        ,Proba    ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_BprobN"       ,BprobN   ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_Bprob"        ,Bprob    ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_Svx"          ,Svx      ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_SvxHP"        ,SvxHP    ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_CombIVF"      ,CombIVF  ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_CombIVF_N"    ,CombIVF_N,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_SoftMuN"      ,SoftMuN  ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_SoftMu"       ,SoftMu   ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_SoftElN"      ,SoftElN  ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_SoftEl"       ,SoftEl   ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_cMVAv2"       ,cMVAv2   ,  NjetName, "F");
-  connectBranchArr(readIn, tree, jetName+"_cMVAv2N"      ,cMVAv2N  ,  NjetName, "F");
 
+  if(doBTA){
+    connectBranchArr(readIn, tree, jetName+"_Ip2N"         ,Ip2N     ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_Ip2P"         ,Ip2P     ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_Ip3N"         ,Ip3N     ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_Ip3P"         ,Ip3P     ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_ProbaN"       ,ProbaN   ,  NjetName, "F");
 
-
+    connectBranchArr(readIn, tree, jetName+"_BprobN"       ,BprobN   ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_Bprob"        ,Bprob    ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_Svx"          ,Svx      ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_SvxHP"        ,SvxHP    ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_CombIVF"      ,CombIVF  ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_CombIVF_N"    ,CombIVF_N,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_SoftMuN"      ,SoftMuN  ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_SoftMu"       ,SoftMu   ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_SoftElN"      ,SoftElN  ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_SoftEl"       ,SoftEl   ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_cMVAv2"       ,cMVAv2   ,  NjetName, "F");
+    connectBranchArr(readIn, tree, jetName+"_cMVAv2N"      ,cMVAv2N  ,  NjetName, "F");
+  }
 
 
   //
@@ -762,11 +770,22 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 	btagData->initSecondaryVerticies(m_prefix, tree);
       }
 
-      int nFirstTrkTagVarCode = inputBranch(tree, (m_prefix+m_name+"_nFirstTrkTagVar").c_str(),  nFirstTrkTagVar);
-      int nLastTrkTagVarCode  = inputBranch(tree, (m_prefix+m_name+"_nLastTrkTagVar" ).c_str(),  nLastTrkTagVar );
-      if(nFirstTrkTagVarCode != -1 && nLastTrkTagVarCode != -1){
-	btagData->initTrkTagVar(m_prefix, tree);
+
+      if(doPFNano){
+	std::cout << "\tjetData::" << m_name << " loading trkTagVar from PFNano" << std::endl;
+	connectBranchArr(readIn, tree, jetName+"_DeepJet_nCpfcand"  , DeepJet_nCpfcand,  NjetName,  "I");
+	btagData->initTrkTagVar(m_prefix+m_name, tree, true);
+
+      }else{
+	std::cout << "\tjetData::" << m_name << " loading trkTagVar from BTA" << std::endl;
+	int nFirstTrkTagVarCode = inputBranch(tree, (m_prefix+m_name+"_nFirstTrkTagVar").c_str(),  nFirstTrkTagVar);
+	int nLastTrkTagVarCode  = inputBranch(tree, (m_prefix+m_name+"_nLastTrkTagVar" ).c_str(),  nLastTrkTagVar );
+	if(nFirstTrkTagVarCode != -1 && nLastTrkTagVarCode != -1){
+	  btagData->initTrkTagVar(m_prefix, tree);
+	}
       }
+
+
     }
 
     if(m_jetDetailLevel.find("GenJet") != std::string::npos){

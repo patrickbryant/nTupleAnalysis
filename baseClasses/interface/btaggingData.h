@@ -94,11 +94,18 @@ namespace nTupleAnalysis {
     bool  hasTrackMatch = false;
     int   matchIsFromV0 = -99;
 
-    std::weak_ptr<trkTagVar>  matchedTrkTagVar;
+    float DeepJet_Cpfcan_puppiw   ;             
+    float DeepJet_Cpfcan_drminsv  ;		     
+    float DeepJet_Cpfcan_VTX_ass  ;		     
+    float DeepJet_Cpfcan_quality  ;             
 
+
+
+    std::weak_ptr<trkTagVar>  matchedTrkTagVar;
 
     trkTagVar();
     trkTagVar(UInt_t, btaggingData*); 
+    trkTagVar(UInt_t iJet, UInt_t iTrk, btaggingData* data);
 
     ~trkTagVar(); 
 
@@ -202,6 +209,8 @@ namespace nTupleAnalysis {
     float sv_dir_z             [MAXSVS];
 
     bool  haveTrkTagVars = false;
+    bool  doPFNano       = true;
+    
     static const unsigned int MAXNTRK = 100000;
     float trackMomentum	    [MAXNTRK];
     float trackEta	    [MAXNTRK];
@@ -269,13 +278,46 @@ namespace nTupleAnalysis {
     float TagVarCSV_trackEtaRel       [4*MAXNJETS]; 
 
 
+    //
+    //  From DeepJetTableProducer
+    //
+    static const unsigned n_cpf_ = 25;
+    float DeepJet_Cpfcan_puppiw                  [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_drminsv		 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_chi2			 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackDeltaR	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackEtaRel	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackJetDistVal	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackPPar	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackPParRatio	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackPtRel	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackSip2dSig	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackSip3dSig	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackSip2dVal	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_BtagPf_trackSip3dVal	 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_VTX_ass		 [n_cpf_][MAXNJETS];
+    float DeepJet_Cpfcan_quality                 [n_cpf_][MAXNJETS];
+
+    //float DeepJet_Cpfcan_ptrel			 [n_cpf_][MAXNJETS];
+
+//    Jet_DeepJet_Npfcan_puppiw_0 = 1, 
+//      Jet_DeepJet_Npfcan_deltaR_0 = -0.568359, 
+//      Jet_DeepJet_Npfcan_drminsv_0 = -0.345215, 
+//      Jet_DeepJet_Npfcan_HadFrac_0 = 0, 
+//      Jet_DeepJet_Npfcan_ptrel_0 = -0.945801, 
+//      Jet_DeepJet_Npfcan_isGamma_0 = 1, 
+
+
+
+
 
     btaggingData(); 
 
     void initSecondaryVerticies(std::string name, TTree* tree);
     std::vector<svPtr> getSecondaryVertices(int nFirstSV, int nLastSV, bool debug);
 
-    void initTrkTagVar(std::string name, TTree* tree);
+    void initTrkTagVar(std::string name, TTree* tree, bool doPFNano_=true);
+    std::vector<trkTagVarPtr> getTrkTagVarsPFNano(unsigned int jetIndex, unsigned int nTrkTagVars);
     std::vector<trkTagVarPtr> getTrkTagVars(int nFirstTrkTagVar, int nLastTrkTagVar);
 
     void initTagVar(std::string name, TTree* tree);

@@ -22,6 +22,7 @@ namespace nTupleAnalysis {
 
 
   public:
+
     UInt_t tree_idx;
 
     UChar_t cleanmask;
@@ -59,6 +60,7 @@ namespace nTupleAnalysis {
     float SoftElN  = -99;
     float cMVAv2   = -99;
     float cMVAv2N  = -99;
+
 
 
     int ntracks        ;
@@ -100,6 +102,7 @@ namespace nTupleAnalysis {
     //
     // trkTag in Jet
     //
+    int DeepJet_nCpfcand = -1;
     std::vector<trkTagVarPtr> trkTagVars;
 
     //
@@ -163,6 +166,9 @@ namespace nTupleAnalysis {
     std::string m_jetDetailLevel;
     static const unsigned int MAXJETS = 10000;
 
+    bool doPFNano = true;
+    bool doBTA    = false;
+
     UInt_t nJets = 0;
 
     UChar_t cleanmask[MAXJETS];
@@ -201,7 +207,6 @@ namespace nTupleAnalysis {
     float SoftElN  [MAXJETS];
     float cMVAv2   [MAXJETS];
     float cMVAv2N  [MAXJETS];
-
 
 
     int ntracks        [MAXJETS];
@@ -256,8 +261,9 @@ namespace nTupleAnalysis {
     int nFirstSV[MAXJETS] = {0};
     int nLastSV[MAXJETS] = {0};
 
-    int nFirstTrkTagVar[MAXJETS];
-    int nLastTrkTagVar [MAXJETS];
+    int DeepJet_nCpfcand[MAXJETS];
+    int nFirstTrkTagVar [MAXJETS];
+    int nLastTrkTagVar  [MAXJETS];
 
     btaggingData* btagData = nullptr;
 

@@ -3,8 +3,9 @@
 #include "nTupleAnalysis/baseClasses/interface/btaggingData.h"
 #include "DataFormats/BTauReco/interface/ParticleMasses.h"
 #include <math.h>
-using namespace nTupleAnalysis;
 
+using namespace nTupleAnalysis;
+using std::cout;  using std::endl;
 
 
 //secondaryVertex object
@@ -87,7 +88,49 @@ trkTagVar::trkTagVar(UInt_t i, btaggingData* data){
   trackNPixelHits       = data->trackNPixelHits  [i];
 
 
+
 }
+
+trkTagVar::trkTagVar(UInt_t iJet, UInt_t iTrk, btaggingData* data){
+
+  //  trackEta	        = data->trackEta	 [i];
+  //  trackMomentum	        = data->trackMomentum	 [i];
+  //  pt                    = trackMomentum/cosh(trackEta);
+  //  trackPhi	        = data->trackPhi	 [i];
+  //  m   = reco::ParticleMasses::piPlus;
+  //  p = TLorentzVector();
+  //  p.SetPtEtaPhiM(pt, trackEta, trackPhi, m);
+  //  e = p.E();
+  //
+
+  //  trackPtRatio	        = data->trackPtRatio	 [i];
+  //  trackDecayLenVal      = data->trackDecayLenVal [i];
+  //  trackDecayLenSig      = data->trackDecayLenSig [i];
+  //  trackJetDistSig       = data->trackJetDistSig  [i];
+  //  trackNTotalHits       = data->trackNTotalHits  [i];
+  //  trackNPixelHits       = data->trackNPixelHits  [i];
+
+  DeepJet_Cpfcan_puppiw                 = data->DeepJet_Cpfcan_puppiw                 [iTrk]      [iJet];
+  DeepJet_Cpfcan_drminsv                = data->DeepJet_Cpfcan_drminsv                [iTrk]      [iJet];
+  trackChi2                             = data->DeepJet_Cpfcan_chi2                   [iTrk]      [iJet];
+  trackDeltaR                           = data->DeepJet_Cpfcan_BtagPf_trackDeltaR     [iTrk]      [iJet];
+  trackEtaRel                           = data->DeepJet_Cpfcan_BtagPf_trackEtaRel     [iTrk]      [iJet];
+  trackJetDistVal                       = data->DeepJet_Cpfcan_BtagPf_trackJetDistVal [iTrk]      [iJet];
+  trackPPar                             = data->DeepJet_Cpfcan_BtagPf_trackPPar       [iTrk]      [iJet];
+  trackPParRatio                        = data->DeepJet_Cpfcan_BtagPf_trackPParRatio  [iTrk]      [iJet];
+  trackPtRel                            = data->DeepJet_Cpfcan_BtagPf_trackPtRel      [iTrk]      [iJet];
+  trackSip2dSig                         = data->DeepJet_Cpfcan_BtagPf_trackSip2dSig   [iTrk]      [iJet];
+  trackSip3dSig                         = data->DeepJet_Cpfcan_BtagPf_trackSip3dSig   [iTrk]      [iJet];
+  trackSip2dVal                         = data->DeepJet_Cpfcan_BtagPf_trackSip2dVal   [iTrk]      [iJet];
+  trackSip3dVal                         = data->DeepJet_Cpfcan_BtagPf_trackSip3dVal   [iTrk]      [iJet];
+  DeepJet_Cpfcan_VTX_ass                = data->DeepJet_Cpfcan_VTX_ass                [iTrk]      [iJet];
+  DeepJet_Cpfcan_quality                = data->DeepJet_Cpfcan_quality                [iTrk]      [iJet];
+
+  //trackPtRel                            = data->DeepJet_Cpfcan_ptrel                  [iTrk]      [iJet];
+
+
+}
+
 
 
 trkTagVar::~trkTagVar(){}
@@ -194,31 +237,59 @@ void btaggingData::initSecondaryVerticies(std::string name, TTree* tree){
 
 
 //access tree
-void btaggingData::initTrkTagVar(std::string name, TTree* tree){
+void btaggingData::initTrkTagVar(std::string name, TTree* tree, bool doPFNano_){
 
   haveTrkTagVars = true;
+  doPFNano = doPFNano_; 
 
-  //nTrkTagVar : nTrkTagVar/I                                          *
-  inputBranch(tree, (name+"TagVar_trackMomentum"        ).c_str(),      trackMomentum    );
-  inputBranch(tree, (name+"TagVar_trackEta"             ).c_str(),      trackEta         );
-  inputBranch(tree, (name+"TagVar_trackPhi"             ).c_str(),      trackPhi         );
-  inputBranch(tree, (name+"TagVar_trackPtRel"           ).c_str(),      trackPtRel       );
-  inputBranch(tree, (name+"TagVar_trackPPar"            ).c_str(),      trackPPar        );
-  inputBranch(tree, (name+"TagVar_trackEtaRel"          ).c_str(),      trackEtaRel      );
-  inputBranch(tree, (name+"TagVar_trackDeltaR"          ).c_str(),      trackDeltaR      );
-  inputBranch(tree, (name+"TagVar_trackPtRatio"         ).c_str(),      trackPtRatio     );
-  inputBranch(tree, (name+"TagVar_trackPParRatio"       ).c_str(),      trackPParRatio   ); 
-  inputBranch(tree, (name+"TagVar_trackSip2dVal"        ).c_str(),      trackSip2dVal    ); 
-  inputBranch(tree, (name+"TagVar_trackSip2dSig"        ).c_str(),      trackSip2dSig    ); 
-  inputBranch(tree, (name+"TagVar_trackSip3dVal"        ).c_str(),      trackSip3dVal    ); 
-  inputBranch(tree, (name+"TagVar_trackSip3dSig"        ).c_str(),      trackSip3dSig    ); 
-  inputBranch(tree, (name+"TagVar_trackDecayLenVal"     ).c_str(),      trackDecayLenVal );
-  inputBranch(tree, (name+"TagVar_trackDecayLenSig"     ).c_str(),      trackDecayLenSig );
-  inputBranch(tree, (name+"TagVar_trackJetDistVal"      ).c_str(),      trackJetDistVal  );
-  inputBranch(tree, (name+"TagVar_trackJetDistSig"      ).c_str(),      trackJetDistSig  );
-  inputBranch(tree, (name+"TagVar_trackChi2"            ).c_str(),      trackChi2        );
-  inputBranch(tree, (name+"TagVar_trackNTotalHits"      ).c_str(),      trackNTotalHits  );
-  inputBranch(tree, (name+"TagVar_trackNPixelHits"      ).c_str(),      trackNPixelHits  );
+  if(doPFNano){
+
+    //Jet_DeepJet_nCpfcand
+    for (unsigned int p = 0; p < n_cpf_; p++) {
+      auto s = std::to_string(p);
+
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_puppiw_"+s                       ,DeepJet_Cpfcan_puppiw                [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_drminsv_"+s                      ,DeepJet_Cpfcan_drminsv               [p],  "n"+name, "F");    
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_chi2_"+s                         ,DeepJet_Cpfcan_chi2                  [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackDeltaR_"+s           ,DeepJet_Cpfcan_BtagPf_trackDeltaR    [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackEtaRel_"+s           ,DeepJet_Cpfcan_BtagPf_trackEtaRel    [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackJetDistVal_"+s       ,DeepJet_Cpfcan_BtagPf_trackJetDistVal[p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackPPar_"+s             ,DeepJet_Cpfcan_BtagPf_trackPPar      [p],  "n"+name, "F");    
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackPParRatio_"+s        ,DeepJet_Cpfcan_BtagPf_trackPParRatio [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackPtRel_"+s            ,DeepJet_Cpfcan_BtagPf_trackPtRel     [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackSip2dSig_"+s         ,DeepJet_Cpfcan_BtagPf_trackSip2dSig  [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackSip3dSig_"+s         ,DeepJet_Cpfcan_BtagPf_trackSip3dSig  [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackSip2dVal_"+s         ,DeepJet_Cpfcan_BtagPf_trackSip2dVal  [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_BtagPf_trackSip3dVal_"+s         ,DeepJet_Cpfcan_BtagPf_trackSip3dVal  [p],  "n"+name, "F");
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_VTX_ass_"+s                      ,DeepJet_Cpfcan_VTX_ass               [p],  "n"+name, "F");    
+      connectBranchArr(true, tree, name+"_DeepJet_Cpfcan_quality_"+s                      ,DeepJet_Cpfcan_quality               [p],  "n"+name, "F");
+    }
+
+
+    //nTrkTagVar : nTrkTagVar/I                                          *
+  }else{
+    inputBranch(tree, (name+"TagVar_trackMomentum"        ).c_str(),      trackMomentum    );
+    inputBranch(tree, (name+"TagVar_trackEta"             ).c_str(),      trackEta         );
+    inputBranch(tree, (name+"TagVar_trackPhi"             ).c_str(),      trackPhi         );
+    inputBranch(tree, (name+"TagVar_trackPtRel"           ).c_str(),      trackPtRel       );
+    inputBranch(tree, (name+"TagVar_trackPPar"            ).c_str(),      trackPPar        );
+    inputBranch(tree, (name+"TagVar_trackEtaRel"          ).c_str(),      trackEtaRel      );
+    inputBranch(tree, (name+"TagVar_trackDeltaR"          ).c_str(),      trackDeltaR      );
+    inputBranch(tree, (name+"TagVar_trackPtRatio"         ).c_str(),      trackPtRatio     );
+    inputBranch(tree, (name+"TagVar_trackPParRatio"       ).c_str(),      trackPParRatio   ); 
+    inputBranch(tree, (name+"TagVar_trackSip2dVal"        ).c_str(),      trackSip2dVal    ); 
+    inputBranch(tree, (name+"TagVar_trackSip2dSig"        ).c_str(),      trackSip2dSig    ); 
+    inputBranch(tree, (name+"TagVar_trackSip3dVal"        ).c_str(),      trackSip3dVal    ); 
+    inputBranch(tree, (name+"TagVar_trackSip3dSig"        ).c_str(),      trackSip3dSig    ); 
+    inputBranch(tree, (name+"TagVar_trackDecayLenVal"     ).c_str(),      trackDecayLenVal );
+    inputBranch(tree, (name+"TagVar_trackDecayLenSig"     ).c_str(),      trackDecayLenSig );
+    inputBranch(tree, (name+"TagVar_trackJetDistVal"      ).c_str(),      trackJetDistVal  );
+    inputBranch(tree, (name+"TagVar_trackJetDistSig"      ).c_str(),      trackJetDistSig  );
+    inputBranch(tree, (name+"TagVar_trackChi2"            ).c_str(),      trackChi2        );
+    inputBranch(tree, (name+"TagVar_trackNTotalHits"      ).c_str(),      trackNTotalHits  );
+    inputBranch(tree, (name+"TagVar_trackNPixelHits"      ).c_str(),      trackNPixelHits  );
+  }
+
     
   
 
@@ -291,6 +362,24 @@ std::vector< std::shared_ptr<secondaryVertex> > btaggingData::getSecondaryVertic
   if(debug) std::cout << "leave btaggingData::getSecondaryVertices " << std::endl;
   return outputSVs;
 }
+
+std::vector<trkTagVarPtr> btaggingData::getTrkTagVarsPFNano(unsigned int jetIndex, unsigned int nTrkTagVars){
+  
+  std::vector<trkTagVarPtr> outputTrkTagVars;
+
+  for(unsigned int trkIndex = 0; trkIndex < nTrkTagVars; ++trkIndex){
+
+    if(trkIndex > int(n_cpf_-1)) {
+      std::cout  << "btaggingData::Warning too many trkTagVars! " << n_cpf_  << " trkTagVars. Skipping. "<< std::endl;
+      break;
+    }
+
+    outputTrkTagVars.push_back(std::make_shared<trkTagVar>(trkTagVar(jetIndex, trkIndex, this)));
+  }
+
+  return outputTrkTagVars;
+}
+
 
 
 std::vector<trkTagVarPtr> btaggingData::getTrkTagVars(int nFirstTrkTagVar, int nLastTrkTagVar){
