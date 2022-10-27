@@ -48,10 +48,14 @@ namespace nTupleAnalysis {
     float dir_y             ;
     float dir_z             ;
 
+    float DeepJet_sv_normchi2         ;
+    float DeepJet_sv_costhetasvpv     ;
+
     std::weak_ptr<secondaryVertex>  matchedSV;
 
     secondaryVertex();
     secondaryVertex(UInt_t, btaggingData*); 
+    secondaryVertex(UInt_t iJet, UInt_t iSV, btaggingData* data);
 
     ~secondaryVertex(); 
 
@@ -297,8 +301,21 @@ namespace nTupleAnalysis {
     float DeepJet_Cpfcan_BtagPf_trackSip3dVal	 [n_cpf_][MAXNJETS];
     float DeepJet_Cpfcan_VTX_ass		 [n_cpf_][MAXNJETS];
     float DeepJet_Cpfcan_quality                 [n_cpf_][MAXNJETS];
-
     //float DeepJet_Cpfcan_ptrel			 [n_cpf_][MAXNJETS];
+
+    static const unsigned n_sv_ = 4; // 5
+    float DeepJet_sv_mass             [n_sv_][MAXNJETS];
+    float DeepJet_sv_pt               [n_sv_][MAXNJETS];
+    float DeepJet_sv_ntracks          [n_sv_][MAXNJETS];
+    float DeepJet_sv_chi2             [n_sv_][MAXNJETS];
+    float DeepJet_sv_normchi2         [n_sv_][MAXNJETS];
+    float DeepJet_sv_dxy              [n_sv_][MAXNJETS];
+    float DeepJet_sv_dxysig           [n_sv_][MAXNJETS];
+    float DeepJet_sv_d3d              [n_sv_][MAXNJETS];
+    float DeepJet_sv_d3dsig           [n_sv_][MAXNJETS];
+    float DeepJet_sv_costhetasvpv     [n_sv_][MAXNJETS];
+    float DeepJet_sv_deltaR           [n_sv_][MAXNJETS];
+    float DeepJet_sv_enratio          [n_sv_][MAXNJETS];
 
 //    Jet_DeepJet_Npfcan_puppiw_0 = 1, 
 //      Jet_DeepJet_Npfcan_deltaR_0 = -0.568359, 
@@ -313,7 +330,8 @@ namespace nTupleAnalysis {
 
     btaggingData(); 
 
-    void initSecondaryVerticies(std::string name, TTree* tree);
+    void initSecondaryVerticies(std::string name, TTree* tree, bool doPFNano_=true);
+    std::vector<svPtr> getSecondaryVerticesPFNano(unsigned int jetIndex, unsigned int nSVs, bool debug);
     std::vector<svPtr> getSecondaryVertices(int nFirstSV, int nLastSV, bool debug);
 
     void initTrkTagVar(std::string name, TTree* tree, bool doPFNano_=true);

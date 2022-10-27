@@ -51,6 +51,52 @@ secondaryVertex::secondaryVertex(UInt_t i, btaggingData* data){
 
 }
 
+secondaryVertex::secondaryVertex(UInt_t iJet, UInt_t iSV, btaggingData* data){
+
+
+  //x                    = data->sv_x                 [i];
+  //y                    = data->sv_y                 [i];
+  //z                    = data->sv_z                 [i];
+  //ex                   = data->sv_ex                [i];
+  //ey                   = data->sv_ey                [i];
+  //ez                   = data->sv_ez                [i];
+
+  //ndf                  = data->sv_ndf               [i];
+
+  //deltaR_sum_jet       = data->sv_deltaR_sum_jet    [i];
+  //deltaR_sum_dir       = data->sv_deltaR_sum_dir    [i];
+
+  //totCharge            = data->sv_totCharge         [i];
+  //vtxDistJetAxis       = data->sv_vtxDistJetAxis    [i];
+
+  //vtx_eta              = data->sv_vtx_eta           [i];
+  //vtx_phi              = data->sv_vtx_phi           [i];
+
+  //dir_x                = data->sv_dir_x             [i];
+  //dir_y                = data->sv_dir_y             [i];
+  //dir_z                = data->sv_dir_z             [i];
+  //
+  //p = TLorentzVector();
+  //p.SetPtEtaPhiM(vtx_pt, vtx_eta, vtx_phi, mass);
+  //e = p.E();
+
+  mass                        = data->DeepJet_sv_mass             [iSV][iJet];
+  vtx_pt                      = data->DeepJet_sv_pt               [iSV][iJet];
+  nTrk                        = data->DeepJet_sv_ntracks          [iSV][iJet];
+  chi2                        = data->DeepJet_sv_chi2             [iSV][iJet];
+  DeepJet_sv_normchi2         = data->DeepJet_sv_normchi2         [iSV][iJet];
+  flight2D                    = data->DeepJet_sv_dxy              [iSV][iJet];
+  flight2DSig                 = data->DeepJet_sv_dxysig           [iSV][iJet];
+  flight                      = data->DeepJet_sv_d3d              [iSV][iJet];
+  flightSig                   = data->DeepJet_sv_d3dsig           [iSV][iJet];
+  DeepJet_sv_costhetasvpv     = data->DeepJet_sv_costhetasvpv     [iSV][iJet];
+  deltaR_jet                  = data->DeepJet_sv_deltaR           [iSV][iJet];
+  EnergyRatio                 = data->DeepJet_sv_enratio          [iSV][iJet];
+
+
+}
+
+
 
 secondaryVertex::~secondaryVertex(){}
 
@@ -201,38 +247,63 @@ btaggingData::btaggingData(){
 }
 
 //access tree
-void btaggingData::initSecondaryVerticies(std::string name, TTree* tree){
+void btaggingData::initSecondaryVerticies(std::string name, TTree* tree, bool doPFNano_){
 
   haveSVs = true;
+  doPFNano = doPFNano_;
 
-  inputBranch(tree, (name+"nSV"                 ).c_str(),   nSV);
-  inputBranch(tree, (name+"SV_x"                ).c_str(),   sv_x                 );
-  inputBranch(tree, (name+"SV_y"                ).c_str(),   sv_y                 );
-  inputBranch(tree, (name+"SV_z"                ).c_str(),   sv_z                 );
-  inputBranch(tree, (name+"SV_ex"               ).c_str(),   sv_ex                );
-  inputBranch(tree, (name+"SV_ey"               ).c_str(),   sv_ey                );
-  inputBranch(tree, (name+"SV_ez"               ).c_str(),   sv_ez                );
-  inputBranch(tree, (name+"SV_chi2"             ).c_str(),   sv_chi2              );
-  inputBranch(tree, (name+"SV_ndf"              ).c_str(),   sv_ndf               );
-  inputBranch(tree, (name+"SV_flight"           ).c_str(),   sv_flight            );
-  inputBranch(tree, (name+"SV_flightErr"        ).c_str(),   sv_flightErr         );
-  inputBranch(tree, (name+"SV_deltaR_jet"       ).c_str(),   sv_deltaR_jet        );
-  inputBranch(tree, (name+"SV_deltaR_sum_jet"   ).c_str(),   sv_deltaR_sum_jet    );
-  inputBranch(tree, (name+"SV_deltaR_sum_dir"   ).c_str(),   sv_deltaR_sum_dir    );
-  inputBranch(tree, (name+"SV_vtx_pt"           ).c_str(),   sv_vtx_pt            );
-  inputBranch(tree, (name+"SV_flight2D"         ).c_str(),   sv_flight2D          );
-  inputBranch(tree, (name+"SV_flight2DErr"      ).c_str(),   sv_flight2DErr       );
-  inputBranch(tree, (name+"SV_totCharge"        ).c_str(),   sv_totCharge         );
-  inputBranch(tree, (name+"SV_vtxDistJetAxis"   ).c_str(),   sv_vtxDistJetAxis    );
-  inputBranch(tree, (name+"SV_nTrk"             ).c_str(),   sv_nTrk              );
-  inputBranch(tree, (name+"SV_mass"             ).c_str(),   sv_mass              );
-  inputBranch(tree, (name+"SV_vtx_eta"          ).c_str(),   sv_vtx_eta           );
-  inputBranch(tree, (name+"SV_vtx_phi"          ).c_str(),   sv_vtx_phi           );
-  inputBranch(tree, (name+"SV_EnergyRatio"      ).c_str(),   sv_EnergyRatio       );
-  inputBranch(tree, (name+"SV_dir_x"            ).c_str(),   sv_dir_x             );
-  inputBranch(tree, (name+"SV_dir_y"            ).c_str(),   sv_dir_y             );
-  inputBranch(tree, (name+"SV_dir_z"            ).c_str(),   sv_dir_z             );
+  if(doPFNano){
 
+    //Jet_DeepJet_nsv
+    for (unsigned int p = 0; p < n_sv_; p++) {
+      auto s = std::to_string(p);
+
+      connectBranchArr(true, tree, name+"_DeepJet_sv_mass_"+s                , DeepJet_sv_mass             [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_pt_"+s                  , DeepJet_sv_pt               [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_ntracks_"+s             , DeepJet_sv_ntracks          [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_chi2_"+s                , DeepJet_sv_chi2             [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_normchi2_"+s            , DeepJet_sv_normchi2         [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_dxy_"+s                 , DeepJet_sv_dxy              [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_dxysig_"+s              , DeepJet_sv_dxysig           [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_d3d_"+s                 , DeepJet_sv_d3d              [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_d3dsig_"+s              , DeepJet_sv_d3dsig           [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_costhetasvpv_"+s        , DeepJet_sv_costhetasvpv     [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_deltaR_"+s              , DeepJet_sv_deltaR           [p], "n"+name,"F");
+      connectBranchArr(true, tree, name+"_DeepJet_sv_enratio_"+s             , DeepJet_sv_enratio          [p], "n"+name,"F");
+
+    }
+
+
+  }else{
+    
+    inputBranch(tree, (name+"nSV"                 ).c_str(),   nSV);
+    inputBranch(tree, (name+"SV_x"                ).c_str(),   sv_x                 );
+    inputBranch(tree, (name+"SV_y"                ).c_str(),   sv_y                 );
+    inputBranch(tree, (name+"SV_z"                ).c_str(),   sv_z                 );
+    inputBranch(tree, (name+"SV_ex"               ).c_str(),   sv_ex                );
+    inputBranch(tree, (name+"SV_ey"               ).c_str(),   sv_ey                );
+    inputBranch(tree, (name+"SV_ez"               ).c_str(),   sv_ez                );
+    inputBranch(tree, (name+"SV_chi2"             ).c_str(),   sv_chi2              );
+    inputBranch(tree, (name+"SV_ndf"              ).c_str(),   sv_ndf               );
+    inputBranch(tree, (name+"SV_flight"           ).c_str(),   sv_flight            );
+    inputBranch(tree, (name+"SV_flightErr"        ).c_str(),   sv_flightErr         );
+    inputBranch(tree, (name+"SV_deltaR_jet"       ).c_str(),   sv_deltaR_jet        );
+    inputBranch(tree, (name+"SV_deltaR_sum_jet"   ).c_str(),   sv_deltaR_sum_jet    );
+    inputBranch(tree, (name+"SV_deltaR_sum_dir"   ).c_str(),   sv_deltaR_sum_dir    );
+    inputBranch(tree, (name+"SV_vtx_pt"           ).c_str(),   sv_vtx_pt            );
+    inputBranch(tree, (name+"SV_flight2D"         ).c_str(),   sv_flight2D          );
+    inputBranch(tree, (name+"SV_flight2DErr"      ).c_str(),   sv_flight2DErr       );
+    inputBranch(tree, (name+"SV_totCharge"        ).c_str(),   sv_totCharge         );
+    inputBranch(tree, (name+"SV_vtxDistJetAxis"   ).c_str(),   sv_vtxDistJetAxis    );
+    inputBranch(tree, (name+"SV_nTrk"             ).c_str(),   sv_nTrk              );
+    inputBranch(tree, (name+"SV_mass"             ).c_str(),   sv_mass              );
+    inputBranch(tree, (name+"SV_vtx_eta"          ).c_str(),   sv_vtx_eta           );
+    inputBranch(tree, (name+"SV_vtx_phi"          ).c_str(),   sv_vtx_phi           );
+    inputBranch(tree, (name+"SV_EnergyRatio"      ).c_str(),   sv_EnergyRatio       );
+    inputBranch(tree, (name+"SV_dir_x"            ).c_str(),   sv_dir_x             );
+    inputBranch(tree, (name+"SV_dir_y"            ).c_str(),   sv_dir_y             );
+    inputBranch(tree, (name+"SV_dir_z"            ).c_str(),   sv_dir_z             );
+  }
 }
 
 
@@ -346,6 +417,23 @@ void btaggingData::initTagVar(std::string name, TTree* tree){
 
 
 }
+
+std::vector< std::shared_ptr<secondaryVertex> > btaggingData::getSecondaryVerticesPFNano(unsigned int jetIndex, unsigned int nSVs, bool debug){
+  if(debug) std::cout << "btaggingData::getSecondaryVertices " << nSVs << " from jet " << jetIndex << std::endl;  
+  std::vector< std::shared_ptr<secondaryVertex> > outputSVs;
+  for(unsigned int iSV = 0; iSV < nSVs; ++iSV){
+    if(iSV > int(n_sv_-1)) {
+      std::cout  << "btaggingData::Warning too many SVs! " << iSV  << " SVs. Skipping. "<< std::endl;
+      break;
+    }
+
+    if(debug) std::cout << "btaggingData::getSecondaryVertices " << iSV <<  "vs nSVs " << nSVs <<  std::endl; 
+    outputSVs.push_back(std::make_shared<secondaryVertex>(secondaryVertex(jetIndex, iSV, this)));
+  }
+  if(debug) std::cout << "leave btaggingData::getSecondaryVertices " << std::endl;
+  return outputSVs;
+}
+
 
 std::vector< std::shared_ptr<secondaryVertex> > btaggingData::getSecondaryVertices(int nFirstSV, int nLastSV, bool debug){
   if(debug) std::cout << "btaggingData::getSecondaryVertices " << nFirstSV << " to " << nLastSV << std::endl;  

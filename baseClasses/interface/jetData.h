@@ -97,6 +97,7 @@ namespace nTupleAnalysis {
     //
     // SVs in Jet
     //
+    int DeepJet_nsv = -1;
     std::vector<svPtr> svs;
 
     //
@@ -257,7 +258,7 @@ namespace nTupleAnalysis {
     int nLastTrack[MAXJETS];
     trackData* trkData = NULL;
 
-
+    int DeepJet_nsv[MAXJETS];
     int nFirstSV[MAXJETS] = {0};
     int nLastSV[MAXJETS] = {0};
 

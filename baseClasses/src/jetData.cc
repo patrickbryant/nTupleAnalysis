@@ -149,20 +149,36 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   }
 
   if(data->btagData){
+
+    //
+    //  SVs
+    //
     if(data->btagData->haveSVs){
-      if(data->debug)  std::cout << data->m_name << " Getting SVs " << data->nFirstSV[i] << " " << data->nLastSV[i] << std::endl;
-      svs = data->btagData->getSecondaryVertices(data->nFirstSV[i],data->nLastSV[i], data->debug);
+      if(data->doPFNano){
+	DeepJet_nsv = data->DeepJet_nsv[i];
+	if(data->debug) std::cout << data->m_name << " Getting PF Nano Svs " << DeepJet_nsv << std::endl;
+	svs = data->btagData->getSecondaryVerticesPFNano(i,DeepJet_nsv, data->debug);
+      }else{
+	if(data->debug)  std::cout << data->m_name << " Getting SVs " << data->nFirstSV[i] << " " << data->nLastSV[i] << std::endl;
+	svs = data->btagData->getSecondaryVertices(data->nFirstSV[i],data->nLastSV[i], data->debug);
+      }
     }
     
+    //
+    //  Track tag vars
+    //
     if(data->btagData->haveTrkTagVars){
-      DeepJet_nCpfcand = data->DeepJet_nCpfcand[i];
       if(data->doPFNano){
+	DeepJet_nCpfcand = data->DeepJet_nCpfcand[i];
 	trkTagVars = data->btagData->getTrkTagVarsPFNano(i,DeepJet_nCpfcand);
       }else{
 	trkTagVars = data->btagData->getTrkTagVars(data->nFirstTrkTagVar[i],data->nLastTrkTagVar[i]);
       }
     }
     
+    //
+    // Tag Vars
+    //
     if(data->btagData->haveTagVars){
       tagVars = data->btagData->getTagVars(i);
     }
@@ -764,19 +780,24 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
       inputBranch(tree, (m_prefix+m_name+"_nSM"            ).c_str(),         nSM            ); 
       inputBranch(tree, (m_prefix+m_name+"_nSE"            ).c_str(),         nSE            ); 
   
-      int nFirstSVCode = inputBranch(tree, (m_prefix+m_name+"_nFirstSV").c_str(),  nFirstSV);
-      int nLastSVCode  = inputBranch(tree, (m_prefix+m_name+"_nLastSV" ).c_str(),  nLastSV );
-      if(nFirstSVCode != -1 && nLastSVCode != -1){
-	btagData->initSecondaryVerticies(m_prefix, tree);
-      }
-
 
       if(doPFNano){
+	std::cout << "\tjetData::" << m_name << " loading secondary verticies from PFNano" << std::endl;
+	connectBranchArr(readIn, tree, jetName+"_DeepJet_nsv"  , DeepJet_nsv,  NjetName,  "I");
+	btagData->initSecondaryVerticies(m_prefix+m_name, tree, true);
+
 	std::cout << "\tjetData::" << m_name << " loading trkTagVar from PFNano" << std::endl;
 	connectBranchArr(readIn, tree, jetName+"_DeepJet_nCpfcand"  , DeepJet_nCpfcand,  NjetName,  "I");
 	btagData->initTrkTagVar(m_prefix+m_name, tree, true);
 
       }else{
+	std::cout << "\tjetData::" << m_name << " loading secondary verticies from BTA" << std::endl;
+	int nFirstSVCode = inputBranch(tree, (m_prefix+m_name+"_nFirstSV").c_str(),  nFirstSV);
+	int nLastSVCode  = inputBranch(tree, (m_prefix+m_name+"_nLastSV" ).c_str(),  nLastSV );
+	if(nFirstSVCode != -1 && nLastSVCode != -1){
+	  btagData->initSecondaryVerticies(m_prefix, tree);
+	}
+
 	std::cout << "\tjetData::" << m_name << " loading trkTagVar from BTA" << std::endl;
 	int nFirstTrkTagVarCode = inputBranch(tree, (m_prefix+m_name+"_nFirstTrkTagVar").c_str(),  nFirstTrkTagVar);
 	int nLastTrkTagVarCode  = inputBranch(tree, (m_prefix+m_name+"_nLastTrkTagVar" ).c_str(),  nLastTrkTagVar );
