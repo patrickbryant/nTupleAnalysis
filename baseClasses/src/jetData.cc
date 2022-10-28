@@ -38,6 +38,11 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   if(deepFlavB == 0)
     deepFlavB = deepFlavB_alt;
 
+  deepFlavCvB   = data->deepFlavCvB [i];
+  deepFlavCvL   = data->deepFlavCvL [i];
+  deepFlavQG    = data->deepFlavQG  [i];
+
+
   bTagScore = deepFlavB;
   if(tagger == "CSVv2") bTagScore = CSVv2;
   if(tagger == "deepB") bTagScore = deepB;
@@ -50,6 +55,19 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   puId = data->puId[i];
   jetId = data->jetId[i];
 
+  area                      = data->area                      [i];
+  rawFactor                 = data->rawFactor                 [i];
+  chEmEF                    = data->chEmEF                    [i];      
+  chHEF                     = data->chHEF                     [i];      
+  hfsigmaEtaEta             = data->hfsigmaEtaEta             [i];
+  hfsigmaPhiPhi             = data->hfsigmaPhiPhi             [i];
+  muEF                      = data->muEF                      [i];
+  muonSubtrFactor           = data->muonSubtrFactor           [i];      
+  neEmEF                    = data->neEmEF                    [i];      
+  neHEF                     = data->neHEF                     [i];      
+  hfadjacentEtaStripsSize   = data->hfadjacentEtaStripsSize   [i];      
+  hfcentralEtaStripSize     = data->hfcentralEtaStripSize     [i];
+  nConstituents             = data->nConstituents             [i];
 
   ntracks        = data->ntracks        [i];
   nseltracks     = data->nseltracks     [i];
@@ -362,6 +380,7 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
   m_jetDetailLevel = jetDetailLevel;
 
   connectBranches(readIn, tree, JECSyst);
+
   bTagScore = deepFlavB; // default btagger
   if(tagger != ""){
     if(tagger == "CSVv2") bTagScore = CSVv2;
@@ -626,10 +645,30 @@ void jetData::writeJets(std::vector< jetPtr > outputJets){
     this->deepB[i]	      = thisJet->deepB   ; 
     this->CSVv2[i]	      = thisJet->CSVv2   ; 
     this->deepFlavB[i]        = thisJet->deepFlavB; 
-  
+
+    this->deepFlavCvB[i]  = thisJet->deepFlavCvB ;
+    this->deepFlavCvL[i]  = thisJet->deepFlavCvL ;
+    this->deepFlavQG [i]  = thisJet->deepFlavQG  ;
+
+
+
     this->puId[i] = thisJet->puId;
     this->jetId[i] = thisJet->jetId;
     
+    this->area                     [i] = thisJet->area                      ;
+    this->rawFactor                [i] = thisJet->rawFactor                 ;
+    this->chEmEF                   [i] = thisJet->chEmEF                    ;      
+    this->chHEF                    [i] = thisJet->chHEF                     ;      
+    this->hfsigmaEtaEta            [i] = thisJet->hfsigmaEtaEta             ;
+    this->hfsigmaPhiPhi            [i] = thisJet->hfsigmaPhiPhi             ;
+    this->muEF                     [i] = thisJet->muEF                      ;
+    this->muonSubtrFactor          [i] = thisJet->muonSubtrFactor           ;      
+    this->neEmEF                   [i] = thisJet->neEmEF                    ;      
+    this->neHEF                    [i] = thisJet->neHEF                     ;      
+    this->hfadjacentEtaStripsSize  [i] = thisJet->hfadjacentEtaStripsSize   ;      
+    this->hfcentralEtaStripSize    [i] = thisJet->hfcentralEtaStripSize     ;
+    this->nConstituents            [i] = thisJet->nConstituents             ;
+
     
     this->ntracks        [i] = thisJet->ntracks        ;
     this->nseltracks     [i] = thisJet->nseltracks     ; 
@@ -673,6 +712,8 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 
   connectBranch(readIn, tree, NjetName, nJets, "i");
 
+
+
   connectBranchArr(readIn, tree, jetName+"_pt"  +JECSyst, pt,  NjetName,  "F");
   connectBranchArr(readIn, tree, jetName+"_eta",          eta, NjetName,  "F");
   connectBranchArr(readIn, tree, jetName+"_phi",          phi, NjetName,  "F");
@@ -697,10 +738,29 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
     connectBranchArr(readIn, tree, jetName+"_DeepFlavourBB",   deepFlavourBB,   NjetName,  "F");  
     connectBranchArr(readIn, tree, jetName+"_DeepFlavourLEPB", deepFlavourLEPB, NjetName,  "F");  
   }
+
+  connectBranchArr(readIn, tree, jetName+"_btagDeepFlavCvB"       ,deepFlavCvB, NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_btagDeepFlavCvL"       ,deepFlavCvL, NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_btagDeepFlavQG"        ,deepFlavQG , NjetName, "F");
   
 
   connectBranchArr(readIn, tree, jetName+"_puId",   puId,   NjetName,  "I");  
   connectBranchArr(readIn, tree, jetName+"_jetId", jetId,   NjetName,  "I");  
+
+  connectBranchArr(readIn, tree, jetName+"_area"                              , area                      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_rawFactor"                         , rawFactor                 , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_chEmEF"                            , chEmEF                    , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_chHEF"                             , chHEF                     , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_hfsigmaEtaEta"                     , hfsigmaEtaEta             , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_hfsigmaPhiPhi"                     , hfsigmaPhiPhi             , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_muEF"                              , muEF                      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_muonSubtrFactor"                   , muonSubtrFactor           , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_neEmEF"                            , neEmEF                    , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_neHEF"                             , neHEF                     , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_hfadjacentEtaStripsSize"           , hfadjacentEtaStripsSize   , NjetName, "F");      
+  connectBranchArr(readIn, tree, jetName+"_hfcentralEtaStripSize"             , hfcentralEtaStripSize     , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_nConstituents"                     , nConstituents             , NjetName, "b");
+
 
   if(m_isMC){
     connectBranchArr(readIn, tree, jetName+"_flavour", flavour,   NjetName,  "I");  
@@ -757,13 +817,21 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
     //  only load the track if the variables are availible
     //
     if(m_jetDetailLevel.find("Tracks") != std::string::npos){
-      std::cout << "jetData::" << m_name << " loading Tracks" << std::endl;
-      inputBranch(tree, (m_prefix+m_name+"_ntracks"        ).c_str(),         ntracks        );
-      inputBranch(tree, (m_prefix+m_name+"_nseltracks"     ).c_str(),         nseltracks     );
-      int nFirstTrackCode = inputBranch(tree, (m_prefix+m_name+"_nFirstTrack").c_str(),  nFirstTrack);
-      int nLastTrackCode  = inputBranch(tree, (m_prefix+m_name+"_nLastTrack" ).c_str(),  nLastTrack );
-      if(nFirstTrackCode != -1 && nLastTrackCode != -1){
-	trkData = new trackData(m_prefix, tree);
+
+      if(doPFNano){
+	//
+	// To do load PF tracks
+	//
+
+      }else{
+	std::cout << "jetData::" << m_name << " loading Tracks" << std::endl;
+	inputBranch(tree, (m_prefix+m_name+"_ntracks"        ).c_str(),         ntracks        );
+	inputBranch(tree, (m_prefix+m_name+"_nseltracks"     ).c_str(),         nseltracks     );
+	int nFirstTrackCode = inputBranch(tree, (m_prefix+m_name+"_nFirstTrack").c_str(),  nFirstTrack);
+	int nLastTrackCode  = inputBranch(tree, (m_prefix+m_name+"_nLastTrack" ).c_str(),  nLastTrack );
+	if(nFirstTrackCode != -1 && nLastTrackCode != -1){
+	  trkData = new trackData(m_prefix, tree);
+	}
       }
     }
 
@@ -773,13 +841,17 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
     if(m_jetDetailLevel.find("btagInputs") != std::string::npos){
       std::cout << "jetData::" << m_name << " loading btagInputs" << std::endl;
       btagData = new btaggingData();
-      btagData->initTagVar(m_prefix, tree);  
+      
+      if(doPFNano){
+	
+      }else{
+	btagData->initTagVar(m_prefix, tree);  
 
-      inputBranch(tree, (m_prefix+m_name+"_SoftMu"         ).c_str(),         SoftMu         ); 
-      inputBranch(tree, (m_prefix+m_name+"_SoftEl"         ).c_str(),         SoftEl         ); 
-      inputBranch(tree, (m_prefix+m_name+"_nSM"            ).c_str(),         nSM            ); 
-      inputBranch(tree, (m_prefix+m_name+"_nSE"            ).c_str(),         nSE            ); 
-  
+	inputBranch(tree, (m_prefix+m_name+"_SoftMu"         ).c_str(),         SoftMu         ); 
+	inputBranch(tree, (m_prefix+m_name+"_SoftEl"         ).c_str(),         SoftEl         ); 
+	inputBranch(tree, (m_prefix+m_name+"_nSM"            ).c_str(),         nSM            ); 
+	inputBranch(tree, (m_prefix+m_name+"_nSE"            ).c_str(),         nSE            ); 
+      }  
 
       if(doPFNano){
 	std::cout << "\tjetData::" << m_name << " loading secondary verticies from PFNano" << std::endl;

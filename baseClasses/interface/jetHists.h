@@ -25,8 +25,25 @@ namespace nTupleAnalysis {
     TH1F* deepB;
     TH1F* CSVv2;
     TH1F* deepFlavB;
+    TH1F* deepFlavCvB;
+    TH1F* deepFlavCvL;
+    TH1F* deepFlavQG;
     TH1F* nJets;
     TH1F* nTrksExpected;
+
+    TH1F* area                      ;
+    TH1F* rawFactor                 ;
+    TH1F* chEmEF                    ;      
+    TH1F* chHEF                     ;      
+    TH1F* hfsigmaEtaEta             ;
+    TH1F* hfsigmaPhiPhi             ;
+    TH1F* muEF                      ;
+    TH1F* muonSubtrFactor           ;      
+    TH1F* neEmEF                    ;      
+    TH1F* neHEF                     ;      
+    TH1F* hfadjacentEtaStripsSize   ;      
+    TH1F* hfcentralEtaStripSize     ;
+    TH1F* nConstituents             ;
 
     TH1F*   ntracks    ;
     TH1F*   nseltracks ;

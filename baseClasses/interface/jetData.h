@@ -40,6 +40,9 @@ namespace nTupleAnalysis {
     float deepB = 0;
     float CSVv2 = 0;
     float deepFlavB = 0;
+    float deepFlavCvB;
+    float deepFlavCvL;
+    float deepFlavQG ;
     float bTagScore = -1;
     Int_t puId;
     Int_t jetId;
@@ -60,7 +63,6 @@ namespace nTupleAnalysis {
     float SoftElN  = -99;
     float cMVAv2   = -99;
     float cMVAv2N  = -99;
-
 
 
     int ntracks        ;
@@ -86,6 +88,19 @@ namespace nTupleAnalysis {
     int nbHadrons      ;
     int ncHadrons      ;
 
+    Float_t area                     ;
+    Float_t rawFactor                ;    
+    Float_t chEmEF                   ;
+    Float_t chHEF                    ;
+    Float_t hfsigmaEtaEta            ;
+    Float_t hfsigmaPhiPhi            ;
+    Float_t muEF                     ;
+    Float_t muonSubtrFactor          ;
+    Float_t neEmEF                   ;
+    Float_t neHEF                    ;
+    Float_t hfadjacentEtaStripsSize  ;
+    Float_t hfcentralEtaStripSize    ;
+    UChar_t nConstituents            ;
 
     //
     //  Tracks in Jet
@@ -183,7 +198,11 @@ namespace nTupleAnalysis {
 
     float deepB[MAXJETS];
     float CSVv2[MAXJETS];
-    float deepFlavB[MAXJETS] = {0};
+    float deepFlavB  [MAXJETS] = {0};
+    float deepFlavCvB[MAXJETS] = {0};
+    float deepFlavCvL[MAXJETS] = {0};
+    float deepFlavQG [MAXJETS] = {0};
+
     float deepFlavourB[MAXJETS];
     float deepFlavourBB[MAXJETS];
     float deepFlavourLEPB[MAXJETS];
@@ -262,9 +281,33 @@ namespace nTupleAnalysis {
     int nFirstSV[MAXJETS] = {0};
     int nLastSV[MAXJETS] = {0};
 
-    int DeepJet_nCpfcand[MAXJETS];
+    int DeepJet_nCpfcand[MAXJETS] = {0};
     int nFirstTrkTagVar [MAXJETS];
     int nLastTrkTagVar  [MAXJETS];
+
+    //
+    //  For overlap removal
+    // 
+    Float_t area                     [MAXJETS];
+    Float_t rawFactor                [MAXJETS];    
+    Float_t chEmEF                   [MAXJETS];
+    Float_t chHEF                    [MAXJETS];
+    Float_t hfsigmaEtaEta            [MAXJETS];
+    Float_t hfsigmaPhiPhi            [MAXJETS];
+    Float_t muEF                     [MAXJETS];
+    Float_t muonSubtrFactor          [MAXJETS];
+    Float_t neEmEF                   [MAXJETS];
+    Float_t neHEF                    [MAXJETS];
+    Float_t hfadjacentEtaStripsSize  [MAXJETS];
+    Float_t hfcentralEtaStripSize    [MAXJETS];
+    UChar_t nConstituents            [MAXJETS];
+    //    Jet_electronIdx1 = 1, 
+    //    Jet_electronIdx2 = -1, 
+    //    Jet_muonIdx1    = 0, 
+    //    Jet_muonIdx2    = -1, 
+    //    Jet_nElectrons  = 1, 
+    //    Jet_nMuons      = 1, 
+
 
     btaggingData* btagData = nullptr;
 

@@ -423,7 +423,7 @@ std::vector< std::shared_ptr<secondaryVertex> > btaggingData::getSecondaryVertic
   std::vector< std::shared_ptr<secondaryVertex> > outputSVs;
   for(unsigned int iSV = 0; iSV < nSVs; ++iSV){
     if(iSV > int(n_sv_-1)) {
-      std::cout  << "btaggingData::Warning too many SVs! " << iSV  << " SVs. Skipping. "<< std::endl;
+      //std::cout  << "btaggingData::Warning too many SVs! " << iSV  << " SVs. Skipping. "<< std::endl;
       break;
     }
 
@@ -458,7 +458,7 @@ std::vector<trkTagVarPtr> btaggingData::getTrkTagVarsPFNano(unsigned int jetInde
   for(unsigned int trkIndex = 0; trkIndex < nTrkTagVars; ++trkIndex){
 
     if(trkIndex > int(n_cpf_-1)) {
-      std::cout  << "btaggingData::Warning too many trkTagVars! " << n_cpf_  << " trkTagVars. Skipping. "<< std::endl;
+      //std::cout  << "btaggingData::Warning too many trkTagVars! " << nTrkTagVars << " vs " << n_cpf_  << " trkTagVars. Skipping. "<< std::endl;
       break;
     }
 
