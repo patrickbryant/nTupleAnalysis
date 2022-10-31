@@ -46,9 +46,21 @@ namespace nTupleAnalysis {
 
     int jetIdx;
     float isolation;
-    float isolation_corrected;
-    float isolation_trackerOnly;
+    //float isolation_corrected;
+    //float isolation_trackerOnly;
     float dR = 1e6;
+
+    Float_t  dxybs              ;
+    Float_t  dz                 ;
+    Float_t  dzErr              ;
+    Float_t  miniPFRelIso_all   ;
+    Float_t  miniPFRelIso_chg   ;
+    Float_t  pfRelIso04_all     ;
+    Float_t  mvaTTH             ;
+    Int_t    nStations          ;
+    Int_t    nTrackerLayers     ;
+    Bool_t   highPurity         ;
+    UChar_t  cleanmask          ;
 
     float SF = 1.0;
 
@@ -70,6 +82,18 @@ namespace nTupleAnalysis {
     
     UInt_t nMuons = 0;
 
+    Float_t  dxybs              [MAXMUONS];
+    Float_t  dz                 [MAXMUONS];
+    Float_t  dzErr              [MAXMUONS];
+    Float_t  miniPFRelIso_all   [MAXMUONS];
+    Float_t  miniPFRelIso_chg   [MAXMUONS];
+    Float_t  pfRelIso04_all     [MAXMUONS];
+    Float_t  mvaTTH             [MAXMUONS];
+    Int_t    nStations          [MAXMUONS];
+    Int_t    nTrackerLayers     [MAXMUONS];
+    Bool_t   highPurity         [MAXMUONS];
+    UChar_t  cleanmask          [MAXMUONS];
+
     float pt [MAXMUONS];
     float eta[MAXMUONS];
     float phi[MAXMUONS];
@@ -86,9 +110,8 @@ namespace nTupleAnalysis {
     Bool_t tightId[MAXMUONS];
 
     int jetIdx[MAXMUONS];
-    float pfRelIso04_all[MAXMUONS];
-    float isolation_corrected[MAXMUONS];
-    float isolation_trkIsoOnly[MAXMUONS];
+    //float isolation_corrected[MAXMUONS];
+    //float isolation_trkIsoOnly[MAXMUONS];
 
 
     Float_t pfRelIso03_all [MAXMUONS]; //         | Float_t PF relative isolation dR=0.3, total (deltaBeta corrections)//

@@ -16,9 +16,9 @@ namespace nTupleAnalysis {
     
     fourVectorHists* v;
     TH1F* quality;
-    TH1F* isolation;
-    TH1F* isolation_cor;
-    TH1F* isolation_cor_s;
+    //TH1F* isolation;
+    //TH1F* isolation_cor;
+    //TH1F* isolation_cor_s;
     TH1F* dR;
     TH1F* nMuons;
     TH1F* SF;
@@ -39,6 +39,16 @@ namespace nTupleAnalysis {
     TH1F* tkIsoId         ;
     TH1F* genPartFlav     ;
 
+    TH1F* dxybs            ;
+    TH1F* dz               ;
+    TH1F* dzErr            ;
+    TH1F* miniPFRelIso_all ;
+    TH1F* miniPFRelIso_chg ;
+    TH1F* mvaTTH           ;
+    TH1F* nStations        ;
+    TH1F* nTrackerLayers   ;
+    TH1F* highPurity       ;
+    TH1F* cleanmask        ;
 
 
     muonHists(std::string, fwlite::TFileService&, std::string title = "");

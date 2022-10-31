@@ -34,8 +34,8 @@ muon::muon(UInt_t i, muonData* data){
 
   jetIdx    = data->jetIdx[i];
   isolation = data->pfRelIso04_all[i];
-  isolation_corrected = data->isolation_corrected[i];
-  isolation_trackerOnly = data->isolation_trkIsoOnly[i];
+  //isolation_corrected = data->isolation_corrected[i];
+  //isolation_trackerOnly = data->isolation_trkIsoOnly[i];
 
   pfRelIso03_all     = data->pfRelIso03_all  [i];
   pfRelIso03_chg     = data->pfRelIso03_chg  [i];
@@ -48,6 +48,20 @@ muon::muon(UInt_t i, muonData* data){
   pfIsoId            = data->pfIsoId         [i];
   tkIsoId            = data->tkIsoId         [i];
   genPartFlav        = data->genPartFlav     [i];
+
+
+
+  dxybs              = data->dxybs              [i];
+  dz                 = data->dz                 [i];
+  dzErr              = data->dzErr              [i];
+  miniPFRelIso_all   = data->miniPFRelIso_all   [i];
+  miniPFRelIso_chg   = data->miniPFRelIso_chg   [i];
+  mvaTTH             = data->mvaTTH             [i];
+  nStations          = data->nStations          [i];
+  nTrackerLayers     = data->nTrackerLayers     [i];
+  highPurity         = data->highPurity         [i];
+  cleanmask          = data->cleanmask          [i];
+
 
  
   //
@@ -154,8 +168,8 @@ void muonData::connectBranches(bool readIn, TTree* tree){
 
   connectBranchArr(readIn, tree, muonName+"_jetIdx",         jetIdx,              NMuonName, "i" );
   connectBranchArr(readIn, tree, muonName+"_pfRelIso04_all", pfRelIso04_all,      NMuonName, "F" );
-  connectBranchArr(readIn, tree, muonName+"_iso",            isolation_corrected, NMuonName, "F" );
-  connectBranchArr(readIn, tree, muonName+"_isoTrackerOnly", isolation_trkIsoOnly,NMuonName, "F" );
+  //connectBranchArr(readIn, tree, muonName+"_iso",            isolation_corrected, NMuonName, "F" );
+  //connectBranchArr(readIn, tree, muonName+"_isoTrackerOnly", isolation_trkIsoOnly,NMuonName, "F" );
 
 
   connectBranchArr(readIn, tree, muonName+"_pfRelIso03_all"  , pfRelIso03_all  , NMuonName, "F");
@@ -169,6 +183,21 @@ void muonData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, muonName+"_pfIsoId"         , pfIsoId         , NMuonName, "b");
   connectBranchArr(readIn, tree, muonName+"_tkIsoId"         , tkIsoId         , NMuonName, "b");
   connectBranchArr(readIn, tree, muonName+"_genPartFlav"     , genPartFlav     , NMuonName, "b");
+
+
+
+  connectBranchArr(readIn, tree, muonName+"_dxybs"               , dxybs              ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_dz"                  , dz                 ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_dzErr"               , dzErr              ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_miniPFRelIso_all"    , miniPFRelIso_all   ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_miniPFRelIso_chg"    , miniPFRelIso_chg   ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_mvaTTH"              , mvaTTH             ,  NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_nStations"           , nStations          ,  NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_nTrackerLayers"      , nTrackerLayers     ,  NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_highPurity"          , highPurity         ,  NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_cleanmask"           , cleanmask          ,  NMuonName, "b");
+
+
 
 
 
@@ -204,8 +233,8 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
     this->tightId[i] =         thisMuon->tightId  ; 
     this->jetIdx[i] = 	       thisMuon->jetIdx     ;
     this->pfRelIso04_all[i] =  thisMuon->isolation; 
-    this->isolation_corrected[i] =    thisMuon->isolation_corrected   ;
-    this->isolation_trkIsoOnly[i] =    thisMuon->isolation_trackerOnly  ;
+    //this->isolation_corrected[i] =    thisMuon->isolation_corrected   ;
+    //this->isolation_trkIsoOnly[i] =    thisMuon->isolation_trackerOnly  ;
 
     this->pfRelIso03_all  [i] = thisMuon->pfRelIso03_all     ;
     this->pfRelIso03_chg  [i] = thisMuon->pfRelIso03_chg     ;
@@ -219,7 +248,16 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
     this->tkIsoId         [i] = thisMuon->tkIsoId            ;
     this->genPartFlav     [i] = thisMuon->genPartFlav        ;
 
-
+    this->dxybs             [i] = thisMuon-> dxybs              ;
+    this->dz                [i] = thisMuon-> dz                 ;
+    this->dzErr             [i] = thisMuon-> dzErr              ;
+    this->miniPFRelIso_all  [i] = thisMuon-> miniPFRelIso_all   ;
+    this->miniPFRelIso_chg  [i] = thisMuon-> miniPFRelIso_chg   ;
+    this->mvaTTH            [i] = thisMuon-> mvaTTH             ;
+    this->nStations         [i] = thisMuon-> nStations          ;
+    this->nTrackerLayers    [i] = thisMuon-> nTrackerLayers     ;
+    this->highPurity        [i] = thisMuon-> highPurity         ;
+    this->cleanmask         [i] = thisMuon-> cleanmask          ;
   }
 
   return ;
