@@ -108,6 +108,18 @@ namespace nTupleAnalysis {
     TH1F* SV  ;
     TH1F* SVweight  ;
 
+    TH1F* dz             ;
+    TH1F* dzError   	 ;
+    TH1F* chi2      	 ;
+    TH1F* puppiWeight    ;
+    TH1F* vtxChi2        ;
+    TH1F* lostInnerHits  ;
+    TH1F* pdgId          ;
+    TH1F* pvAssocQuality ;
+    TH1F* trkQuality     ;
+
+
+
     //
     // Eta/Phi Maps
     //
@@ -126,6 +138,9 @@ namespace nTupleAnalysis {
     std::vector<TH1F*> trackEta_forAlgo;
     std::vector<TH1F*> trackPhi_forAlgo;
     std::vector<TH1F*> trackPt_forAlgo;
+
+
+    
 
     
 

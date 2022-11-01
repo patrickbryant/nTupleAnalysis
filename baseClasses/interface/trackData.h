@@ -64,12 +64,12 @@ namespace nTupleAnalysis {
     float TPAssociationQuality ;
     int   idxMatchedTP         ;
 
-    float PFCands_puppiWeight    ;
-    float PFCands_vtxChi2        ;
-    int   PFCands_lostInnerHits  ;
-    int    PFCands_pdgId          ;
-    float PFCands_pvAssocQuality ;
-    float PFCands_trkQuality     ;
+    float puppiWeight    ;
+    float vtxChi2        ;
+    int   lostInnerHits  ;
+    int   pdgId          ;
+    float pvAssocQuality ;
+    float trkQuality     ;
 
 
     float dR                   ;
@@ -149,29 +149,23 @@ namespace nTupleAnalysis {
     int   idxMatchedTP          [MAXNTRKS];
 
     //   nPFCands        = 32
-    Float_t PFCands_d0                 [MAXNTRKS];
-    Float_t PFCands_d0Err              [MAXNTRKS];
-    Float_t PFCands_dz                 [MAXNTRKS];
-    Float_t PFCands_dzErr              [MAXNTRKS];
-    Float_t PFCands_eta                [MAXNTRKS];
-    Float_t PFCands_mass               [MAXNTRKS];
-    Float_t PFCands_phi                [MAXNTRKS];
-    Float_t PFCands_pt                 [MAXNTRKS];
-    Float_t PFCands_puppiWeight        [MAXNTRKS];
-    Float_t PFCands_puppiWeightNoLep   [MAXNTRKS];
-    Float_t PFCands_trkChi2            [MAXNTRKS];
-    Float_t PFCands_vtxChi2            [MAXNTRKS];
-    Int_t   PFCands_charge             [MAXNTRKS];
-    Int_t   PFCands_lostInnerHits      [MAXNTRKS];
-    Int_t   PFCands_numberOFHits       [MAXNTRKS];
-    Int_t   PFCands_numberOfPixelHits  [MAXNTRKS];
-    Int_t   PFCands_pdgId              [MAXNTRKS];
-    Int_t   PFCands_pvAssocQuality     [MAXNTRKS];
-    Int_t   PFCands_trkQuality         [MAXNTRKS];
+    Float_t d0                 [MAXNTRKS];
+    Float_t d0Err              [MAXNTRKS];
+    Float_t mass               [MAXNTRKS];
+    Float_t puppiWeight        [MAXNTRKS];
+    Float_t puppiWeightNoLep   [MAXNTRKS];
+    Float_t trkChi2            [MAXNTRKS];
+    Float_t vtxChi2            [MAXNTRKS];
+    Int_t   lostInnerHits      [MAXNTRKS];
+    Int_t   numberOFHits       [MAXNTRKS];
+    Int_t   numberOfPixelHits  [MAXNTRKS];
+    Int_t   pdgId              [MAXNTRKS];
+    Int_t   pvAssocQuality     [MAXNTRKS];
+    Int_t   trkQuality         [MAXNTRKS];
 
     trackData(std::string, TTree*); 
     std::vector< std::shared_ptr<track> > getTracks(int nFirstTrack, int nLastTrack);
-    std::vector< std::shared_ptr<track> > getTracks();
+    std::vector< std::shared_ptr<track> > getTracks(bool isCharged);
 
     ~trackData(); 
 

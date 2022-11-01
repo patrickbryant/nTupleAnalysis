@@ -4,6 +4,7 @@
 #define eventData_H
 #include <TChain.h>
 #include "nTupleAnalysis/baseClasses/interface/initBranch.h"
+#include "nTupleAnalysis/baseClasses/interface/trigData.h"
 
 namespace nTupleAnalysis {
   //forward declaration for use in elec constructor from tree
@@ -28,7 +29,7 @@ namespace nTupleAnalysis {
     Int_t    PV_npvs         = 0;
     Int_t    PV_npvsGood     = 0;
 
-    // Add trig data
+    trigData* triggerData = NULL;
 
     eventData(std::string name, TChain* tree, bool readIn = true, bool isMC = false); 
 

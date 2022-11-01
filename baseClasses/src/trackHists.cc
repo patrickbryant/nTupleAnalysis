@@ -116,6 +116,16 @@ void trackHists::makeHists(std::string name, TFileDirectory& dir, std::string ti
   SV              = dir.make<TH1F>("SV"  ,  "SV;SV", 10, -0.5,  9.5);  
   SVweight        = dir.make<TH1F>("SVweight"  ,  "SVweight;SVweight", 40, -0.1,  1.1);  
 
+  dz                     = dir.make<TH1F>("dz"                , "dz            ;    dz             ; Entries", 50, -20,20);
+  dzError        	 = dir.make<TH1F>("dzError"           , "dzError       ;    dzError        ; Entries", 50, 0,2);
+  chi2           	 = dir.make<TH1F>("chi2"              , "chi2          ;    chi2           ; Entries", 50, 0,5);
+  puppiWeight    	 = dir.make<TH1F>("puppiWeight"       , "puppiWeight   ;    puppiWeight    ; Entries", 50, 0,1);
+  vtxChi2        	 = dir.make<TH1F>("vtxChi2"           , "vtxChi2       ;    vtxChi2        ; Entries", 50, 0,5);
+  lostInnerHits  	 = dir.make<TH1F>("lostInnerHits"     , "lostInnerHits ;    lostInnerHits  ; Entries", 10, -0.5,9.5);
+  pdgId          	 = dir.make<TH1F>("pdgId"             , "pdgId         ;    pdgId          ; Entries", 39, -19.5,19.9);
+  pvAssocQuality 	 = dir.make<TH1F>("pvAssocQuality"    , "pvAssocQuality;    pvAssocQuality ; Entries", 10, -0.5,9.5);
+  trkQuality     	 = dir.make<TH1F>("trkQuality"        , "trkQuality    ;    trkQuality     ; Entries", 10, -0.5,9.5);
+
   //
   // Eta/Phi Maps
   //
@@ -199,6 +209,15 @@ void trackHists::Fill(const std::shared_ptr<track> &track, float weight){
   SVweight             ->Fill(track->SVweight,weight);
 
 
+  dz                    ->Fill(track->dz             ,weight);
+  dzError               ->Fill(track->dzError        ,weight);
+  chi2                  ->Fill(track->chi2           ,weight);
+  puppiWeight           ->Fill(track->puppiWeight    ,weight);
+  vtxChi2               ->Fill(track->vtxChi2        ,weight);
+  lostInnerHits         ->Fill(track->lostInnerHits  ,weight);
+  pdgId                 ->Fill(track->pdgId          ,weight);
+  pvAssocQuality        ->Fill(track->pvAssocQuality ,weight);
+  trkQuality            ->Fill(track->trkQuality     ,weight);
 
   //
   // Eta/Phi Maps

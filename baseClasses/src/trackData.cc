@@ -14,34 +14,34 @@ track::track(UInt_t i, trackData* data){
 
   if(data->doPFNano){
 
-    pt  = data->PFCands_pt                 [i];
-    eta = data->PFCands_eta                [i];
-    phi = data->PFCands_phi                [i];
-    m   = data->PFCands_mass               [i];
+    pt  = data->pt                 [i];
+    eta = data->eta                [i];
+    phi = data->phi                [i];
+    m   = data->mass               [i];
     p = TLorentzVector();
     p.SetPtEtaPhiM(pt, eta, phi, m);
     e = p.E();
 
 
-    dxy       = data->PFCands_d0                 [i];
-    dxyError  = data->PFCands_d0Err              [i];
+    dxy       = data->d0                 [i];
+    dxyError  = data->d0Err              [i];
     IP2D                 = dxy;
     IP2Dsig              = dxyError ? dxy / dxyError : -1;
     IP2Derr              = dxyError;
 
-    dz        = data->PFCands_dz                 [i];
-    dzError   = data->PFCands_dzErr              [i];
-    chi2      = data->PFCands_trkChi2            [i];
-    charge    = data->PFCands_charge             [i];
-    nHitAll   = data->PFCands_numberOFHits       [i];
-    nHitPixel = data->PFCands_numberOfPixelHits  [i];
+    dz        = data->dz                 [i];
+    dzError   = data->dzError              [i];
+    chi2      = data->trkChi2            [i];
+    charge    = data->charge             [i];
+    nHitAll   = data->numberOFHits       [i];
+    nHitPixel = data->numberOfPixelHits  [i];
 
-    PFCands_puppiWeight    = data->PFCands_puppiWeight        [i];
-    PFCands_vtxChi2        = data->PFCands_vtxChi2            [i];
-    PFCands_lostInnerHits  = data->PFCands_lostInnerHits      [i];
-    PFCands_pdgId          = data->PFCands_pdgId              [i];
-    PFCands_pvAssocQuality = data->PFCands_pvAssocQuality     [i];
-    PFCands_trkQuality     = data->PFCands_trkQuality         [i];
+    puppiWeight    = data->puppiWeight        [i];
+    vtxChi2        = data->vtxChi2            [i];
+    lostInnerHits  = data->lostInnerHits      [i];
+    pdgId          = data->pdgId              [i];
+    pvAssocQuality = data->pvAssocQuality     [i];
+    trkQuality     = data->trkQuality         [i];
 
   }else{
 
@@ -109,25 +109,25 @@ trackData::trackData(std::string name, TTree* tree){
     
     inputBranch(tree, ("n"+name).c_str(), nTracks);
 
-    inputBranch(tree, (name+"_d0"                ).c_str(),   PFCands_d0                 );
-    inputBranch(tree, (name+"_d0Err"             ).c_str(),   PFCands_d0Err              );
-    inputBranch(tree, (name+"_dz"                ).c_str(),   PFCands_dz                 );
-    inputBranch(tree, (name+"_dzErr"             ).c_str(),   PFCands_dzErr              );
-    inputBranch(tree, (name+"_eta"               ).c_str(),   PFCands_eta                );
-    inputBranch(tree, (name+"_mass"              ).c_str(),   PFCands_mass               );
-    inputBranch(tree, (name+"_phi"               ).c_str(),   PFCands_phi                );
-    inputBranch(tree, (name+"_pt"                ).c_str(),   PFCands_pt                 );
-    inputBranch(tree, (name+"_puppiWeight"       ).c_str(),   PFCands_puppiWeight        );
-    inputBranch(tree, (name+"_puppiWeightNoLep"  ).c_str(),   PFCands_puppiWeightNoLep   );
-    inputBranch(tree, (name+"_trkChi2"           ).c_str(),   PFCands_trkChi2            );
-    inputBranch(tree, (name+"_vtxChi2"           ).c_str(),   PFCands_vtxChi2            );
-    inputBranch(tree, (name+"_charge"            ).c_str(),   PFCands_charge             );
-    inputBranch(tree, (name+"_lostInnerHits"     ).c_str(),   PFCands_lostInnerHits      );
-    inputBranch(tree, (name+"_numberOFHits"      ).c_str(),   PFCands_numberOFHits       );
-    inputBranch(tree, (name+"_numberOfPixelHits" ).c_str(),   PFCands_numberOfPixelHits  );
-    inputBranch(tree, (name+"_pdgId"             ).c_str(),   PFCands_pdgId              );
-    inputBranch(tree, (name+"_pvAssocQuality"    ).c_str(),   PFCands_pvAssocQuality     );
-    inputBranch(tree, (name+"_trkQuality"        ).c_str(),   PFCands_trkQuality         );
+    inputBranch(tree, (name+"_d0"                ).c_str(),   d0                 );
+    inputBranch(tree, (name+"_d0Err"             ).c_str(),   d0Err              );
+    inputBranch(tree, (name+"_dz"                ).c_str(),   dz                 );
+    inputBranch(tree, (name+"_dzErr"             ).c_str(),   dzError            );
+    inputBranch(tree, (name+"_eta"               ).c_str(),   eta                );
+    inputBranch(tree, (name+"_mass"              ).c_str(),   mass               );
+    inputBranch(tree, (name+"_phi"               ).c_str(),   phi                );
+    inputBranch(tree, (name+"_pt"                ).c_str(),   pt                 );
+    inputBranch(tree, (name+"_puppiWeight"       ).c_str(),   puppiWeight        );
+    inputBranch(tree, (name+"_puppiWeightNoLep"  ).c_str(),   puppiWeightNoLep   );
+    inputBranch(tree, (name+"_trkChi2"           ).c_str(),   trkChi2            );
+    inputBranch(tree, (name+"_vtxChi2"           ).c_str(),   vtxChi2            );
+    inputBranch(tree, (name+"_charge"            ).c_str(),   charge             );
+    inputBranch(tree, (name+"_lostInnerHits"     ).c_str(),   lostInnerHits      );
+    inputBranch(tree, (name+"_numberOFHits"      ).c_str(),   numberOFHits       );
+    inputBranch(tree, (name+"_numberOfPixelHits" ).c_str(),   numberOfPixelHits  );
+    inputBranch(tree, (name+"_pdgId"             ).c_str(),   pdgId              );
+    inputBranch(tree, (name+"_pvAssocQuality"    ).c_str(),   pvAssocQuality     );
+    inputBranch(tree, (name+"_trkQuality"        ).c_str(),   trkQuality         );
 
   }else{
 
@@ -190,10 +190,13 @@ std::vector< std::shared_ptr<track> > trackData::getTracks(int nFirstTrack, int 
 }
 
 
-std::vector< std::shared_ptr<track> > trackData::getTracks(){
+std::vector< std::shared_ptr<track> > trackData::getTracks(bool isCharged){
   
   std::vector< std::shared_ptr<track> > outputTracks;
   for(Int_t i = 0; i < int(nTracks); ++i){
+
+    if(isCharged && charge[i] == 0) continue;
+
     outputTracks.push_back(std::make_shared<track>(track(i, this)));
   }
   return outputTracks;

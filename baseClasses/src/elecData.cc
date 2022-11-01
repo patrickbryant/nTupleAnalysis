@@ -21,28 +21,46 @@ elec::elec(UInt_t i, elecData* data){
   dr03EcalRecHitSumEt          = data->dr03EcalRecHitSumEt          [i];
   dr03HcalDepth1TowerSumEt     = data->dr03HcalDepth1TowerSumEt     [i];
   dr03TkSumPt                  = data->dr03TkSumPt                  [i];
-  eCorr                        = data->eCorr                        [i];
   eInvMinusPInv                = data->eInvMinusPInv                [i];
   hoe                          = data->hoe                          [i];
   miniPFRelIso_all             = data->miniPFRelIso_all             [i];
   miniPFRelIso_chg             = data->miniPFRelIso_chg             [i];
-  mvaFall17V1Iso               = data->mvaFall17V1Iso               [i];
-  mvaFall17V1noIso             = data->mvaFall17V1noIso             [i];
-  mvaFall17V2Iso               = data->mvaFall17V2Iso               [i];
-  mvaFall17V2noIso             = data->mvaFall17V2noIso             [i];
   pfRelIso03_all               = data->pfRelIso03_all               [i];
   pfRelIso03_chg               = data->pfRelIso03_chg               [i];
   r9                           = data->r9                           [i];
   scEtOverPt                   = data->scEtOverPt                   [i];
   sieie                        = data->sieie                        [i];
   cutBased                     = data->cutBased                     [i];
-  cutBased_Fall17_V1           = data->cutBased_Fall17_V1           [i];
   pdgId                        = data->pdgId                        [i];
   convVeto                     = data->convVeto                     [i];
-  mvaFall17V2Iso_WP80          = data->mvaFall17V2Iso_WP80          [i];
-  mvaFall17V2Iso_WP90          = data->mvaFall17V2Iso_WP90          [i];
-  mvaFall17V2Iso_WPL           = data->mvaFall17V2Iso_WPL           [i];
   genPartFlav                  = data->genPartFlav                  [i];
+
+  deltaEtaSC               = data->deltaEtaSC    [i];
+  dxy           	   = data->dxy           [i];
+  dxyErr        	   = data->dxyErr        [i];
+  dz            	   = data->dz            [i];
+  dzErr         	   = data->dzErr         [i];
+  energyErr     	   = data->energyErr     [i];
+  ip3d          	   = data->ip3d          [i];
+  jetPtRelv2    	   = data->jetPtRelv2    [i];
+  jetRelIso     	   = data->jetRelIso     [i];
+  mvaHZZIso     	   = data->mvaHZZIso     [i];
+  mvaIso        	   = data->mvaIso        [i];
+  mvaNoIso      	   = data->mvaNoIso      [i];
+  sip3d         	   = data->sip3d         [i];
+  mvaTTH        	   = data->mvaTTH        [i];
+  mvaIso_WP80   	   = data->mvaIso_WP80   [i];
+  mvaIso_WP90   	   = data->mvaIso_WP90   [i];
+  mvaIso_WPL    	   = data->mvaIso_WPL    [i];
+  mvaNoIso_WP80 	   = data->mvaNoIso_WP80 [i];
+  mvaNoIso_WP90 	   = data->mvaNoIso_WP90 [i];
+  mvaNoIso_WPL  	   = data->mvaNoIso_WPL  [i];
+  jetIdx        	   = data->jetIdx        [i];
+  tightCharge   	   = data->tightCharge   [i];
+  charge        	   = data->charge        [i];
+  lostHits      	   = data->lostHits      [i];
+
+
 
   
 }
@@ -104,15 +122,10 @@ void elecData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, elecName+"_dr03EcalRecHitSumEt"        ,     dr03EcalRecHitSumEt             ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_dr03HcalDepth1TowerSumEt"   ,     dr03HcalDepth1TowerSumEt        ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_dr03TkSumPt"                ,     dr03TkSumPt                     ,NElecName, "F");
-  connectBranchArr(readIn, tree, elecName+"_eCorr"                      ,     eCorr                           ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_eInvMinusPInv"              ,     eInvMinusPInv                   ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_hoe"                        ,     hoe                             ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_miniPFRelIso_all"           ,     miniPFRelIso_all                ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_miniPFRelIso_chg"           ,     miniPFRelIso_chg                ,NElecName, "F");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V1Iso"             ,     mvaFall17V1Iso                  ,NElecName, "F");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V1noIso"           ,     mvaFall17V1noIso                ,NElecName, "F");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso"             ,     mvaFall17V2Iso                  ,NElecName, "F");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2noIso"           ,     mvaFall17V2noIso                ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_pfRelIso03_all"             ,     pfRelIso03_all                  ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_pfRelIso03_chg"             ,     pfRelIso03_chg                  ,NElecName, "F");
   connectBranchArr(readIn, tree, elecName+"_r9"                         ,     r9                              ,NElecName, "F");
@@ -120,15 +133,39 @@ void elecData::connectBranches(bool readIn, TTree* tree){
   connectBranchArr(readIn, tree, elecName+"_sieie"                      ,     sieie                           ,NElecName, "F");
 
   connectBranchArr(readIn, tree, elecName+"_cutBased"                   ,     cutBased                        ,NElecName, "i");
-  connectBranchArr(readIn, tree, elecName+"_cutBased_Fall17_V1"         ,     cutBased_Fall17_V1              ,NElecName, "i");
   connectBranchArr(readIn, tree, elecName+"_pdgId"                      ,     pdgId                           ,NElecName, "i");
 
   connectBranchArr(readIn, tree, elecName+"_convVeto"                    ,    convVeto                         ,NElecName, "O");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WP80"         ,    mvaFall17V2Iso_WP80              ,NElecName, "O");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WP90"         ,    mvaFall17V2Iso_WP90              ,NElecName, "O");
-  connectBranchArr(readIn, tree, elecName+"_mvaFall17V2Iso_WPL"          ,    mvaFall17V2Iso_WPL               ,NElecName, "O");
 
   connectBranchArr(readIn, tree, elecName+"_genPartFlav"                 ,    genPartFlav                      ,NElecName, "b");
+
+
+  connectBranchArr(readIn, tree, elecName+"_deltaEtaSC"        , deltaEtaSC    , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dxy"               , dxy           , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dxyErr"            , dxyErr        , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dz"                , dz            , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_dzErr"             , dzErr         , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_energyErr"         , energyErr     , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_ip3d"              , ip3d          , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_jetPtRelv2"        , jetPtRelv2    , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_jetRelIso"         , jetRelIso     , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaHZZIso"         , mvaHZZIso     , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaIso"            , mvaIso        , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaNoIso"          , mvaNoIso      , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_sip3d"             , sip3d         , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaTTH"            , mvaTTH        , NElecName, "F");
+  connectBranchArr(readIn, tree, elecName+"_mvaIso_WP80"       , mvaIso_WP80   , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaIso_WP90"       , mvaIso_WP90   , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaIso_WPL"        , mvaIso_WPL    , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaNoIso_WP80"     , mvaNoIso_WP80 , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaNoIso_WP90"     , mvaNoIso_WP90 , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_mvaNoIso_WPL"      , mvaNoIso_WPL  , NElecName, "O");
+  connectBranchArr(readIn, tree, elecName+"_jetIdx"            , jetIdx        , NElecName, "i");
+  connectBranchArr(readIn, tree, elecName+"_tightCharge"       , tightCharge   , NElecName, "i");
+  connectBranchArr(readIn, tree, elecName+"_charge"            , charge        , NElecName, "i");
+  connectBranchArr(readIn, tree, elecName+"_lostHits"          , lostHits      , NElecName, "b");
+
+
 
 }    
 
@@ -154,30 +191,44 @@ void elecData::writeElecs(std::vector< std::shared_ptr<elec> > outputElecs){
     this->dr03EcalRecHitSumEt          [i]  = thisElec->dr03EcalRecHitSumEt          ;
     this->dr03HcalDepth1TowerSumEt     [i]  = thisElec->dr03HcalDepth1TowerSumEt     ;
     this->dr03TkSumPt                  [i]  = thisElec->dr03TkSumPt                  ;
-    this->eCorr                        [i]  = thisElec->eCorr                        ;
     this->eInvMinusPInv                [i]  = thisElec->eInvMinusPInv                ;
     this->hoe                          [i]  = thisElec->hoe                          ;
     this->miniPFRelIso_all             [i]  = thisElec->miniPFRelIso_all             ;
     this->miniPFRelIso_chg             [i]  = thisElec->miniPFRelIso_chg             ;
-    this->mvaFall17V1Iso               [i]  = thisElec->mvaFall17V1Iso               ;
-    this->mvaFall17V1noIso             [i]  = thisElec->mvaFall17V1noIso             ;
-    this->mvaFall17V2Iso               [i]  = thisElec->mvaFall17V2Iso               ;
-    this->mvaFall17V2noIso             [i]  = thisElec->mvaFall17V2noIso             ;
     this->pfRelIso03_all               [i]  = thisElec->pfRelIso03_all               ;
     this->pfRelIso03_chg               [i]  = thisElec->pfRelIso03_chg               ;
     this->r9                           [i]  = thisElec->r9                           ;
     this->scEtOverPt                   [i]  = thisElec->scEtOverPt                   ;
     this->sieie                        [i]  = thisElec->sieie                        ;
     this->cutBased                     [i]  = thisElec->cutBased                     ;
-    this->cutBased_Fall17_V1           [i]  = thisElec->cutBased_Fall17_V1           ;
     this->pdgId                        [i]  = thisElec->pdgId                        ;
     this->convVeto                     [i]  = thisElec->convVeto                     ;
-    this->mvaFall17V2Iso_WP80          [i]  = thisElec->mvaFall17V2Iso_WP80          ;
-    this->mvaFall17V2Iso_WP90          [i]  = thisElec->mvaFall17V2Iso_WP90          ;
-    this->mvaFall17V2Iso_WPL           [i]  = thisElec->mvaFall17V2Iso_WPL           ;
     this->genPartFlav                  [i]  = thisElec->genPartFlav                  ;
 
-
+    this->deltaEtaSC                 [i] = thisElec->deltaEtaSC    ;
+    this->dxy           	     [i] = thisElec->dxy           ;
+    this->dxyErr        	     [i] = thisElec->dxyErr        ;
+    this->dz            	     [i] = thisElec->dz            ;
+    this->dzErr         	     [i] = thisElec->dzErr         ;
+    this->energyErr     	     [i] = thisElec->energyErr     ;
+    this->ip3d          	     [i] = thisElec->ip3d          ;
+    this->jetPtRelv2    	     [i] = thisElec->jetPtRelv2    ;
+    this->jetRelIso     	     [i] = thisElec->jetRelIso     ;
+    this->mvaHZZIso     	     [i] = thisElec->mvaHZZIso     ;
+    this->mvaIso        	     [i] = thisElec->mvaIso        ;
+    this->mvaNoIso      	     [i] = thisElec->mvaNoIso      ;
+    this->sip3d         	     [i] = thisElec->sip3d         ;
+    this->mvaTTH        	     [i] = thisElec->mvaTTH        ;
+    this->mvaIso_WP80   	     [i] = thisElec->mvaIso_WP80   ;
+    this->mvaIso_WP90   	     [i] = thisElec->mvaIso_WP90   ;
+    this->mvaIso_WPL    	     [i] = thisElec->mvaIso_WPL    ;
+    this->mvaNoIso_WP80 	     [i] = thisElec->mvaNoIso_WP80 ;
+    this->mvaNoIso_WP90 	     [i] = thisElec->mvaNoIso_WP90 ;
+    this->mvaNoIso_WPL  	     [i] = thisElec->mvaNoIso_WPL  ;
+    this->jetIdx        	     [i] = thisElec->jetIdx        ;
+    this->tightCharge   	     [i] = thisElec->tightCharge   ;
+    this->charge        	     [i] = thisElec->charge        ;
+    this->lostHits      	     [i] = thisElec->lostHits      ;
 
   }
 
@@ -197,7 +248,7 @@ std::vector<std::shared_ptr<elec> > elecData::getElecs(float ptMin, float etaMax
 
     if(      pt[i] < ptMin) continue;
     if(fabs(eta[i])>etaMax) continue;
-    if(mvaCut && !mvaFall17V2Iso_WP80[i]) continue;
+    if(mvaCut && !mvaIso_WP80[i]) continue;
     //if(isolation && pfRelIso04_all[i] > 0.20) continue; 
 
     outputElecs.push_back(std::make_shared<elec>(elec(i, this)));

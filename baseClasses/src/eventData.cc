@@ -11,6 +11,8 @@ eventData::eventData(std::string name, TChain* tree, bool readIn, bool isMC){
 
   m_name = name;
 
+  triggerData = new nTupleAnalysis::trigData("TrigObj",tree);
+
   connectBranches(readIn, tree);
 
   

@@ -365,6 +365,18 @@ void jet::dump(){
   std::cout << "    appliedBRegression = " << appliedBRegression << ", bRegCorr = "<< bRegCorr << std::endl;
 }
 
+void jet::addTracks(std::vector<nTupleAnalysis::trackPtr> allTracks)
+{
+  for(const nTupleAnalysis::trackPtr& trk : allTracks){
+    if(trk->p.DeltaR(p) < 0.5){
+      tracks.push_back(trk);
+    }
+  }
+
+  return;
+}
+
+
 
 jet::~jet(){
 }
@@ -908,3 +920,4 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 
   return ;
 }
+
