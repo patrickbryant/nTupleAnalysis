@@ -77,6 +77,7 @@ namespace nTupleAnalysis {
     float DeepCSVbb    = 0;
 
     // truth Info
+    int genJetIdx      ;
     int flavour        ;
     int flavourCleaned ;
     int partonFlavour  ;
@@ -219,6 +220,10 @@ namespace nTupleAnalysis {
 
     //
     bool m_loadGenJets =  false; 
+    bool  hasGenJetHasMatch = false;
+    UInt_t nGenJets = 0;
+    UChar_t GenJet_hadronFlavour  [MAXJETS];
+    Int_t   GenJet_partonFlavour  [MAXJETS];
     int   GenJet_hasMatch [MAXJETS];
     float GenJet_pt       [MAXJETS];
     float GenJet_eta      [MAXJETS];
@@ -238,6 +243,7 @@ namespace nTupleAnalysis {
 
 
     // truth Info
+    int genJetIdx      [MAXJETS];
     int flavour        [MAXJETS];
     int flavourCleaned [MAXJETS];
     int partonFlavour  [MAXJETS];

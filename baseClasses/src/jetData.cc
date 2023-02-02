@@ -211,18 +211,29 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
 
   if(data->m_loadGenJets){
     genJet_p = TLorentzVector();    
-    genJet_p.SetPtEtaPhiM(data->GenJet_pt[i],
-			  data->GenJet_eta[i],
-			  data->GenJet_phi[i],
-			  data->GenJet_m[i]);
-    //cout << "is B is " << data->isB[i] << endl;
-    if(data->isB[i] || data->isBB[i] || data->isGBB[i] ){
-      //cout << " pass  " << data->isB[i] << endl;
-      flavour        = 5;
-    }else if(data->isC[i] || data->isCC[i] || data->isGCC[i] ){
-      flavour        = 4;
+    if(data->hasGenJetHasMatch){
+      genJet_p.SetPtEtaPhiM(data->GenJet_pt[i],
+          data->GenJet_eta[i],
+          data->GenJet_phi[i],
+          data->GenJet_m[i]);
+      //cout << "is B is " << data->isB[i] << endl;
+      if(data->isB[i] || data->isBB[i] || data->isGBB[i] ){
+        //cout << " pass  " << data->isB[i] << endl;
+        flavour        = 5;
+      }else if(data->isC[i] || data->isCC[i] || data->isGCC[i] ){
+        flavour        = 4;
+      }else{
+        flavour        = 0;
+      }
     }else{
-      flavour        = 0;
+      auto idx = data->genJetIdx[i];
+      if(idx >= 0){
+        genJet_p.SetPtEtaPhiM(data->GenJet_pt[idx],
+            data->GenJet_eta[idx],
+            data->GenJet_phi[idx],
+            data->GenJet_m[idx]);
+        flavour = data->GenJet_partonFlavour[idx];
+      }
     }
     
   }
@@ -626,6 +637,7 @@ void jetData::writeJets(std::vector< jetPtr > outputJets){
     this->DeepCSVl       [i] =      thisJet->DeepCSVl       ;
     this->DeepCSVbb      [i] =      thisJet->DeepCSVbb      ;
     
+    this->genJetIdx      [i] =     thisJet->genJetIdx      ;
     this->flavour        [i] =     thisJet->flavour        ;
     this->flavourCleaned [i] =     thisJet->flavourCleaned ;
     this->partonFlavour  [i] =     thisJet->partonFlavour  ;
@@ -682,12 +694,13 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
   connectBranchArr(readIn, tree, jetName+"_jetId", jetId,   NjetName,  "I");  
 
   if(m_isMC){
+    connectBranchArr(readIn, tree, jetName+"_genJetIdx", genJetIdx,   NjetName,  "I");
     connectBranchArr(readIn, tree, jetName+"_flavour", flavour,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_flavourCleaned", flavourCleaned,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_partonFlavour", partonFlavour,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_hadronFlavour", hadronFlavour,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_nbHadrons", nbHadrons,   NjetName,  "I");  
-    connectBranchArr(readIn, tree, jetName+"_ncHadrons", ncHadrons,   NjetName,  "I");  
+    connectBranchArr(readIn, tree, jetName+"_ncHadrons", ncHadrons,   NjetName,  "I");
   }
 
   connectBranchArr(readIn, tree, jetName+"_looseID", looseID,   NjetName,  "I");  
@@ -771,12 +784,21 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 
     if(m_jetDetailLevel.find("GenJet") != std::string::npos){
       m_loadGenJets = true;
-      connectBranchArr(readIn, tree, jetName+"_GenJetHasMatch"  , GenJet_hasMatch,  NjetName,  "I");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_pt"  , GenJet_pt,  NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_eta",  GenJet_eta, NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_phi",  GenJet_phi, NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_mass", GenJet_m,   NjetName,  "F");  
-
+      hasGenJetHasMatch = (connectBranchArr(readIn, tree, jetName+"_GenJetHasMatch"  , GenJet_hasMatch,  NjetName,  "I") == 0);
+      if(hasGenJetHasMatch){
+        connectBranchArr(readIn, tree, jetName+"_GenJet_pt"  , GenJet_pt,  NjetName,  "F");
+        connectBranchArr(readIn, tree, jetName+"_GenJet_eta",  GenJet_eta, NjetName,  "F");
+        connectBranchArr(readIn, tree, jetName+"_GenJet_phi",  GenJet_phi, NjetName,  "F");
+        connectBranchArr(readIn, tree, jetName+"_GenJet_mass", GenJet_m,   NjetName,  "F");  
+      }else{
+        connectBranch(readIn, tree, "nGenJet", nGenJets, "i");
+        connectBranchArr(readIn, tree, "GenJet_pt"  , GenJet_pt,  "nGenJet",  "F");
+        connectBranchArr(readIn, tree, "GenJet_eta",  GenJet_eta, "nGenJet",  "F");
+        connectBranchArr(readIn, tree, "GenJet_phi",  GenJet_phi, "nGenJet",  "F");
+        connectBranchArr(readIn, tree, "GenJet_mass", GenJet_m,   "nGenJet",  "F");  
+        connectBranchArr(readIn, tree, "GenJet_hadronFlavour", GenJet_hadronFlavour,   "nGenJet",  "b");  
+        connectBranchArr(readIn, tree, "GenJet_partonFlavour", GenJet_partonFlavour,   "nGenJet",  "I"); 
+      }
       connectBranchArr(readIn, tree, jetName+"_isB"         , isB        , NjetName, "I");
       connectBranchArr(readIn, tree, jetName+"_isGBB"	, isGBB      , NjetName, "I");
       connectBranchArr(readIn, tree, jetName+"_isBB" 	, isBB       , NjetName, "I");
