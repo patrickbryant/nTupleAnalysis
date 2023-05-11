@@ -412,19 +412,19 @@ jetData::jetData(std::string name, TTree* tree, bool readIn, bool isMC, std::str
 								      variation // systematic type
 								      );
 
-	std::cout << "jetData::Load BTagEntry::FLAV_B" << std::endl;
+	std::cout << "jetData::Load BTagEntry::FLAV_B " << BTagEntry::FLAV_B << std::endl;
 	m_btagCalibrationTools[variation]->load(calib, 
 						BTagEntry::FLAV_B,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
 						"iterativefit"      // measurement type
 						);
 	
-	std::cout << "jetData::Load BTagEntry::FLAV_C" << std::endl;
+	std::cout << "jetData::Load BTagEntry::FLAV_C " << BTagEntry::FLAV_C << std::endl;
 	m_btagCalibrationTools[variation]->load(calib, 
 					       BTagEntry::FLAV_C,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
 					       "iterativefit"      // measurement type
 					       );
 
-	std::cout << "jetData::Load BTagEntry::FLAV_UDSG" << std::endl;
+	std::cout << "jetData::Load BTagEntry::FLAV_UDSG " << BTagEntry::FLAV_UDSG << std::endl;
 	m_btagCalibrationTools[variation]->load(calib, 
 						BTagEntry::FLAV_UDSG,   // 0 is for b flavour, 1: FLAV_C, 2: FLAV_UDSG
 						"iterativefit"      // measurement type
@@ -572,7 +572,7 @@ void jetData::updateSFs(float jetEta,  float jetPt,  float jetTagScore, int jetH
 void jetData::updateSFs(const jetPtr& jet, bool debug){
   for(auto &variation: m_btagVariations){
     if(debug)
-      cout << "jetPt/jetEta/jetTagScore/jetHadronFlavour/SF" 
+      cout << "jetPt/jetEta/jetTagScore/jetHadronFlavour/SF = " 
 	   << jet->pt << "/" << jet->eta << "/" << jet->bTagScore << "/" << jet->hadronFlavour << "/" << getSF(jet->eta, jet->pt, jet->bTagScore, jet->hadronFlavour, variation) << endl;
       
     m_btagSFs[variation] *= getSF(jet->eta, jet->pt, jet->bTagScore, jet->hadronFlavour, variation);
@@ -581,6 +581,7 @@ void jetData::updateSFs(const jetPtr& jet, bool debug){
 
 void jetData::updateSFs(std::vector< jetPtr > jets, bool debug){
   for(auto &jet: jets) updateSFs(jet, debug);
+  if(debug) cout << m_btagSFs["central"] << endl;
 }
 
 
