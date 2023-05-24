@@ -130,7 +130,7 @@ namespace nTupleAnalysis {
 
     
     muonData(std::string, TTree*, bool readIn = true, bool isMC = false, std::string SFName=""); 
-    std::vector<std::shared_ptr<muon>> getMuons(float ptMin = -1e6, float etaMax = 1e6, int tag = -1, bool isolation = false);
+    std::vector<std::shared_ptr<muon>> getMuons(float ptMin = -1e6, float etaMax = 1e6, int tag = -1, bool isolation = false, float sip3dMax = -1);
     ~muonData(); 
 
     void writeMuons(std::vector< std::shared_ptr<muon> > outputMuons) ;

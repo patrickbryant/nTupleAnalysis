@@ -265,7 +265,7 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
 
 
 
-std::vector<std::shared_ptr<muon>> muonData::getMuons(float ptMin, float etaMax, int tag, bool isolation){
+std::vector<std::shared_ptr<muon>> muonData::getMuons(float ptMin, float etaMax, int tag, bool isolation, float sip3dMax){
 
   std::vector<std::shared_ptr<muon>> outputMuons;
 
@@ -284,6 +284,8 @@ std::vector<std::shared_ptr<muon>> muonData::getMuons(float ptMin, float etaMax,
 
     if(      pt[i] < ptMin) continue;
     if(fabs(eta[i])>etaMax) continue;
+
+    if( (sip3dMax > 0) && (sip3d[i] > sip3dMax) ) continue;
 
     outputMuons.push_back(std::make_shared<muon>(muon(i, this)));
   }
