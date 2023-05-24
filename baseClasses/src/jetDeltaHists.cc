@@ -82,7 +82,7 @@ void jetDeltaHists::Fill(const std::shared_ptr<nTupleAnalysis::jet> &jet1, const
   //
   //  Fill delta SVs
   //
-  for(const svPtr& sv: jet1->svs) {
+  for(const secondaryVertexPtr& sv: jet1->secondaryVertices) {
     // assuming this is the right matching object !!
     std::shared_ptr<nTupleAnalysis::secondaryVertex> matchedSV = sv->matchedSV.lock();
     if(matchedSV) dbtagging->FillSVHists(sv, jet1, matchedSV, jet2, weight);

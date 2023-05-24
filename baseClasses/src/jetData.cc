@@ -4,6 +4,7 @@
 
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
 #include "DataFormats/BTauReco/interface/ParticleMasses.h"
+#include "DataFormats/Math/interface/deltaR.h"
 #include "CondFormats/BTauObjects/interface/BTagEntry.h"
 #include "CondFormats/BTauObjects/interface/BTagCalibration.h"
 
@@ -175,10 +176,10 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
       if(data->doPFNano){
 	DeepJet_nsv = data->DeepJet_nsv[i];
 	if(data->debug) std::cout << data->m_name << " Getting PF Nano Svs " << DeepJet_nsv << std::endl;
-	svs = data->btagData->getSecondaryVerticesPFNano(i,DeepJet_nsv, data->debug);
+	secondaryVertices = data->btagData->getSecondaryVerticesPFNano(i,DeepJet_nsv, data->debug);
       }else{
 	if(data->debug)  std::cout << data->m_name << " Getting SVs " << data->nFirstSV[i] << " " << data->nLastSV[i] << std::endl;
-	svs = data->btagData->getSecondaryVertices(data->nFirstSV[i],data->nLastSV[i], data->debug);
+	secondaryVertices = data->btagData->getSecondaryVertices(data->nFirstSV[i],data->nLastSV[i], data->debug);
       }
     }
     
@@ -370,6 +371,19 @@ void jet::addTracks(std::vector<nTupleAnalysis::trackPtr> allTracks)
   for(const nTupleAnalysis::trackPtr& trk : allTracks){
     if(trk->p.DeltaR(p) < 0.5){
       tracks.push_back(trk);
+    }
+  }
+
+  return;
+}
+
+
+void jet::addSVs(std::vector<nTupleAnalysis::svPtr> allSVs)
+{
+  for(const nTupleAnalysis::svPtr& sv : allSVs){
+    float dR2 = reco::deltaR2<float, float, float, float>(p.Eta(),p.Phi(), sv->eta, sv->phi);
+    if(dR2 < 0.5*0.5){
+      svs.push_back(sv);
     }
   }
 

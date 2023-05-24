@@ -91,6 +91,10 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 
     }
 
+    if(jetDetailLevel.find("SVs") != std::string::npos){
+      svs      = new svHists(name+"/SVs",      fs, title);
+    }
+
     if(jetDetailLevel.find("reCalcDeepCSV") != std::string::npos){
       deepCSV_reCalc   = dir.make<TH1F>("DeepCSV_reCalc",   (name+"/DeepCSV_reCalc; "   +title+" DeepCSV; Entries").c_str(), 120,-0.2,1.2);
       delta_deepCSV    = dir.make<TH1F>("delta_DeepCSV",   (name+"/delta_DeepCSV; "   +title+" #Detla DeepCSV (nom-recalc); Entries").c_str(), 100,-1.2,1.2);
@@ -148,6 +152,9 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
 
     }
 
+    if(jetDetailLevel.find("vsLB") != std::string::npos){
+      vsLB     = dir.make<TH1F>("vsLB",     (name+"/vsLB; "    +title+" LB; Entries").c_str(), 1000,-0.5,999.5);
+    }
 }
 
 
@@ -245,8 +252,8 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
 
     SF               ->Fill(jet->SF      , weight);
 
-    btags->sv_nSVs->Fill(jet->svs.size(), weight);
-    for(const svPtr& sv: jet->svs) 
+    btags->sv_nSVs->Fill(jet->secondaryVertices.size(), weight);
+    for(const secondaryVertexPtr& sv: jet->secondaryVertices) 
       btags->FillSVHists(sv, jet, weight);
 
     btags->trkTag_nTracks->Fill(jet->trkTagVars.size(), weight);
@@ -361,6 +368,16 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   }
 
 
+  //
+  // SVs
+  //
+  if(svs){
+    svs->nSVs->Fill(jet->svs.size(), weight);
+    for(const svPtr& sv: jet->svs){ 
+      svs->Fill(sv, jet, weight);
+    }
+
+  }
 
   if(debug) std::cout << "jetHists::Fill " << name << " " << title << " done" << std::endl;
   return;

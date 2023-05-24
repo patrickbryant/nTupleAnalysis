@@ -10,6 +10,7 @@
 #include "nTupleAnalysis/baseClasses/interface/jetDeltaHists.h"
 #include "nTupleAnalysis/baseClasses/interface/trackHists.h"
 #include "nTupleAnalysis/baseClasses/interface/btaggingHists.h"
+#include "nTupleAnalysis/baseClasses/interface/svHists.h"
 
 namespace nTupleAnalysis {
 
@@ -105,6 +106,8 @@ namespace nTupleAnalysis {
 
     btaggingHists* btags = NULL;
     btaggingHists* btags_noV0 = NULL;
+
+    svHists* svs = NULL;
     
     TH1F* Delta_nTracks_tracks_btag = NULL;
     TH1F* Delta_nTracks_tracks_btag_noV0 = NULL;
@@ -118,6 +121,8 @@ namespace nTupleAnalysis {
     std::vector<float> deepFlavB_etaBins = {0.5,1,1.5,2,2.5};
     std::vector<TH1F*> deepFlavB_etaHists;
     std::vector<TH1F*> Proba_etaHists;
+
+    TH1F* vsLB;
 
     std::string name;
     std::string title;

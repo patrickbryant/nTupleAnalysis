@@ -12,7 +12,9 @@ namespace nTupleAnalysis {
 
   //forward declaration for use in secondaryVertex constructor from tree
   class btaggingData;
-  //secondaryVertex object
+
+
+  //secondaryVertex object from the btagging inputs
   class secondaryVertex {
 
   public:
@@ -62,7 +64,7 @@ namespace nTupleAnalysis {
     //void dump();
   };
 
-  typedef std::shared_ptr<secondaryVertex> svPtr;
+  typedef std::shared_ptr<secondaryVertex> secondaryVertexPtr;
 
 
   class trkTagVar {
@@ -331,8 +333,8 @@ namespace nTupleAnalysis {
     btaggingData(); 
 
     void initSecondaryVerticies(std::string name, TTree* tree, bool doPFNano_=true);
-    std::vector<svPtr> getSecondaryVerticesPFNano(unsigned int jetIndex, unsigned int nSVs, bool debug);
-    std::vector<svPtr> getSecondaryVertices(int nFirstSV, int nLastSV, bool debug);
+    std::vector<secondaryVertexPtr> getSecondaryVerticesPFNano(unsigned int jetIndex, unsigned int nSVs, bool debug);
+    std::vector<secondaryVertexPtr> getSecondaryVertices(int nFirstSV, int nLastSV, bool debug);
 
     void initTrkTagVar(std::string name, TTree* tree, bool doPFNano_=true);
     std::vector<trkTagVarPtr> getTrkTagVarsPFNano(unsigned int jetIndex, unsigned int nTrkTagVars);

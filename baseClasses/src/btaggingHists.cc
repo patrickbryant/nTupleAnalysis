@@ -128,7 +128,7 @@ void btaggingHists::makeHists(std::string name, TFileDirectory& dir, std::string
   
 } 
 
-void btaggingHists::FillSVHists(const svPtr &sv, const jetPtr& jet, float weight){
+void btaggingHists::FillSVHists(const secondaryVertexPtr &sv, const jetPtr& jet, float weight){
 
   
   sv_NTracks                ->Fill(sv->nTrk, weight);

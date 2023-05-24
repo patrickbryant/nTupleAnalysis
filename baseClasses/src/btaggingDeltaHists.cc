@@ -105,8 +105,8 @@ void btaggingDeltaHists::makeHists(std::string name, TFileDirectory& dir, std::s
 
 } 
 
-void btaggingDeltaHists::FillSVHists(const svPtr &sv1, const jetPtr& jet1, 
-				     const svPtr &sv2, const jetPtr& jet2, 
+void btaggingDeltaHists::FillSVHists(const secondaryVertexPtr &sv1, const jetPtr& jet1, 
+				     const secondaryVertexPtr &sv2, const jetPtr& jet2, 
 				     float weight){
 
   

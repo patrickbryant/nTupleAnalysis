@@ -97,8 +97,8 @@ namespace nTupleAnalysis {
     btaggingDeltaHists(std::string, fwlite::TFileService&, std::string title = "");
 
     void makeHists(std::string, TFileDirectory&, std::string title);
-    void FillSVHists(const svPtr& sv1, const jetPtr& jet1, 
-		     const svPtr& sv2, const jetPtr& jet2, 
+    void FillSVHists(const secondaryVertexPtr& sv1, const jetPtr& jet1, 
+		     const secondaryVertexPtr& sv2, const jetPtr& jet2, 
 		     float weight);
 
     void FillTrkTagVarHists(const trkTagVarPtr& trkTag1, 

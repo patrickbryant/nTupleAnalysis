@@ -6,6 +6,7 @@
 #include <TLorentzVector.h>
 #include "nTupleAnalysis/baseClasses/interface/initBranch.h"
 #include "nTupleAnalysis/baseClasses/interface/trackData.h"
+#include "nTupleAnalysis/baseClasses/interface/svData.h"
 #include "nTupleAnalysis/baseClasses/interface/btaggingData.h"
 
 #include "CondTools/BTau/interface/BTagCalibrationReader.h"
@@ -113,7 +114,8 @@ namespace nTupleAnalysis {
     // SVs in Jet
     //
     int DeepJet_nsv = -1;
-    std::vector<svPtr> svs;
+    std::vector<secondaryVertexPtr> secondaryVertices; // These are the inputs to btagging already matched
+    std::vector<svPtr> svs;                      // Theser are the SVs from eg: Nano
 
     //
     // trkTag in Jet
@@ -152,6 +154,7 @@ namespace nTupleAnalysis {
     void undo_bRegression();
     void dump();
     void addTracks(std::vector<nTupleAnalysis::trackPtr> allTracks);
+    void addSVs(std::vector<nTupleAnalysis::svPtr> allSVs);
     ~jet(); 
 
     void RotateZ(float dPhi);
