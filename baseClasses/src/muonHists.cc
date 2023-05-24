@@ -21,6 +21,7 @@ muonHists::muonHists(std::string name, fwlite::TFileService& fs, std::string tit
     ip3d_l            = dir.make<TH1F>("ip3d_l",          (name+"/ip3d_l           ; "+title+" ip3d           ; Entries").c_str(), 50,0,20);
     sip3d             = dir.make<TH1F>("sip3d",           (name+"/sip3d            ; "+title+" sip3d          ; Entries").c_str(), 50,-0.1,10);
     sip3d_l           = dir.make<TH1F>("sip3d_l",         (name+"/sip3d            ; "+title+" sip3d          ; Entries").c_str(), 50,-0.1,100);
+    pfRelIso04_all    = dir.make<TH1F>("pfRelIso04_all",  (name+"/pfRelIso04_all   ; "+title+" pfRelIso04_all ; Entries").c_str(), 50,0,2);
     pfRelIso03_all    = dir.make<TH1F>("pfRelIso03_all",  (name+"/pfRelIso03_all   ; "+title+" pfRelIso03_all ; Entries").c_str(), 50,0,2);
     pfRelIso03_chg    = dir.make<TH1F>("pfRelIso03_chg",  (name+"/pfRelIso03_chg   ; "+title+" pfRelIso03_chg ; Entries").c_str(), 50,0,2);
     tkRelIso          = dir.make<TH1F>("tkRelIso",        (name+"/tkRelIso         ; "+title+" tkRelIso       ; Entries").c_str(), 50,0,2);
@@ -65,6 +66,7 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   ip3d_l                -> Fill(muon->ip3d            ,weight);
   sip3d                 -> Fill(muon->sip3d           ,weight);
   sip3d_l               -> Fill(muon->sip3d           ,weight);
+  pfRelIso04_all        -> Fill(muon->pfRelIso04_all  ,weight);
   pfRelIso03_all        -> Fill(muon->pfRelIso03_all  ,weight);
   pfRelIso03_chg        -> Fill(muon->pfRelIso03_chg  ,weight);
   tkRelIso              -> Fill(muon->tkRelIso        ,weight);

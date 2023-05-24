@@ -27,6 +27,7 @@ namespace nTupleAnalysis {
     TH1F* ip3d_l            ;
     TH1F* sip3d  	      ;
     TH1F* sip3d_l  	      ;
+    TH1F* pfRelIso04_all  ;
     TH1F* pfRelIso03_all  ;
     TH1F* pfRelIso03_chg  ;
     TH1F* ptErr           ;
