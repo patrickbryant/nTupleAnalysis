@@ -15,7 +15,7 @@ eventHists::eventHists(std::string name, fwlite::TFileService& fs) {
     PV_npvs       = dir.make<TH1F>("PV_npvs"       ,  (name+"/PV_npvs         ;PV_npvs        ;Entries").c_str(),  50,-0.5, 99.5);
     PV_npvsGood   = dir.make<TH1F>("PV_npvsGood"   ,  (name+"/PV_npvsGood     ;PV_npvsGood    ;Entries").c_str(),  50,-0.5, 99.5);
 
-
+    puppiMETHists = new MeTHists(name+"/PuppiMET", fs, "Puppi MET");
 
 } 
 
@@ -31,6 +31,8 @@ void eventHists::Fill(const eventData& event, float weight){
   PV_npvs       -> Fill(event.PV_npvs      , weight);
   PV_npvsGood   -> Fill(event.PV_npvsGood  , weight);
 
+  if(event.puppiMetData)
+    puppiMETHists->Fill(*event.puppiMetData, weight);
 
   return;
 }
