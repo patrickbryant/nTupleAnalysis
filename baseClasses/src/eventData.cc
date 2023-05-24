@@ -12,6 +12,7 @@ eventData::eventData(std::string name, TChain* tree, bool readIn, bool isMC){
   m_name = name;
 
   triggerData = new nTupleAnalysis::trigData("TrigObj",tree);
+  puppiMetData = new nTupleAnalysis::MeTData("PuppiMET",tree);
 
   connectBranches(readIn, tree);
 

@@ -5,6 +5,7 @@
 #include <TChain.h>
 #include "nTupleAnalysis/baseClasses/interface/initBranch.h"
 #include "nTupleAnalysis/baseClasses/interface/trigData.h"
+#include "nTupleAnalysis/baseClasses/interface/MeTData.h"
 
 namespace nTupleAnalysis {
   //forward declaration for use in elec constructor from tree
@@ -29,7 +30,8 @@ namespace nTupleAnalysis {
     Int_t    PV_npvs         = 0;
     Int_t    PV_npvsGood     = 0;
 
-    trigData* triggerData = NULL;
+    trigData* triggerData  = NULL;
+    MeTData*  puppiMetData = NULL;
 
     eventData(std::string name, TChain* tree, bool readIn = true, bool isMC = false); 
 
