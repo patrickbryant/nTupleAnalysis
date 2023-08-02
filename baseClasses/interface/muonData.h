@@ -36,7 +36,6 @@ namespace nTupleAnalysis {
     Float_t pfRelIso03_chg ;
     Float_t ptErr          ;
     Float_t tkRelIso       ;
-    Int_t   pdgId          ;
     Bool_t  looseId        ;
     Bool_t  mediumPromptId ;
     UChar_t mvaId          ;
@@ -61,6 +60,32 @@ namespace nTupleAnalysis {
     Int_t    nTrackerLayers     ;
     Bool_t   highPurity         ;
     UChar_t  cleanmask          ;
+
+
+    UChar_t mvaLowPtId       ;
+    Bool_t inTimeMuon        ;
+    Bool_t triggerIdLoose    ;
+    float  jetPtRelv2        ;
+    Int_t  fsrPhotonIdx      ;
+    Bool_t isPFcand          ;
+    float  softMva           ;
+    Bool_t isTracker         ;
+    float  mvaLowPt          ;
+    Int_t  pdgId             ;
+    UChar_t puppiIsoId       ;
+    float segmentComp        ;
+    UChar_t jetNDauCharged   ;
+    UChar_t multiIsoId       ;
+    Bool_t isGlobal          ;
+    Bool_t isStandalone      ;
+    float tunepRelPt         ;
+    UChar_t miniIsoId        ;
+    Int_t charge             ;
+    Bool_t softMvaId         ;
+    Int_t tightCharge        ;
+    float jetRelIso          ;
+
+
 
     float SF = 1.0;
 
@@ -127,6 +152,33 @@ namespace nTupleAnalysis {
     UChar_t genPartFlav    [MAXMUONS]; //         | UChar_t Flavour of genParticle for MC matching to status==1 muons://
                                        //         |  1 = prompt muon (including gamma//->mu mu), 15 = muon from prompt tau, 5 = muon from b, 4 = muon from c, 3 = muon from light or unknown, 0 = unmatched//
     
+ 
+  
+    UChar_t mvaLowPtId       [MAXMUONS];
+    Bool_t  inTimeMuon        [MAXMUONS];
+    Bool_t  triggerIdLoose    [MAXMUONS];
+    Float_t jetPtRelv2         [MAXMUONS];
+    Int_t   fsrPhotonIdx       [MAXMUONS];
+    Bool_t  isPFcand          [MAXMUONS];
+    Float_t softMva            [MAXMUONS];
+    Bool_t  isTracker         [MAXMUONS];
+    Float_t mvaLowPt           [MAXMUONS];
+    UChar_t puppiIsoId       [MAXMUONS];
+    Float_t segmentComp        [MAXMUONS];
+    UChar_t jetNDauCharged   [MAXMUONS];
+    UChar_t multiIsoId       [MAXMUONS];
+    Bool_t  isGlobal          [MAXMUONS];
+    Bool_t  isStandalone      [MAXMUONS];
+    Float_t tunepRelPt         [MAXMUONS];
+    UChar_t miniIsoId        [MAXMUONS];
+    Int_t   charge             [MAXMUONS];
+    Bool_t  softMvaId         [MAXMUONS];
+    Int_t   tightCharge        [MAXMUONS];
+    Float_t jetRelIso          [MAXMUONS];
+
+
+
+
 
     
     muonData(std::string, TTree*, bool readIn = true, bool isMC = false, std::string SFName=""); 

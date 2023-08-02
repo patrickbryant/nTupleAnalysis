@@ -34,6 +34,7 @@ namespace nTupleAnalysis {
     TH1F* tkRelIso        ;
     TH1F* pdgId           ;
     TH1F* looseId         ;
+    TH1F* softId         ;
     TH1F* mediumPromptId  ;
     TH1F* mvaId           ;
     TH1F* pfIsoId         ;
@@ -52,7 +53,32 @@ namespace nTupleAnalysis {
     TH1F* cleanmask        ;
 
 
-    muonHists(std::string, fwlite::TFileService&, std::string title = "");
+    TH1F* mvaLowPtId       ;
+    TH1F* inTimeMuon       ;
+    TH1F* triggerIdLoose   ;
+    TH1F* jetPtRelv2       ;
+    TH1F* fsrPhotonIdx     ;
+    TH1F* isPFcand         ;
+    TH1F* softMva          ;
+    TH1F* isTracker        ;
+    TH1F* mvaLowPt         ;
+    TH1F* puppiIsoId       ;
+    TH1F* segmentComp      ;
+    TH1F* jetNDauCharged   ;
+    TH1F* multiIsoId       ;
+    TH1F* isGlobal         ;
+    TH1F* isStandalone     ;
+    TH1F* tunepRelPt       ;
+    TH1F* miniIsoId        ;
+    TH1F* charge           ;
+    TH1F* softMvaId        ;
+    TH1F* tightCharge      ;
+    TH1F* jetRelIso        ;
+
+
+    muonHists(std::string name, fwlite::TFileService& fs, std::string title = "");
+    muonHists(std::string name, TFileDirectory& dir, std::string title = "");
+    void makeHists(std::string name, TFileDirectory& dir, std::string title = "");
     void Fill(const muonPtr&, float);
     ~muonHists(); 
 

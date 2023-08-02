@@ -3,8 +3,18 @@
 using namespace nTupleAnalysis;
 
 muonHists::muonHists(std::string name, fwlite::TFileService& fs, std::string title) {
+  TFileDirectory dir = fs.mkdir(name);
+  this->makeHists(name, dir, title);
+}
 
-    dir = fs.mkdir(name);
+
+muonHists::muonHists(std::string name, TFileDirectory& dir, std::string title) {
+  this->makeHists(name, dir, title);
+}
+
+
+void muonHists::makeHists(std::string name, TFileDirectory& dir, std::string title) {
+
     v = new fourVectorHists(name, dir);
 
     quality   = dir.make<TH1F>("quality",   (name+"/quality;   "+title+" Quality;   Entries").c_str(), 3,-0.5,2.5);
@@ -27,6 +37,7 @@ muonHists::muonHists(std::string name, fwlite::TFileService& fs, std::string tit
     tkRelIso          = dir.make<TH1F>("tkRelIso",        (name+"/tkRelIso         ; "+title+" tkRelIso       ; Entries").c_str(), 50,0,2);
     pdgId             = dir.make<TH1F>("pdgId",           (name+"/pdgId            ; "+title+" pdgId          ; Entries").c_str(), 31,-15.5,15.5);
     looseId           = dir.make<TH1F>("looseId",         (name+"/looseId          ; "+title+" looseId        ; Entries").c_str(), 2,-0.5,1.5);
+    softId            = dir.make<TH1F>("softId",          (name+"/softId           ; "+title+" softId         ; Entries").c_str(), 2,-0.5,1.5);
     mediumPromptId    = dir.make<TH1F>("mediumPromptId",  (name+"/mediumPromptId   ; "+title+" mediumPromptId ; Entries").c_str(), 2,-0.5,1.5);
     mvaId             = dir.make<TH1F>("mvaId",           (name+"/mvaId            ; "+title+" mvaId          ; Entries").c_str(), 10,-0.5,9.5);
     pfIsoId           = dir.make<TH1F>("pfIsoId",         (name+"/pfIsoId          ; "+title+" pfIsoId        ; Entries").c_str(), 10,-0.5,9.5);
@@ -47,9 +58,34 @@ muonHists::muonHists(std::string name, fwlite::TFileService& fs, std::string tit
 
 
 
+    mvaLowPtId       = dir.make<TH1F>("mvaLowPtId"       , (name+"/mvaLowPtId     ; "+title+" mvaLowPtId     ; Entries").c_str(), 50, -2, 20);
+    inTimeMuon       = dir.make<TH1F>("inTimeMuon"       , (name+"/inTimeMuon     ; "+title+" inTimeMuon     ; Entries").c_str(), 2, -0.5, 1.5);
+    triggerIdLoose   = dir.make<TH1F>("triggerIdLoose"   , (name+"/triggerIdLoose ; "+title+" triggerIdLoose ; Entries").c_str(), 2, -0.5, 1.5);
+    jetPtRelv2       = dir.make<TH1F>("jetPtRelv2"       , (name+"/jetPtRelv2     ; "+title+" jetPtRelv2     ; Entries").c_str(), 50, 0, 20);
+    fsrPhotonIdx     = dir.make<TH1F>("fsrPhotonIdx"     , (name+"/fsrPhotonIdx   ; "+title+" fsrPhotonIdx   ; Entries").c_str(), 15, -0.5, 14.5);
+    isPFcand         = dir.make<TH1F>("isPFcand"         , (name+"/isPFcand       ; "+title+" isPFcand       ; Entries").c_str(), 2, -0.5, 1.5);
+    softMva          = dir.make<TH1F>("softMva"          , (name+"/softMva        ; "+title+" softMva        ; Entries").c_str(), 50, -1.1, 1.1);
+    isTracker        = dir.make<TH1F>("isTracker"        , (name+"/isTracker      ; "+title+" isTracker      ; Entries").c_str(), 2, -0.5, 1.5);
+    mvaLowPt         = dir.make<TH1F>("mvaLowPt"         , (name+"/mvaLowPt       ; "+title+" mvaLowPt       ; Entries").c_str(), 50, -1.1, 1.1);
+    puppiIsoId       = dir.make<TH1F>("puppiIsoId"       , (name+"/puppiIsoId     ; "+title+" puppiIsoId     ; Entries").c_str(), 10, -0.5, 9.5);
+    segmentComp      = dir.make<TH1F>("segmentComp"      , (name+"/segmentComp    ; "+title+" segmentComp    ; Entries").c_str(), 50, 0, 1.5);
+    jetNDauCharged   = dir.make<TH1F>("jetNDauCharged"   , (name+"/jetNDauCharged ; "+title+" jetNDauCharged ; Entries").c_str(), 20, -0.5, 19.5);
+    multiIsoId       = dir.make<TH1F>("multiIsoId"       , (name+"/multiIsoId     ; "+title+" multiIsoId     ; Entries").c_str(), 10, -0.5, 9.5);
+    isGlobal         = dir.make<TH1F>("isGlobal"         , (name+"/isGlobal       ; "+title+" isGlobal       ; Entries").c_str(), 2, -0.5, 1.5);
+    isStandalone     = dir.make<TH1F>("isStandalone"     , (name+"/isStandalone   ; "+title+" isStandalone   ; Entries").c_str(), 2, -0.5, 1.5);
+    tunepRelPt       = dir.make<TH1F>("tunepRelPt"       , (name+"/tunepRelPt     ; "+title+" tunepRelPt     ; Entries").c_str(), 50, -1, 2);
+    miniIsoId        = dir.make<TH1F>("miniIsoId"        , (name+"/miniIsoId      ; "+title+" miniIsoId      ; Entries").c_str(), 10, -0.5, 9.5);
+    charge           = dir.make<TH1F>("charge"           , (name+"/charge         ; "+title+" charge         ; Entries").c_str(), 3, -1.5, 1.5);
+    softMvaId        = dir.make<TH1F>("softMvaId"        , (name+"/softMvaId      ; "+title+" softMvaId      ; Entries").c_str(), 2, -0.5, 1.5);
+    tightCharge      = dir.make<TH1F>("tightCharge"      , (name+"/tightCharge    ; "+title+" tightCharge    ; Entries").c_str(), 3, -1.5, 1.5);
+    jetRelIso        = dir.make<TH1F>("jetRelIso"        , (name+"/jetRelIso      ; "+title+" jetRelIso      ; Entries").c_str(), 50, -1, 20);
+
+
 
 
 } 
+
+
 
 void muonHists::Fill(const muonPtr &muon, float weight){
 
@@ -72,6 +108,7 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   tkRelIso              -> Fill(muon->tkRelIso        ,weight);
   pdgId                 -> Fill(muon->pdgId           ,weight);
   looseId               -> Fill(muon->looseId         ,weight);
+  softId                -> Fill(muon->softId         ,weight);
   mediumPromptId        -> Fill(muon->mediumPromptId  ,weight);
   mvaId                 -> Fill(muon->mvaId           ,weight);
   pfIsoId               -> Fill(muon->pfIsoId         ,weight);
@@ -79,16 +116,42 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   genPartFlav           -> Fill(muon->genPartFlav     ,weight);
 
 
-    dxybs                  -> Fill (muon->dxybs              , weight);
-    dz                     -> Fill (muon->dz                 , weight);
-    dzErr                  -> Fill (muon->dzErr              , weight);
-    miniPFRelIso_all       -> Fill (muon->miniPFRelIso_all   , weight);
-    miniPFRelIso_chg       -> Fill (muon->miniPFRelIso_chg   , weight);
-    mvaTTH                 -> Fill (muon->mvaTTH             , weight);
-    nStations              -> Fill (muon->nStations          , weight);
-    nTrackerLayers         -> Fill (muon->nTrackerLayers     , weight);
-    highPurity             -> Fill (muon->highPurity         , weight);
-    cleanmask              -> Fill (muon->cleanmask          , weight);
+  dxybs                  -> Fill (muon->dxybs              , weight);
+  dz                     -> Fill (muon->dz                 , weight);
+  dzErr                  -> Fill (muon->dzErr              , weight);
+  miniPFRelIso_all       -> Fill (muon->miniPFRelIso_all   , weight);
+  miniPFRelIso_chg       -> Fill (muon->miniPFRelIso_chg   , weight);
+  mvaTTH                 -> Fill (muon->mvaTTH             , weight);
+  nStations              -> Fill (muon->nStations          , weight);
+  nTrackerLayers         -> Fill (muon->nTrackerLayers     , weight);
+  highPurity             -> Fill (muon->highPurity         , weight);
+  cleanmask              -> Fill (muon->cleanmask          , weight);
+
+
+  mvaLowPtId             -> Fill (muon->mvaLowPtId      ,weight);
+  inTimeMuon             -> Fill (muon->inTimeMuon      ,weight);
+  triggerIdLoose         -> Fill (muon->triggerIdLoose  ,weight);
+  jetPtRelv2             -> Fill (muon->jetPtRelv2      ,weight);
+  fsrPhotonIdx           -> Fill (muon->fsrPhotonIdx    ,weight);
+  isPFcand               -> Fill (muon->isPFcand        ,weight);
+  softMva                -> Fill (muon->softMva         ,weight);
+  isTracker              -> Fill (muon->isTracker       ,weight);
+  mvaLowPt               -> Fill (muon->mvaLowPt        ,weight);
+  puppiIsoId             -> Fill (muon->puppiIsoId      ,weight);
+  segmentComp            -> Fill (muon->segmentComp     ,weight);
+  jetNDauCharged         -> Fill (muon->jetNDauCharged  ,weight);
+  multiIsoId             -> Fill (muon->multiIsoId      ,weight);
+  isGlobal               -> Fill (muon->isGlobal        ,weight);
+  isStandalone           -> Fill (muon->isStandalone    ,weight);
+  tunepRelPt             -> Fill (muon->tunepRelPt      ,weight);
+  miniIsoId              -> Fill (muon->miniIsoId       ,weight);
+  charge                 -> Fill (muon->charge          ,weight);
+  softMvaId              -> Fill (muon->softMvaId       ,weight);
+  tightCharge            -> Fill (muon->tightCharge     ,weight);
+  jetRelIso              -> Fill (muon->jetRelIso       ,weight);
+
+
+
 
   return;
 }

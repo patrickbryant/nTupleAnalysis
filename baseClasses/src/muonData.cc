@@ -62,6 +62,29 @@ muon::muon(UInt_t i, muonData* data){
   highPurity         = data->highPurity         [i];
   cleanmask          = data->cleanmask          [i];
 
+  mvaLowPtId        = data-> mvaLowPtId       [i];
+  inTimeMuon        = data-> inTimeMuon       [i];
+  triggerIdLoose    = data-> triggerIdLoose   [i];
+  jetPtRelv2        = data-> jetPtRelv2       [i];
+  fsrPhotonIdx      = data-> fsrPhotonIdx     [i];
+  isPFcand          = data-> isPFcand         [i];
+  softMva           = data-> softMva          [i];
+  isTracker         = data-> isTracker        [i];
+  mvaLowPt          = data-> mvaLowPt         [i];
+  puppiIsoId        = data-> puppiIsoId       [i];
+  segmentComp       = data-> segmentComp      [i];
+  jetNDauCharged    = data-> jetNDauCharged   [i];
+  multiIsoId        = data-> multiIsoId       [i];
+  isGlobal          = data-> isGlobal         [i];
+  isStandalone      = data-> isStandalone     [i];
+  tunepRelPt        = data-> tunepRelPt       [i];
+  miniIsoId         = data-> miniIsoId        [i];
+  charge            = data-> charge           [i];
+  softMvaId         = data-> softMvaId        [i];
+  tightCharge       = data-> tightCharge      [i];
+  jetRelIso         = data-> jetRelIso        [i];
+
+
 
  
   //
@@ -199,6 +222,32 @@ void muonData::connectBranches(bool readIn, TTree* tree){
 
 
 
+  connectBranchArr(readIn, tree, muonName+"_mvaLowPtId"       , mvaLowPtId       , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_inTimeMuon"       , inTimeMuon       , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_triggerIdLoose"   , triggerIdLoose   , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_jetPtRelv2"       , jetPtRelv2       , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_fsrPhotonIdx"     , fsrPhotonIdx     , NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_isPFcand"         , isPFcand         , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_softMva"          , softMva          , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_isTracker"        , isTracker        , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_mvaLowPt"         , mvaLowPt         , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_puppiIsoId"       , puppiIsoId       , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_segmentComp"      , segmentComp      , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_jetNDauCharged"   , jetNDauCharged   , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_multiIsoId"       , multiIsoId       , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_isGlobal"         , isGlobal         , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_isStandalone"     , isStandalone     , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_tunepRelPt"       , tunepRelPt       , NMuonName, "F");
+  connectBranchArr(readIn, tree, muonName+"_miniIsoId"        , miniIsoId        , NMuonName, "b");
+  connectBranchArr(readIn, tree, muonName+"_charge"           , charge           , NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_softMvaId"        , softMvaId        , NMuonName, "O");
+  connectBranchArr(readIn, tree, muonName+"_tightCharge"      , tightCharge      , NMuonName, "i");
+  connectBranchArr(readIn, tree, muonName+"_jetRelIso"        , jetRelIso        , NMuonName, "F");
+
+
+
+
+
 
 
 
@@ -258,6 +307,32 @@ void muonData::writeMuons(std::vector< std::shared_ptr<muon> > outputMuons){
     this->nTrackerLayers    [i] = thisMuon-> nTrackerLayers     ;
     this->highPurity        [i] = thisMuon-> highPurity         ;
     this->cleanmask         [i] = thisMuon-> cleanmask          ;
+
+
+    this->mvaLowPtId       [i] = thisMuon ->  mvaLowPtId       ;
+    this->inTimeMuon       [i] = thisMuon ->  inTimeMuon       ;
+    this->triggerIdLoose   [i] = thisMuon ->  triggerIdLoose   ;
+    this->jetPtRelv2       [i] = thisMuon ->  jetPtRelv2       ;
+    this->fsrPhotonIdx     [i] = thisMuon ->  fsrPhotonIdx     ;
+    this->isPFcand         [i] = thisMuon ->  isPFcand         ;
+    this->softMva          [i] = thisMuon ->  softMva          ;
+    this->isTracker        [i] = thisMuon ->  isTracker        ;
+    this->mvaLowPt         [i] = thisMuon ->  mvaLowPt         ;
+    this->puppiIsoId       [i] = thisMuon ->  puppiIsoId       ;
+    this->segmentComp      [i] = thisMuon ->  segmentComp      ;
+    this->jetNDauCharged   [i] = thisMuon ->  jetNDauCharged   ;
+    this->multiIsoId       [i] = thisMuon ->  multiIsoId       ;
+    this->isGlobal         [i] = thisMuon ->  isGlobal         ;
+    this->isStandalone     [i] = thisMuon ->  isStandalone     ;
+    this->tunepRelPt       [i] = thisMuon ->  tunepRelPt       ;
+    this->miniIsoId        [i] = thisMuon ->  miniIsoId        ;
+    this->charge           [i] = thisMuon ->  charge           ;
+    this->softMvaId        [i] = thisMuon ->  softMvaId        ;
+    this->tightCharge      [i] = thisMuon ->  tightCharge      ;
+    this->jetRelIso        [i] = thisMuon ->  jetRelIso        ;
+
+
+
   }
 
   return ;
@@ -280,6 +355,7 @@ std::vector<std::shared_ptr<muon>> muonData::getMuons(float ptMin, float etaMax,
     if(tag == 2 && mediumId[i] == 0) continue;
     if(tag == 3 && tightId[i]  == 0) continue;
     if(tag == 4 && int(mvaId[i]) < 3) continue;
+    if(tag == 5 && (looseId[i] == 0 || softId[i] == 0)) continue;
     if(isolation && pfRelIso04_all[i] > 0.20) continue; //working points here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideMuonIdRun2
 
     if(      pt[i] < ptMin) continue;
