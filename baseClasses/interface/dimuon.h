@@ -11,6 +11,8 @@
 namespace nTupleAnalysis {
   const float mJpsi =  3.096916;
 
+
+
   //dimuon object
   class dimuon {
 
@@ -38,6 +40,8 @@ namespace nTupleAnalysis {
 
     //void dump();
   };
+
+  typedef std::shared_ptr<dimuon> dimuonPtr;
 
 }
 #endif // dimuon_H

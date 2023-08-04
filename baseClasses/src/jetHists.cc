@@ -9,37 +9,37 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     title = _title;
     dir = fs.mkdir(name);
     v = new fourVectorHists(name, dir, title);
+    v->m_s->SetBins(100, 0, 20);
+    v->m->SetBins(100, 0, 50);
+    v->m_l->SetBins(100, 0, 100);
+
+
 
     cleanmask = dir.make<TH1F>("cleanmask", (name+"/cleanmask; "+title+" Clean Mask; Entries").c_str(), 2,-0.5,1.5);
     puId = dir.make<TH1F>("puId", (name+"/puId; "+title+" Pileup ID; Entries").c_str(), 17,-0.5,16.5);
     jetId = dir.make<TH1F>("jetId", (name+"/jetId; "+title+" Jet ID; Entries").c_str(), 17,-0.5,16.5);
 
     deepB     = dir.make<TH1F>("deepB",     (name+"/deepB; "    +title+" Deep B; Entries").c_str(), 120,-0.2,1.2);
-    CSVv2     = dir.make<TH1F>("CSVv2",     (name+"/CSVv2; "    +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
     deepFlavB = dir.make<TH1F>("deepFlavB", (name+"/deepFlavB; "+title+" Deep (Jet) Flavour B; Entries").c_str(), 120,-0.2,1.2);
     deepFlavCvB = dir.make<TH1F>("deepFlavCvB", (name+"/deepFlavCvB; "+title+" Deep (Jet) Flavour CvB; Entries").c_str(), 120,-0.2,1.2);
     deepFlavCvL = dir.make<TH1F>("deepFlavCvL", (name+"/deepFlavCvL; "+title+" Deep (Jet) Flavour CvL; Entries").c_str(), 120,-0.2,1.2);
     deepFlavQG  = dir.make<TH1F>("deepFlavQG",  (name+"/deepFlavQG; "+title+" Deep (Jet) Flavour QG; Entries").c_str(), 120,-0.2,1.2);
     nJets     = dir.make<TH1F>("nJets",     (name+"/nJets;    " +title+" Number of Jets; Entries").c_str(),  10,-0.5,9.5);
 
-    CSVv2_l     = dir.make<TH1F>("CSVv2_l",     (name+"/CSVv2_l; "   +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
-    deepCSV_l   = dir.make<TH1F>("DeepCSV_l",   (name+"/DeepCSV_l; "   +title+" DeepCSV; Entries").c_str(), 120,-0.2,1.2);
-    deepCSVb_l  = dir.make<TH1F>("DeepCSVb_l",   (name+"/DeepCSVb_l; "   +title+" DeepCSVb; Entries").c_str(), 120,-0.2,1.2);
-    deepCSVbb_l = dir.make<TH1F>("DeepCSVbb_l",   (name+"/DeepCSVbb_l; "   +title+" DeepCSVbb; Entries").c_str(), 120,-0.2,1.2);
-
-    nSoftMu     = dir.make<TH1F>("nSoftMu",     (name+"/nSoftMu;    " +title+" Number of Soft Mu.; Entries").c_str(),  11,-0.5,10.5);
-    nSoftEl     = dir.make<TH1F>("nSoftEl",     (name+"/nSoftEl;    " +title+" Number of Soft El; Entries").c_str(),  11,-0.5,10.5);
 
     pt_wo_bRegCorr = dir.make<TH1F>("pt_wo_bRegCorr", (name+"/pt_wo_bRegCorr; "+title+" p_T (No bRegCorr) [GeV]; Entries").c_str(),  100,0, 500);
     bRegCorr       = dir.make<TH1F>("bRegCorr", (name+"/bRegCorr; "+title+" bRegCorr; Entries").c_str(),  100,0,2 );
+    bRegRes       	 = dir.make<TH1F>("bRegRes"       ,(name+"/bRegRes       ; "+title+" bRegRes       ; Entries").c_str(), 50,  0., 1);
+    cRegCorr      	 = dir.make<TH1F>("cRegCorr"      ,(name+"/cRegCorr      ; "+title+" cRegCorr      ; Entries").c_str(), 100, 0, 2);
+
     hadronFlavour     = dir.make<TH1F>("hadronFlavour",     (name+"/hadronFlavour;    " +title+" Hadron Flavour; Entries").c_str(),  31,-5.5,25.5);
  
     area                         = dir.make<TH1F>("area"                       ,(name+"/area                    ; "+title+"      area                      ; Entries").c_str(),  100, 0, 1.0);
     rawFactor                    = dir.make<TH1F>("rawFactor"                  ,(name+"/rawFactor               ; "+title+"      rawFactor                 ; Entries").c_str(),  100, 0, 1.0);
     chEmEF                       = dir.make<TH1F>("chEmEF"                     ,(name+"/chEmEF                  ; "+title+"      chEmEF                    ; Entries").c_str(),  100, 0, 1.0);
     chHEF                        = dir.make<TH1F>("chHEF"                      ,(name+"/chHEF                   ; "+title+"      chHEF                     ; Entries").c_str(),  100, 0, 1.0);
-    hfsigmaEtaEta                = dir.make<TH1F>("hfsigmaEtaEta"              ,(name+"/hfsigmaEtaEta           ; "+title+"      hfsigmaEtaEta             ; Entries").c_str(),  100, 0, 0.4);
-    hfsigmaPhiPhi                = dir.make<TH1F>("hfsigmaPhiPhi"              ,(name+"/hfsigmaPhiPhi           ; "+title+"      hfsigmaPhiPhi             ; Entries").c_str(),  100, 0, 0.4);
+    hfsigmaEtaEta                = dir.make<TH1F>("hfsigmaEtaEta"              ,(name+"/hfsigmaEtaEta           ; "+title+"      hfsigmaEtaEta             ; Entries").c_str(),  100, -1.1, 0.4);
+    hfsigmaPhiPhi                = dir.make<TH1F>("hfsigmaPhiPhi"              ,(name+"/hfsigmaPhiPhi           ; "+title+"      hfsigmaPhiPhi             ; Entries").c_str(),  100, -1.1, 0.4);
     muEF                         = dir.make<TH1F>("muEF"                       ,(name+"/muEF                    ; "+title+"      muEF                      ; Entries").c_str(),  100, 0, 1.0);
     muonSubtrFactor              = dir.make<TH1F>("muonSubtrFactor"            ,(name+"/muonSubtrFactor         ; "+title+"      muonSubtrFactor           ; Entries").c_str(),  100, 0, 1.0);
     neEmEF                       = dir.make<TH1F>("neEmEF"                     ,(name+"/neEmEF                  ; "+title+"      neEmEF                    ; Entries").c_str(),  100, 0, 1.0);
@@ -48,7 +48,19 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     hfcentralEtaStripSize        = dir.make<TH1F>("hfcentralEtaStripSize"      ,(name+"/hfcentralEtaStripSize   ; "+title+"      hfcentralEtaStripSize     ; Entries").c_str(),  100, 0, 0.1);
     nConstituents                = dir.make<TH1F>("nConstituents"              ,(name+"/nConstituents           ; "+title+"      nConstituents             ; Entries").c_str(),  50, -0.5, 49.5);
 
-    
+    nMuons        	 = dir.make<TH1F>("nMuons"        ,(name+"/nMuons        ; "+title+" nMuons        ; Entries").c_str(), 10, -0.5, 9.5);
+    muonIdx1      	 = dir.make<TH1F>("muonIdx1"      ,(name+"/muonIdx1      ; "+title+" muonIdx1      ; Entries").c_str(), 11, -1.5, 9.5);
+    muonIdx2             = dir.make<TH1F>("muonIdx2"      ,(name+"/muonIdx2      ; "+title+" muonIdx2      ; Entries").c_str(), 11, -1.5, 9.5);
+
+    nElectrons    	 = dir.make<TH1F>("nElectrons"    ,(name+"/nElectrons    ; "+title+" nElectrons    ; Entries").c_str(), 10, -0.5, 9.5);
+    electronIdx1  	 = dir.make<TH1F>("electronIdx1"  ,(name+"/electronIdx1  ; "+title+" electronIdx1  ; Entries").c_str(), 11, -1.5, 9.5);
+    electronIdx2  	 = dir.make<TH1F>("electronIdx2"  ,(name+"/electronIdx2  ; "+title+" electronIdx2  ; Entries").c_str(), 11, -1.5, 9.5);
+
+
+    puIdDisc      	 = dir.make<TH1F>("puIdDisc"      ,(name+"/puIdDisc      ; "+title+" puIdDisc      ; Entries").c_str(), 50, -2, 2);
+    qgl           	 = dir.make<TH1F>("qgl"           ,(name+"/qgl           ; "+title+" qgl           ; Entries").c_str(), 50, -1.1, 1.1);
+    chFPV0EF      	 = dir.make<TH1F>("chFPV0EF"      ,(name+"/chFPV0EF      ; "+title+" chFPV0EF      ; Entries").c_str(), 100, 0, 1.0);
+
     if(jetDetailLevel.find("matchedJet") != std::string::npos){
       hMatchedJet = new jetDeltaHists(name+"/matchedJet", fs, title);
     }
@@ -101,6 +113,13 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     }
 
     if(jetDetailLevel.find("allTaggers") != std::string::npos){
+
+      CSVv2     = dir.make<TH1F>("CSVv2",     (name+"/CSVv2; "    +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
+      CSVv2_l     = dir.make<TH1F>("CSVv2_l",     (name+"/CSVv2_l; "   +title+" CSV v2; Entries").c_str(), 120,-0.2,1.2);
+      deepCSV_l   = dir.make<TH1F>("DeepCSV_l",   (name+"/DeepCSV_l; "   +title+" DeepCSV; Entries").c_str(), 120,-0.2,1.2);
+      deepCSVb_l  = dir.make<TH1F>("DeepCSVb_l",   (name+"/DeepCSVb_l; "   +title+" DeepCSVb; Entries").c_str(), 120,-0.2,1.2);
+      deepCSVbb_l = dir.make<TH1F>("DeepCSVbb_l",   (name+"/DeepCSVbb_l; "   +title+" DeepCSVbb; Entries").c_str(), 120,-0.2,1.2);
+
       Ip2N      = dir.make<TH1F>("Ip2N"         ,  (name+"/Ip2N;     "+title+ " Ip2N     ;Entries").c_str(), 100, -10.2, 10.2);
       Ip2P      = dir.make<TH1F>("Ip2P"         ,  (name+"/Ip2P;     "+title+ " Ip2P     ;Entries").c_str(), 100, -10.2, 10.2);
       Ip3N      = dir.make<TH1F>("Ip3N"         ,  (name+"/Ip3N;     "+title+ " Ip3N     ;Entries").c_str(), 100, -10.2, 10.2);
@@ -173,19 +192,10 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   jetId->Fill(jet->jetId, weight);
 
   deepB    ->Fill(jet->deepB, weight);
-  CSVv2    ->Fill(jet->CSVv2, weight);
-  CSVv2_l  ->Fill(jet->CSVv2, weight);
   deepFlavB->Fill(jet->deepFlavB, weight);
   deepFlavCvB ->Fill(jet->deepFlavCvB , weight);
   deepFlavCvL ->Fill(jet->deepFlavCvL , weight);
   deepFlavQG  ->Fill(jet->deepFlavQG  , weight);
-
-  deepCSV_l  ->Fill(jet->DeepCSV    ,weight);
-  deepCSVb_l  ->Fill(jet->DeepCSVb    ,weight);
-  deepCSVbb_l  ->Fill(jet->DeepCSVbb    ,weight);
-
-  nSoftMu    ->Fill(jet->nSM        ,weight);
-  nSoftEl    ->Fill(jet->nSE        ,weight);
 
   pt_wo_bRegCorr ->Fill(jet->pt_wo_bRegCorr, weight);
   bRegCorr ->Fill(jet->bRegCorr, weight);
@@ -205,6 +215,19 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   hfadjacentEtaStripsSize          ->Fill(jet->hfadjacentEtaStripsSize      , weight);
   hfcentralEtaStripSize            ->Fill(jet->hfcentralEtaStripSize        , weight);
   nConstituents                    ->Fill(jet->nConstituents                , weight);
+
+  muonIdx2              ->Fill(jet->muonIdx2      , weight);
+  bRegRes       	->Fill(jet->bRegRes       , weight);
+  nMuons        	->Fill(jet->nMuons        , weight);
+  cRegCorr      	->Fill(jet->cRegCorr      , weight);
+  electronIdx2  	->Fill(jet->electronIdx2  , weight);
+  nElectrons    	->Fill(jet->nElectrons    , weight);
+  muonIdx1      	->Fill(jet->muonIdx1      , weight);
+  electronIdx1  	->Fill(jet->electronIdx1  , weight);
+  puIdDisc      	->Fill(jet->puIdDisc      , weight);
+  qgl           	->Fill(jet->qgl           , weight);
+  chFPV0EF      	->Fill(jet->chFPV0EF      , weight);
+
 
   unsigned int nTrks_noV0 = 0;
 
@@ -310,6 +333,13 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   }
   
   if(Ip2N){
+    CSVv2    ->Fill(jet->CSVv2, weight);
+    CSVv2_l  ->Fill(jet->CSVv2, weight);
+    deepCSV_l  ->Fill(jet->DeepCSV    ,weight);
+    deepCSVb_l  ->Fill(jet->DeepCSVb    ,weight);
+    deepCSVbb_l  ->Fill(jet->DeepCSVbb    ,weight);
+
+
     Ip2N      ->Fill(jet-> Ip2N      , weight);
     Ip2P      ->Fill(jet-> Ip2P      , weight);
     Ip2N_l    ->Fill(jet-> Ip2N      , weight);

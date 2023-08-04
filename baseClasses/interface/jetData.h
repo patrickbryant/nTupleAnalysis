@@ -103,6 +103,20 @@ namespace nTupleAnalysis {
     Float_t hfcentralEtaStripSize    ;
     UChar_t nConstituents            ;
 
+    Int_t muonIdx2 ;
+    Float_t bRegRes ;
+    Int_t nMuons ;
+    Float_t cRegCorr ;
+    Int_t electronIdx2 ;
+    Int_t nElectrons ;
+    Int_t muonIdx1 ;
+    Int_t jetIdx; 
+    Int_t electronIdx1 ;
+    Float_t puIdDisc ;
+    Float_t qgl   ;
+    Float_t chFPV0EF ;
+
+
     //
     //  Tracks in Jet
     //
@@ -311,6 +325,19 @@ namespace nTupleAnalysis {
     //    Jet_muonIdx2    = -1, 
     //    Jet_nElectrons  = 1, 
     //    Jet_nMuons      = 1, 
+
+    Int_t   muonIdx2      [MAXJETS];
+    Float_t bRegRes       [MAXJETS];
+    Int_t   nMuons        [MAXJETS];
+    Float_t cRegCorr      [MAXJETS];
+    Int_t   electronIdx2  [MAXJETS];
+    Int_t   nElectrons    [MAXJETS];
+    Int_t   muonIdx1      [MAXJETS];
+    Int_t   electronIdx1  [MAXJETS];
+    Float_t puIdDisc      [MAXJETS];
+    Float_t qgl           [MAXJETS];
+    Float_t chFPV0EF      [MAXJETS];
+
 
 
     btaggingData* btagData = nullptr;

@@ -46,6 +46,18 @@ namespace nTupleAnalysis {
     TH1F* hfcentralEtaStripSize     ;
     TH1F* nConstituents             ;
 
+    TH1F* muonIdx2      ;
+    TH1F* bRegRes       ;
+    TH1F* nMuons        ;
+    TH1F* cRegCorr      ;
+    TH1F* electronIdx2  ;
+    TH1F* nElectrons    ;
+    TH1F* muonIdx1      ;
+    TH1F* electronIdx1  ;
+    TH1F* puIdDisc      ;
+    TH1F* qgl           ;
+    TH1F* chFPV0EF      ;
+
     TH1F*   ntracks    ;
     TH1F*   nseltracks ;
     TH1F*   CSVv2_l    ;
@@ -53,11 +65,8 @@ namespace nTupleAnalysis {
     TH1F*   deepCSVb_l    ;
     TH1F*   deepCSVbb_l    ;
 
-    TH1F*   nSoftMu        ;
     TH1F*   pt_wo_bRegCorr;
     TH1F*   bRegCorr;
-
-    TH1F*   nSoftEl        ;
 
     TH1F* flavour       ;
     TH1F* flavourCleaned;

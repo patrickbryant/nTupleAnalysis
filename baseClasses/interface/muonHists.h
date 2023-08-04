@@ -74,7 +74,7 @@ namespace nTupleAnalysis {
     TH1F* softMvaId        ;
     TH1F* tightCharge      ;
     TH1F* jetRelIso        ;
-
+    TH1F* jetIdx           ;
 
     muonHists(std::string name, fwlite::TFileService& fs, std::string title = "");
     muonHists(std::string name, TFileDirectory& dir, std::string title = "");

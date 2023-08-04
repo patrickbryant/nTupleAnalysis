@@ -70,6 +70,21 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   hfcentralEtaStripSize     = data->hfcentralEtaStripSize     [i];
   nConstituents             = data->nConstituents             [i];
 
+
+  muonIdx2        = data->muonIdx2      [i];
+  bRegRes       	= data->bRegRes       [i];
+  nMuons        	= data->nMuons        [i];
+  cRegCorr      	= data->cRegCorr      [i];
+  electronIdx2  	= data->electronIdx2  [i];
+  nElectrons    	= data->nElectrons    [i];
+  muonIdx1      	= data->muonIdx1      [i];
+  electronIdx1  	= data->electronIdx1  [i];
+  puIdDisc      	= data->puIdDisc      [i];
+  qgl           	= data->qgl           [i];
+  chFPV0EF      	= data->chFPV0EF      [i];
+  jetIdx = i;
+
+
   ntracks        = data->ntracks        [i];
   nseltracks     = data->nseltracks     [i];
 
@@ -695,6 +710,18 @@ void jetData::writeJets(std::vector< jetPtr > outputJets){
     this->hfcentralEtaStripSize    [i] = thisJet->hfcentralEtaStripSize     ;
     this->nConstituents            [i] = thisJet->nConstituents             ;
 
+    this->muonIdx2      [i] = thisJet->muonIdx2      ;
+    this->bRegRes       [i] = thisJet->bRegRes       ;
+    this->nMuons        [i] = thisJet->nMuons        ;
+    this->cRegCorr      [i] = thisJet->cRegCorr      ;
+    this->electronIdx2  [i] = thisJet->electronIdx2  ;
+    this->nElectrons    [i] = thisJet->nElectrons    ;
+    this->muonIdx1      [i] = thisJet->muonIdx1      ;
+    this->electronIdx1  [i] = thisJet->electronIdx1  ;
+    this->puIdDisc      [i] = thisJet->puIdDisc      ;
+    this->qgl           [i] = thisJet->qgl           ;
+    this->chFPV0EF      [i] = thisJet->chFPV0EF      ;
+
     
     this->ntracks        [i] = thisJet->ntracks        ;
     this->nseltracks     [i] = thisJet->nseltracks     ; 
@@ -786,6 +813,19 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
   connectBranchArr(readIn, tree, jetName+"_hfadjacentEtaStripsSize"           , hfadjacentEtaStripsSize   , NjetName, "F");      
   connectBranchArr(readIn, tree, jetName+"_hfcentralEtaStripSize"             , hfcentralEtaStripSize     , NjetName, "F");
   connectBranchArr(readIn, tree, jetName+"_nConstituents"                     , nConstituents             , NjetName, "b");
+
+
+  connectBranchArr(readIn, tree, jetName+"_muonIdx2"       , muonIdx2      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_bRegRes"        , bRegRes       , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_nMuons"         , nMuons        , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_cRegCorr"       , cRegCorr      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_electronIdx2"   , electronIdx2  , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_nElectrons"     , nElectrons    , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_muonIdx1"       , muonIdx1      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_electronIdx1"   , electronIdx1  , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_puIdDisc"       , puIdDisc      , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_qgl"            , qgl           , NjetName, "F");
+  connectBranchArr(readIn, tree, jetName+"_chFPV0EF"       , chFPV0EF      , NjetName, "F");
 
 
   if(m_isMC){

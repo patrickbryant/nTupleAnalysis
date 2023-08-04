@@ -44,6 +44,7 @@ namespace nTupleAnalysis {
     UChar_t genPartFlav    ;
 
     int jetIdx;
+    int muonIdx;
     float isolation;
     //float isolation_corrected;
     //float isolation_trackerOnly;

@@ -16,6 +16,11 @@ muonHists::muonHists(std::string name, TFileDirectory& dir, std::string title) {
 void muonHists::makeHists(std::string name, TFileDirectory& dir, std::string title) {
 
     v = new fourVectorHists(name, dir);
+    v->pt_s->SetBins(100, 0, 20);
+    v->pt_m->SetBins(100, 0, 40);
+    v->pt_l->SetBins(100, 0, 100);
+
+
 
     quality   = dir.make<TH1F>("quality",   (name+"/quality;   "+title+" Quality;   Entries").c_str(), 3,-0.5,2.5);
     //isolation = dir.make<TH1F>("isolation", (name+"/isolation; "+title+" Isolation; Entries").c_str(), 50,0,1);
@@ -79,7 +84,7 @@ void muonHists::makeHists(std::string name, TFileDirectory& dir, std::string tit
     softMvaId        = dir.make<TH1F>("softMvaId"        , (name+"/softMvaId      ; "+title+" softMvaId      ; Entries").c_str(), 2, -0.5, 1.5);
     tightCharge      = dir.make<TH1F>("tightCharge"      , (name+"/tightCharge    ; "+title+" tightCharge    ; Entries").c_str(), 3, -1.5, 1.5);
     jetRelIso        = dir.make<TH1F>("jetRelIso"        , (name+"/jetRelIso      ; "+title+" jetRelIso      ; Entries").c_str(), 50, -1, 20);
-
+    jetIdx           = dir.make<TH1F>("jetIdx"           , (name+"/jetIdx         ; "+title+" jetIdx         ; Entries").c_str(), 20, -1.5, 18.5);
 
 
 
@@ -149,6 +154,7 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   softMvaId              -> Fill (muon->softMvaId       ,weight);
   tightCharge            -> Fill (muon->tightCharge     ,weight);
   jetRelIso              -> Fill (muon->jetRelIso       ,weight);
+  jetIdx                 -> Fill (muon->jetIdx          ,weight);
 
 
 

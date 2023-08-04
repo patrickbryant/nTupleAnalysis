@@ -7,6 +7,7 @@
 #include "PhysicsTools/FWLite/interface/TFileService.h"
 #include "nTupleAnalysis/baseClasses/interface/dijet.h"
 #include "nTupleAnalysis/baseClasses/interface/fourVectorHists.h"
+#include "nTupleAnalysis/baseClasses/interface/jetHists.h"
 
 //using namespace nTupleAnalysis;
 
@@ -19,6 +20,10 @@ namespace nTupleAnalysis {
     fourVectorHists* v;
     TH1F* dR;
     TH1F* dPhi;
+
+    jetHists* lead;
+    jetHists* subl;
+
 
     dijetHists(std::string, fwlite::TFileService&, std::string title = "");
     void Fill(std::shared_ptr<dijet>&, float);

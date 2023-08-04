@@ -33,6 +33,7 @@ muon::muon(UInt_t i, muonData* data){
   quality  = mediumId + tightId;
 
   jetIdx    = data->jetIdx[i];
+  muonIdx   = i;
   isolation = data->pfRelIso04_all[i];
   //isolation_corrected = data->isolation_corrected[i];
   //isolation_trackerOnly = data->isolation_trkIsoOnly[i];
