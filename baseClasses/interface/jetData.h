@@ -8,6 +8,7 @@
 #include "nTupleAnalysis/baseClasses/interface/trackData.h"
 #include "nTupleAnalysis/baseClasses/interface/svData.h"
 #include "nTupleAnalysis/baseClasses/interface/btaggingData.h"
+#include "nTupleAnalysis/baseClasses/interface/muonData.h"
 
 #include "CondTools/BTau/interface/BTagCalibrationReader.h"
 
@@ -16,7 +17,6 @@ namespace nTupleAnalysis {
 
   //forward declaration for use in jet constructor from tree
   class jetData;
-
 
   //jet object
   class jet {

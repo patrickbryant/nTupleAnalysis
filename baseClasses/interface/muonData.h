@@ -6,10 +6,13 @@
 #include <TH2D.h>
 #include <TLorentzVector.h>
 #include "nTupleAnalysis/baseClasses/interface/initBranch.h"
+#include "nTupleAnalysis/baseClasses/interface/jetData.h"
 
 namespace nTupleAnalysis {
   //forward declaration for use in muon constructor from tree
   class muonData;
+  class jet;
+
   //muon object
   class muon {
 
@@ -86,7 +89,7 @@ namespace nTupleAnalysis {
     Int_t tightCharge        ;
     float jetRelIso          ;
 
-
+    std::weak_ptr<jet>  matchedJet;
 
     float SF = 1.0;
 

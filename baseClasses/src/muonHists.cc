@@ -26,7 +26,9 @@ void muonHists::makeHists(std::string name, TFileDirectory& dir, std::string tit
     //isolation = dir.make<TH1F>("isolation", (name+"/isolation; "+title+" Isolation; Entries").c_str(), 50,0,1);
     //isolation_cor = dir.make<TH1F>("iso_cor", (name+"/iso_cor; "+title+" Isolation; Entries").c_str(), 50,0,1);
     //isolation_cor_s = dir.make<TH1F>("iso_cor_s", (name+"/iso_cor_s; "+title+" Isolation; Entries").c_str(), 50,0,0.1);
-    dR        = dir.make<TH1F>("dR",        (name+"/dR;        "+title+" Min #DeltaR(muon,jet); Entries").c_str(), 50, 0, 5);
+    dR_match        = dir.make<TH1F>("dR_match",        (name+"/dR_match;        "+title+" Min #DeltaR(muon,jet); Entries").c_str(), 50, 0, 5);
+    dR_match_s        = dir.make<TH1F>("dR_match_s",        (name+"/dR_match_s;        "+title+" Min #DeltaR(muon,jet); Entries").c_str(), 50, 0, 1);
+    dR_noMatch        = dir.make<TH1F>("dR_noMatch",        (name+"/dR_noMatch;        "+title+" Min #DeltaR(muon,jet); Entries").c_str(), 50, 0, 5);
     nMuons    = dir.make<TH1F>("nMuons",    (name+"/nMuons;    "+title+" Number of Muons; Entries").c_str(),  6,-0.5,5.5);
     SF      = dir.make<TH1F>("SF",     (name+"/SF;SF;Entries").c_str(),50,-0.1,2);
 
@@ -100,7 +102,15 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   //isolation->Fill(muon->isolation, weight);
   //isolation_cor->Fill(muon->isolation_corrected, weight);
   //isolation_cor_s->Fill(muon->isolation_corrected, weight);
-  dR       ->Fill(muon->dR,        weight);
+  const nTupleAnalysis::jetPtr matchedJet = muon->matchedJet.lock();
+  if(matchedJet){
+    dR_match_s       ->Fill(muon->p.DeltaR(matchedJet->p),        weight);
+    dR_match       ->Fill(muon->p.DeltaR(matchedJet->p),        weight);
+  }else{
+    dR_noMatch       ->Fill(muon->dR,        weight);
+  }
+    
+
   SF               ->Fill(muon->SF      , weight);
 
   ip3d                  -> Fill(muon->ip3d            ,weight);
