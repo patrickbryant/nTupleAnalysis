@@ -77,6 +77,7 @@ namespace nTupleAnalysis {
     TH1F* tightCharge      ;
     TH1F* jetRelIso        ;
     TH1F* jetIdx           ;
+    TH1F* matchedJet       ;
 
     muonHists(std::string name, fwlite::TFileService& fs, std::string title = "");
     muonHists(std::string name, TFileDirectory& dir, std::string title = "");

@@ -44,6 +44,7 @@ namespace nTupleAnalysis {
     float deepFlavCvB;
     float deepFlavCvL;
     float deepFlavQG ;
+    float XCvLCvB ;
     float bTagScore = -1;
     Int_t puId;
     Int_t jetId;

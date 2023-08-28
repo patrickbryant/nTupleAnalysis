@@ -31,6 +31,7 @@ namespace nTupleAnalysis {
     TH1F* deepFlavQG;
     TH1F* nJets;
     TH1F* nTrksExpected;
+    TH1F* XCvLCvB;
 
     TH1F* area                      ;
     TH1F* rawFactor                 ;

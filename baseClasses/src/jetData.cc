@@ -43,6 +43,8 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   deepFlavCvL   = data->deepFlavCvL [i];
   deepFlavQG    = data->deepFlavQG  [i];
 
+  XCvLCvB = pow(pow((1.0-deepFlavCvL),2) + pow((1.0-deepFlavCvB),2),0.5);
+
 
   bTagScore = deepFlavB;
   if(tagger == "CSVv2") bTagScore = CSVv2;
@@ -595,6 +597,9 @@ std::vector< jetPtr > jetData::getJets(std::vector< jetPtr > inputJets, float pt
       if(tagger == "CSVv2") tag = jet->CSVv2;
       if(tagger == "deepB") tag = jet->deepB;
       if(tagger == "deepFlavB" || tagger == "deepjet") tag = jet->deepFlavB;
+      if(tagger == "deepFlavB" || tagger == "deepjet") tag = jet->deepFlavB;
+      if(tagger == "deepFlavCvL") tag = jet->deepFlavCvL;
+      if(tagger == "deepFlavCvB") tag = jet->deepFlavCvB;
     }
 
     if(antiTag^(tag < tagMin)) {

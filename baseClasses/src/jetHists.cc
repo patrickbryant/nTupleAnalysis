@@ -26,6 +26,7 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     deepFlavQG  = dir.make<TH1F>("deepFlavQG",  (name+"/deepFlavQG; "+title+" Deep (Jet) Flavour QG; Entries").c_str(), 120,-0.2,1.2);
     nJets     = dir.make<TH1F>("nJets",     (name+"/nJets;    " +title+" Number of Jets; Entries").c_str(),  10,-0.5,9.5);
 
+    XCvLCvB = dir.make<TH1F>("XCvLCvB", (name+"/XCvLCvB; "+title+" Deep Jet XCvLCvB; Entries").c_str(), 120,-0.2,1.2);
 
     pt_wo_bRegCorr = dir.make<TH1F>("pt_wo_bRegCorr", (name+"/pt_wo_bRegCorr; "+title+" p_T (No bRegCorr) [GeV]; Entries").c_str(),  100,0, 500);
     bRegCorr       = dir.make<TH1F>("bRegCorr", (name+"/bRegCorr; "+title+" bRegCorr; Entries").c_str(),  100,0,2 );
@@ -196,6 +197,7 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   deepFlavCvB ->Fill(jet->deepFlavCvB , weight);
   deepFlavCvL ->Fill(jet->deepFlavCvL , weight);
   deepFlavQG  ->Fill(jet->deepFlavQG  , weight);
+  XCvLCvB ->Fill(jet->XCvLCvB , weight);
 
   pt_wo_bRegCorr ->Fill(jet->pt_wo_bRegCorr, weight);
   bRegCorr ->Fill(jet->bRegCorr, weight);

@@ -87,6 +87,7 @@ void muonHists::makeHists(std::string name, TFileDirectory& dir, std::string tit
     tightCharge      = dir.make<TH1F>("tightCharge"      , (name+"/tightCharge    ; "+title+" tightCharge    ; Entries").c_str(), 3, -1.5, 1.5);
     jetRelIso        = dir.make<TH1F>("jetRelIso"        , (name+"/jetRelIso      ; "+title+" jetRelIso      ; Entries").c_str(), 50, -1, 20);
     jetIdx           = dir.make<TH1F>("jetIdx"           , (name+"/jetIdx         ; "+title+" jetIdx         ; Entries").c_str(), 20, -1.5, 18.5);
+    matchedJet       = dir.make<TH1F>("matchedJet"       , (name+"/matchedJet     ; "+title+" matchedJet     ; Entries").c_str(), 2, -0.5, 1.5);
 
 
 
@@ -102,10 +103,12 @@ void muonHists::Fill(const muonPtr &muon, float weight){
   //isolation->Fill(muon->isolation, weight);
   //isolation_cor->Fill(muon->isolation_corrected, weight);
   //isolation_cor_s->Fill(muon->isolation_corrected, weight);
-  const nTupleAnalysis::jetPtr matchedJet = muon->matchedJet.lock();
-  if(matchedJet){
-    dR_match_s       ->Fill(muon->p.DeltaR(matchedJet->p),        weight);
-    dR_match       ->Fill(muon->p.DeltaR(matchedJet->p),        weight);
+  const nTupleAnalysis::jetPtr jetMatchingMuon = muon->matchedJet.lock();
+  matchedJet ->Fill(bool(jetMatchingMuon), weight);
+
+  if(jetMatchingMuon){
+    dR_match_s       ->Fill(muon->p.DeltaR(jetMatchingMuon->p),        weight);
+    dR_match       ->Fill(muon->p.DeltaR(jetMatchingMuon->p),        weight);
   }else{
     dR_noMatch       ->Fill(muon->dR,        weight);
   }
