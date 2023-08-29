@@ -24,26 +24,51 @@ particle::particle(UInt_t i, truthParticle* data){
 
 void particle::getDaughters(std::vector< std::shared_ptr<particle> > particles){
   
-  bool found_b     = false;
-  bool found_bbar  = false;
-  bool found_q     = false;
-  bool found_qbar  = false;
+  bool found_b       = false;
+  bool found_bbar    = false;
+  bool found_q       = false;
+  bool found_qbar    = false;
+  bool found_Wplus   = false;
+  bool found_Wminus  = false;
+  bool found_l       = false;
+  bool found_lbar    = false;
+  bool found_nu      = false;
+  bool found_nubar   = false;
 
   for(auto &p: particles){
     if(p->genPartIdxMother != this->idx) continue;
     this->daughters.push_back( p );
-    if     (p->pdgId ==  5 && !found_b   ) found_b     = true;
-    else if(p->pdgId == -5 && !found_bbar) found_bbar  = true;
+    
+    if     (p->pdgId ==   5 &&  !found_b   )   found_b      = true;
+    else if(p->pdgId ==  -5 &&  !found_bbar)   found_bbar   = true;
+    else if(p->pdgId ==  24 &&  !found_Wplus)  found_Wplus  = true;
+    else if(p->pdgId == -24 &&  !found_Wminus) found_Wminus = true;
 
-    if(abs(p->pdgId) < 7){
+    int abs_pdgId  = abs(p->pdgId);
+    if(abs_pdgId < 7){
       if(p->pdgId > 0){ found_q = true;}
       else{             found_qbar = true;}
     }
 
+    // Find e/mu/tau
+    if(abs_pdgId == 11 || abs_pdgId == 13 || abs_pdgId == 15 ){
+      if(p->pdgId > 0) {found_l      = true;}
+      else             {found_lbar   = true;}
+    }
+
+    // Find nu_e/nu_mu/nu_tau
+    if(abs_pdgId == 12 || abs_pdgId == 14 || abs_pdgId == 16 ){
+      if(p->pdgId > 0) {found_nu      = true;}
+      else             {found_nubar   = true;}
+    }
+
+
   }
 
-  this->tobbbar = found_b && found_bbar && this->daughters.size()==2;
-  this->toqqbar = found_q && found_qbar && this->daughters.size()==2;
+  this->tobbbar = found_b && found_bbar       && this->daughters.size()==2;
+  this->toqqbar = found_q && found_qbar       && this->daughters.size()==2;
+  this->tolnu   = (found_l && found_nubar || found_lbar && found_nu)  && this->daughters.size()==2;
+  this->toWW    = found_Wplus && found_Wminus && this->daughters.size()==2;
 
   return;
 }
@@ -126,7 +151,7 @@ void truthParticle::writeTruth(std::vector< std::shared_ptr<particle> > outputTr
 }
 
 
-std::vector< std::shared_ptr<particle> > truthParticle::getParticles(Int_t absPDG, Int_t absMomPDG, Int_t maxAbsPDG){
+std::vector< std::shared_ptr<particle> > truthParticle::getParticles(Int_t absPDG, Int_t absMomPDG, Int_t maxAbsPDG, Int_t minAbsPDG){
   
   std::vector< std::shared_ptr<particle> > outputParticles;
 
@@ -134,6 +159,7 @@ std::vector< std::shared_ptr<particle> > truthParticle::getParticles(Int_t absPD
     if(    absPDG != -1 && abs(pdgId[i])                   != absPDG    ) continue;
     if( absMomPDG != -1 && abs(pdgId[genPartIdxMother[i]]) != absMomPDG ) continue;
     if( maxAbsPDG != -1 && abs(pdgId[i])                   > maxAbsPDG  ) continue;
+    if( minAbsPDG != -1 && abs(pdgId[i])                   < minAbsPDG  ) continue;
     outputParticles.push_back(std::make_shared<particle>(particle(i, this)));
   }
 

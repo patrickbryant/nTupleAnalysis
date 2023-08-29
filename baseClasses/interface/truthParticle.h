@@ -30,6 +30,8 @@ namespace nTupleAnalysis {
     std::vector< std::shared_ptr<particle> > daughters;
     bool tobbbar = false;
     bool toqqbar = false;
+    bool tolnu = false;
+    bool toWW = false;
     ~particle(); 
 
     void dump(std::string prefix = "");
@@ -57,7 +59,7 @@ namespace nTupleAnalysis {
     void connectBranches(bool readIn, TTree* tree);
     void writeTruth(std::vector< std::shared_ptr<particle> > outputTruth);
 
-    std::vector< std::shared_ptr<particle> > getParticles(Int_t absPDG = -1, Int_t absMomPDG = -1, Int_t maxAbsPDG = -1);
+    std::vector< std::shared_ptr<particle> > getParticles(Int_t absPDG = -1, Int_t absMomPDG = -1, Int_t maxAbsPDG = -1, Int_t minAbsPDG = -1);
     ~truthParticle(); 
 
     //void dump();
