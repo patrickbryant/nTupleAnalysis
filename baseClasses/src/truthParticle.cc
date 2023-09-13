@@ -69,6 +69,7 @@ void particle::getDaughters(std::vector< std::shared_ptr<particle> > particles){
   this->toqqbar = found_q && found_qbar       && this->daughters.size()==2;
   this->tolnu   = (found_l && found_nubar || found_lbar && found_nu)  && this->daughters.size()==2;
   this->toWW    = found_Wplus && found_Wminus && this->daughters.size()==2;
+  this->toWb    = (found_Wplus || found_Wminus) && (found_b || found_bbar) && this->daughters.size()==2;
 
   return;
 }

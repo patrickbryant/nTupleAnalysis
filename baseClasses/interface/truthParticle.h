@@ -32,6 +32,7 @@ namespace nTupleAnalysis {
     bool toqqbar = false;
     bool tolnu = false;
     bool toWW = false;
+    bool toWb = false;
     ~particle(); 
 
     void dump(std::string prefix = "");

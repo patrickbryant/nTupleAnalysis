@@ -32,12 +32,16 @@ namespace nTupleAnalysis {
     std::vector<particlePtr> Wqqs;//all W bosons which decayed to qq
     std::vector<particlePtr> Wlnus;//all W bosons which decayed to l nu
     std::vector<particlePtr> Vqqs;//all V bosons which decayed to qq
+    std::vector<particlePtr> TWbs;//all Tops which decayed to Wb
 
     float m4b;
-    float mbbWW;
+    
+    bool doBBWW  = false;
+    bool doTTbar = false;
+
 
     // Constructors and member functions
-    truthData(TChain*, bool, std::string truthName = "GenPart"); 
+    truthData(TChain* t, bool _debug, std::string truthName = "GenPart", bool _doBBWW = false, bool _doTTbar = false ); 
     void reset();
     void update();
     void dump();
