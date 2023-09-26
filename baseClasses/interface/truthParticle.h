@@ -9,6 +9,8 @@
 namespace nTupleAnalysis {
   //forward declaration for use in particle constructor from tree
   class truthParticle;
+  class jet;
+  class trackJet;
   //particle object
   class particle {
 
@@ -23,6 +25,9 @@ namespace nTupleAnalysis {
     Int_t genPartIdxMother;
     Int_t pdgId;
     Int_t idx;
+    std::weak_ptr<jet>  matchedJet;
+    std::weak_ptr<trackJet>  matchedTrackJet;
+
 
     particle();
     particle(UInt_t, truthParticle*); 
