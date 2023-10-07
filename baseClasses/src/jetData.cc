@@ -129,6 +129,7 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
   hadronFlavour  = data->hadronFlavour  [i];
   nbHadrons      = data->nbHadrons      [i];
   ncHadrons      = data->ncHadrons      [i];
+  genJetIdx      = data->genJetIdx      [i];
 
   isTag          = data->isTag      [i];
   isSel          = data->isSel      [i];
@@ -266,23 +267,23 @@ jet::jet(UInt_t i, jetData* data, std::string tagger){
     }
   }
 
-  if(data->m_loadGenJets){
-    genJet_p = TLorentzVector();    
-    genJet_p.SetPtEtaPhiM(data->GenJet_pt[i],
-			  data->GenJet_eta[i],
-			  data->GenJet_phi[i],
-			  data->GenJet_m[i]);
-    //cout << "is B is " << data->isB[i] << endl;
-    if(data->isB[i] || data->isBB[i] || data->isGBB[i] ){
-      //cout << " pass  " << data->isB[i] << endl;
-      flavour        = 5;
-    }else if(data->isC[i] || data->isCC[i] || data->isGCC[i] ){
-      flavour        = 4;
-    }else{
-      flavour        = 0;
-    }
-    
-  }
+//  if(data->m_loadGenJets){
+//    genJet_p = TLorentzVector();    
+//    genJet_p.SetPtEtaPhiM(data->GenJet_pt[i],
+//			  data->GenJet_eta[i],
+//			  data->GenJet_phi[i],
+//			  data->GenJet_m[i]);
+//    //cout << "is B is " << data->isB[i] << endl;
+//    if(data->isB[i] || data->isBB[i] || data->isGBB[i] ){
+//      //cout << " pass  " << data->isB[i] << endl;
+//      flavour        = 5;
+//    }else if(data->isC[i] || data->isCC[i] || data->isGCC[i] ){
+//      flavour        = 4;
+//    }else{
+//      flavour        = 0;
+//    }
+//    
+//  }
 
   if(data->m_isMC && data->m_btagCalibrationTool){
     SF = data->getSF(eta, pt, DeepCSV, hadronFlavour);
@@ -750,6 +751,7 @@ void jetData::writeJets(std::vector< jetPtr > outputJets){
     this->hadronFlavour  [i] =     thisJet->hadronFlavour  ;
     this->nbHadrons      [i] =     thisJet->nbHadrons      ;
     this->ncHadrons      [i] =     thisJet->ncHadrons      ;
+    this->genJetIdx      [i] =     thisJet->genJetIdx      ;
 
     this->isTag      [i] =   thisJet->isTag          ;
     this->isSel      [i] =   thisJet->isSel          ;
@@ -840,6 +842,7 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
     connectBranchArr(readIn, tree, jetName+"_hadronFlavour", hadronFlavour,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_nbHadrons", nbHadrons,   NjetName,  "I");  
     connectBranchArr(readIn, tree, jetName+"_ncHadrons", ncHadrons,   NjetName,  "I");  
+    connectBranchArr(readIn, tree, jetName+"_genJetIdx", genJetIdx,   NjetName,  "I");  
   }
 
   connectBranchArr(readIn, tree, jetName+"_looseID", looseID,   NjetName,  "I");  
@@ -952,28 +955,28 @@ void jetData::connectBranches(bool readIn, TTree* tree, std::string JECSyst){
 
     }
 
-    if(m_jetDetailLevel.find("GenJet") != std::string::npos){
-      m_loadGenJets = true;
-      connectBranchArr(readIn, tree, jetName+"_GenJetHasMatch"  , GenJet_hasMatch,  NjetName,  "I");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_pt"  , GenJet_pt,  NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_eta",  GenJet_eta, NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_phi",  GenJet_phi, NjetName,  "F");
-      connectBranchArr(readIn, tree, jetName+"_GenJet_mass", GenJet_m,   NjetName,  "F");  
-
-      connectBranchArr(readIn, tree, jetName+"_isB"         , isB        , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isGBB"	, isGBB      , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isBB" 	, isBB       , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isC" 	, isC        , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isGCC"	, isGCC      , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isCC" 	, isCC       , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isTau"	, isTau      , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isG" 	, isG        , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isUD"	, isUD       , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isS" 	, isS        , NjetName, "I");
-      connectBranchArr(readIn, tree, jetName+"_isUndefined" , isUndefined, NjetName, "I"); 
-									       
-    }
-
+//    if(m_jetDetailLevel.find("GenJet") != std::string::npos){
+//      m_loadGenJets = true;
+//      connectBranchArr(readIn, tree, jetName+"_GenJetHasMatch"  , GenJet_hasMatch,  NjetName,  "I");
+//      connectBranchArr(readIn, tree, jetName+"_GenJet_pt"  , GenJet_pt,  NjetName,  "F");
+//      connectBranchArr(readIn, tree, jetName+"_GenJet_eta",  GenJet_eta, NjetName,  "F");
+//      connectBranchArr(readIn, tree, jetName+"_GenJet_phi",  GenJet_phi, NjetName,  "F");
+//      connectBranchArr(readIn, tree, jetName+"_GenJet_mass", GenJet_m,   NjetName,  "F");  
+//
+//      connectBranchArr(readIn, tree, jetName+"_isB"         , isB        , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isGBB"	, isGBB      , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isBB" 	, isBB       , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isC" 	, isC        , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isGCC"	, isGCC      , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isCC" 	, isCC       , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isTau"	, isTau      , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isG" 	, isG        , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isUD"	, isUD       , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isS" 	, isS        , NjetName, "I");
+//      connectBranchArr(readIn, tree, jetName+"_isUndefined" , isUndefined, NjetName, "I"); 
+//									       
+//    }
+//
   }
 
 

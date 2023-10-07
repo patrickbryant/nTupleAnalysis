@@ -116,7 +116,7 @@ namespace nTupleAnalysis {
     Float_t puIdDisc ;
     Float_t qgl   ;
     Float_t chFPV0EF ;
-
+    Int_t genJetIdx;
 
     //
     //  Tracks in Jet
@@ -151,9 +151,10 @@ namespace nTupleAnalysis {
     std::weak_ptr<jet>  matchedJet;
 
     //
-    // GenJet
+    // Matched Truth Particle
     //
-    TLorentzVector genJet_p;
+    //std::weak_ptr<truthParticle>  matchedTruth;
+    //TLorentzVector genJet_p;
 
     float SF = 1.0; //btagging scale-factor
 
@@ -262,23 +263,24 @@ namespace nTupleAnalysis {
     float DeepCSVbb    [MAXJETS] = {0};
 
     //
-    bool m_loadGenJets =  false; 
-    int   GenJet_hasMatch [MAXJETS];
-    float GenJet_pt       [MAXJETS];
-    float GenJet_eta      [MAXJETS];
-    float GenJet_phi      [MAXJETS];
-    float GenJet_m        [MAXJETS];
-    int   isB             [MAXJETS];
-    int   isGBB           [MAXJETS];
-    int   isBB            [MAXJETS];
-    int   isC             [MAXJETS];
-    int   isGCC           [MAXJETS];
-    int   isCC            [MAXJETS];
-    int   isTau           [MAXJETS];
-    int   isG             [MAXJETS];
-    int   isUD            [MAXJETS];
-    int   isS             [MAXJETS];
-    int   isUndefined     [MAXJETS];
+    Int_t   genJetIdx [MAXJETS];    
+//    bool m_loadGenJets =  false; 
+//    int   GenJet_hasMatch [MAXJETS];
+//    float GenJet_pt       [MAXJETS];
+//    float GenJet_eta      [MAXJETS];
+//    float GenJet_phi      [MAXJETS];
+//    float GenJet_m        [MAXJETS];
+//    int   isB             [MAXJETS];
+//    int   isGBB           [MAXJETS];
+//    int   isBB            [MAXJETS];
+//    int   isC             [MAXJETS];
+//    int   isGCC           [MAXJETS];
+//    int   isCC            [MAXJETS];
+//    int   isTau           [MAXJETS];
+//    int   isG             [MAXJETS];
+//    int   isUD            [MAXJETS];
+//    int   isS             [MAXJETS];
+//    int   isUndefined     [MAXJETS];
 
 
     // truth Info

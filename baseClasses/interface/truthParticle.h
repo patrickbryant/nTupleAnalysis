@@ -25,6 +25,11 @@ namespace nTupleAnalysis {
     Int_t genPartIdxMother;
     Int_t pdgId;
     Int_t idx;
+    Int_t status;
+    Int_t statusFlags;
+    Int_t partonFlavour;
+    UChar_t hadronFlavour;
+
     std::weak_ptr<jet>  matchedJet;
     std::weak_ptr<trackJet>  matchedTrackJet;
 
@@ -60,6 +65,11 @@ namespace nTupleAnalysis {
 
     Int_t genPartIdxMother[MAXTRUTH];
     Int_t pdgId[MAXTRUTH];
+    Int_t status[MAXTRUTH];
+    Int_t statusFlags[MAXTRUTH];
+
+    Int_t   partonFlavour[MAXTRUTH];
+    UChar_t hadronFlavour[MAXTRUTH];
 
     truthParticle(std::string name, TTree* tree, bool readIn = true); 
     void connectBranches(bool readIn, TTree* tree);

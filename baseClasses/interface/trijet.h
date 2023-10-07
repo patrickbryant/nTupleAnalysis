@@ -6,6 +6,7 @@
 #include <TLorentzVector.h>
 #include "nTupleAnalysis/baseClasses/interface/jetData.h"
 #include "nTupleAnalysis/baseClasses/interface/dijet.h"
+#include "nTupleAnalysis/baseClasses/interface/truthData.h"
 
 namespace nTupleAnalysis {
   const float mt = 173.0;
@@ -40,7 +41,7 @@ namespace nTupleAnalysis {
     //TLorentzVector pbW;
 
     //trijet();
-    trijet(std::shared_ptr<jet>&, std::shared_ptr<jet>&, std::shared_ptr<jet>&); 
+    trijet(std::shared_ptr<jet>& jet1, std::shared_ptr<jet>& jet2, std::shared_ptr<jet>& jet3, nTupleAnalysis::truthData* truth = NULL); 
     ~trijet(); 
 
     //void dump();

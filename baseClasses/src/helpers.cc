@@ -21,6 +21,16 @@ bool nTupleAnalysis::failOverlap(const TLorentzVector& jet,const std::vector<ele
 }
 
 
+bool nTupleAnalysis::failOverlap(const TLorentzVector& jet,const std::vector<jetPtr>& jets, float dRCut ) {
+    
+  for( jetPtr j : jets){
+    if(jet.DeltaR(j->p) < dRCut)
+      return true;
+  }
+  return false;
+}
+
+
 
 bool nTupleAnalysis::findSubStr(std::string inputStr, std::string subString) { 
   return (inputStr.find(subString) != std::string::npos); 

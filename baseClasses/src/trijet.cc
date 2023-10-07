@@ -4,7 +4,7 @@ using namespace nTupleAnalysis;
 
 //trijet object
 //trijet::trijet(){}
-trijet::trijet(std::shared_ptr<jet> &jet1, std::shared_ptr<jet> &jet2, std::shared_ptr<jet> &jet3){
+trijet::trijet(std::shared_ptr<jet> &jet1, std::shared_ptr<jet> &jet2, std::shared_ptr<jet> &jet3, nTupleAnalysis::truthData* truth){
 
   //// sanity checks
   //float dr12 = jet1->p.DeltaR(jet2->p);
@@ -18,7 +18,7 @@ trijet::trijet(std::shared_ptr<jet> &jet1, std::shared_ptr<jet> &jet2, std::shar
   b = jet1;
   jet_j = jet2;
   jet_l = jet3;
-  W = std::make_shared<dijet>(dijet(jet2, jet3, true)); // bool specifiess to use regular JES for the constituent four-vectors
+  W = std::make_shared<dijet>(dijet(jet2, jet3, true, truth)); // bool specifiess to use regular JES for the constituent four-vectors
   
   st  = jet1->pt + W->p1.Pt() + W->p2.Pt();
   p   = jet1->p  + W->p1      + W->p2;

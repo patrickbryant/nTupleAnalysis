@@ -34,7 +34,8 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     cRegCorr      	 = dir.make<TH1F>("cRegCorr"      ,(name+"/cRegCorr      ; "+title+" cRegCorr      ; Entries").c_str(), 100, 0, 2);
 
     hadronFlavour     = dir.make<TH1F>("hadronFlavour",     (name+"/hadronFlavour;    " +title+" Hadron Flavour; Entries").c_str(),  31,-5.5,25.5);
- 
+    partonFlavour     = dir.make<TH1F>("partonFlavour",     (name+"/partonFlavour;    " +title+" Parton Flavour; Entries").c_str(),  31,-5.5,25.5);
+
     area                         = dir.make<TH1F>("area"                       ,(name+"/area                    ; "+title+"      area                      ; Entries").c_str(),  100, 0, 1.0);
     rawFactor                    = dir.make<TH1F>("rawFactor"                  ,(name+"/rawFactor               ; "+title+"      rawFactor                 ; Entries").c_str(),  100, 0, 1.0);
     chEmEF                       = dir.make<TH1F>("chEmEF"                     ,(name+"/chEmEF                  ; "+title+"      chEmEF                    ; Entries").c_str(),  100, 0, 1.0);
@@ -86,7 +87,6 @@ jetHists::jetHists(std::string _name, fwlite::TFileService& fs, std::string _tit
     if(jetDetailLevel.find("btagInputs") != std::string::npos){
       flavour          = dir.make<TH1F>("flavour",     (name+"/flavour;    " +title+" Flavour; Entries").c_str(),  31,-5.5,25.5);
       flavourCleaned     = dir.make<TH1F>("flavourCleaned",     (name+"/flavourCleaned;    " +title+" Flavour (cleaned); Entries").c_str(),  31,-5.5,25.5);
-      partonFlavour     = dir.make<TH1F>("partonFlavour",     (name+"/partonFlavour;    " +title+" Parton Flavour; Entries").c_str(),  31,-5.5,25.5);
       nbHadrons     = dir.make<TH1F>("nbHadrons",     (name+"/nbHadrons;    " +title+" Number of B Hadrons; Entries").c_str(),  5,-0.5,4.5);
       ncHadrons     = dir.make<TH1F>("ncHadrons",     (name+"/ncHadrons;    " +title+" Number of C Hadrons; Entries").c_str(),  5,-0.5,4.5);
 
@@ -203,6 +203,7 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   bRegCorr ->Fill(jet->bRegCorr, weight);
 
   hadronFlavour    ->Fill(jet->hadronFlavour,   weight);
+  partonFlavour    ->Fill(jet->partonFlavour,   weight);
 
   area                             ->Fill(jet->area                         , weight);
   rawFactor                        ->Fill(jet->rawFactor                    , weight);
@@ -271,7 +272,6 @@ void jetHists::Fill(const std::shared_ptr<jet> &jet, float weight){
   if(btags){
     flavour    ->Fill(jet->flavour,   weight);
     flavourCleaned    ->Fill(jet->flavourCleaned,   weight);
-    partonFlavour    ->Fill(jet->partonFlavour,   weight);
     nbHadrons        ->Fill(jet->nbHadrons,   weight);
     ncHadrons        ->Fill(jet->ncHadrons,   weight);
 

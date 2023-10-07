@@ -46,6 +46,15 @@ dijet::dijet(std::shared_ptr<jet> &jet1, std::shared_ptr<jet> &jet2, bool undo_b
 	truthMatch = B;
       }//dR matching
     }//Bbbs
+
+    for(auto &W: truth->Wqqs){
+      if( (W->daughters[0]->p.DeltaR(p1) < 0.4 && W->daughters[1]->p.DeltaR(p2) < 0.4) || 
+	  (W->daughters[0]->p.DeltaR(p2) < 0.4 && W->daughters[1]->p.DeltaR(p1) < 0.4) ){ // dijet dR matched to massive boson decay products
+	truthMatch = W;
+      }//dR matching
+    }//Bbbs
+
+
   }//truth
 
 }

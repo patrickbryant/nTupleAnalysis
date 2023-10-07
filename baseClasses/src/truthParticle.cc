@@ -20,6 +20,11 @@ particle::particle(UInt_t i, truthParticle* data){
   genPartIdxMother = data->genPartIdxMother[i];
   idx = (Int_t) i;
 
+  status = data->status[i];
+  statusFlags = data->statusFlags[i];
+
+  partonFlavour = data->partonFlavour[i];
+  hadronFlavour = data->hadronFlavour[i];
 }
 
 void particle::getDaughters(std::vector< std::shared_ptr<particle> > particles){
@@ -120,7 +125,13 @@ void truthParticle::connectBranches(bool readIn, TTree* tree){
 
   connectBranchArr(readIn, tree, truthName+"_genPartIdxMother", genPartIdxMother, NTruthName, "I" );
   connectBranchArr(readIn, tree, truthName+"_pdgId", pdgId, NTruthName, "I" );
+  connectBranchArr(readIn, tree, truthName+"_status", status, NTruthName, "I" );
+  connectBranchArr(readIn, tree, truthName+"_statusFlags", statusFlags, NTruthName, "I" );
   //inputBranch(tree, (name+"_").c_str(),  );
+
+  connectBranchArr(readIn, tree, truthName+"_partonFlavour", partonFlavour, NTruthName, "I" );
+  connectBranchArr(readIn, tree, truthName+"_hadronFlavour", hadronFlavour, NTruthName, "b" );
+
 
 
 }
@@ -145,6 +156,10 @@ void truthParticle::writeTruth(std::vector< std::shared_ptr<particle> > outputTr
     this->m     [i] = thisParticle->m          ;
     this->genPartIdxMother  [i] = thisParticle->genPartIdxMother       ;
     this->pdgId [i] = thisParticle->pdgId	   ;
+    this->status [i] = thisParticle->status	   ;
+    this->statusFlags [i] = thisParticle->statusFlags	   ;
+    this->partonFlavour [i] = thisParticle->partonFlavour	   ;
+    this->hadronFlavour [i] = thisParticle->hadronFlavour	   ;
 
   }
 

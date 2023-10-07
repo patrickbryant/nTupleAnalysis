@@ -20,6 +20,8 @@ namespace nTupleAnalysis {
     fourVectorHists* v;
     TH1F* dR;
     TH1F* dPhi;
+    TH1F* nDiJets;
+    TH2F* leadPt_vs_sublPt;
 
     jetHists* lead;
     jetHists* subl;
